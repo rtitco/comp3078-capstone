@@ -1,8 +1,0 @@
-{
-  "runtimeOptions": {
-    "additionalProbingPaths": [
-      "C:\\Users\\joelp\\.dotnet\\store\\|arch|\\|tfm|",
-      "C:\\Users\\joelp\\.nuget\\packages"
-    ]
-  }
-}
