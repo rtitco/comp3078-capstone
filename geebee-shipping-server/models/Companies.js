@@ -9,10 +9,7 @@ var CompanySchema = new mongoose.Schema({
         city: String,
         postal_code: String
     },
-    company_phone: String,
-    company_contact: {
-        user_id: String
-    }
+    company_phone: String
 })
 
 const Company = mongoose.model("Company", CompanySchema);
