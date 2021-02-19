@@ -1,11 +1,16 @@
 import './App.css';
-import LoginForm from './components/shared/login/login'
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import LoginForm from './components/shared/login/login';
+import DashboardPage from './components/shared/dashboard/dashboard';
 
 function App() {
   return (
-   <div>
-     <LoginForm/>
-   </div>
+      <Router>
+        <Switch>
+          <Route path="/login" component={LoginForm} />
+          <Route path="/dashboard" component={DashboardPage} />
+        </Switch>
+      </Router>
   );
 }
 

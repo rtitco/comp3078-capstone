@@ -8,11 +8,11 @@ import Col from 'react-bootstrap/Col';
 
 function LoginForm() {
     return (
-        <Container className="">
+        <Container>
             <Row className="justify-content-md-center">
-                <Col className="login-boxp-5" md="6">
-                <h1 className="h3">Geebee Shipping Solutions</h1>
-                <h2 className="h4">Login</h2>
+                <Col className="login-box p-5"  lg="3" md="6" sm="8">
+                <h1 className="h3 text-center">Geebee Shipping Solutions</h1>
+                <h2 className="h5 text-center">Login</h2>
                 <hr/>
                 <Form>
                     <Form.Group controlId="formBasicEmail">
