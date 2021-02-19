@@ -1,0 +1,23 @@
+import './dashboard.css';
+
+import NavBarHeader from '../navbar/navbar';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+
+function DashboardPage() {
+    return (
+    <Container fluid className="">
+            <NavBarHeader />
+            <Row className="justify-content-md-center">
+                <Col md="6">
+                    <h1>Hello</h1>
+                </Col>
+            </Row>
+        </Container>
+    );
+}
+
+export default DashboardPage;
