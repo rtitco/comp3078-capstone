@@ -1,6 +1,5 @@
 
 import React, { Component } from 'react';
-import "bootstrap/dist/css/bootstrap.min.css"
 import axios from 'axios'
 import logo from './gb.png'
 
@@ -11,7 +10,7 @@ class RegisterForm extends Component{
         this.state = {
             firstName: '',
             lastName: '',
-            phoneNumber: Number,
+            phoneNumber: '',
             email: '',
             company: '',
             password: ''
@@ -80,15 +79,19 @@ class RegisterForm extends Component{
             password: this.state.password
         }
         // everything stored in registered will send to backend (url) then to mongo
-        axios.post('http://localhost:3000/register', registered)
-        .then(res => console.log(res.data))
+        axios.post('http://localhost:8081/register', registered)
+        .then(res => {
+            console.log(res.data)
+        }, (error) => {
+            console.log(error);
+        })
 
         // here you redirect to profile page or home page
         // window.location = '/'
         this.setState({
             firstName: '',
             lastName: '',
-            phoneNumber: Number,
+            phoneNumber: '',
             email: '',
             company: '',
             password: ''
@@ -116,7 +119,7 @@ class RegisterForm extends Component{
                             value={this.state.lastName}
                             className='form-control form-group'/>
 
-                            <input type='number'
+                            <input type='text'
                             placeholder='Phone Number'
                             onChange={this.changePhoneNumber}
                             value={this.state.phoneNumber}
