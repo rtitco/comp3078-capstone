@@ -4,8 +4,10 @@ const vehicleModel = require('../models/Vehicles.js')
 const orderModel = require('../models/Orders.js')
 const itemModel = require('../models/Items.js')
 const companyModel = require('../models/Companies.js')
-
+const bcrypt = require('bcrypt')
+const registerTemplateCopy = require('../models/RegisterModels.js')
 const app = express();
+const router = express.Router();
 
 //CRUD Operations + routes
 
@@ -162,6 +164,29 @@ app.post('/items', async (req, res) => {
     catch(err) {
         res.status(500).send(err);
     }
+})
+
+// POST for register
+app.post('/register', async (req, res) => {
+    // generating salt password to hash and encrypt
+    const saltPassword = await bcrypt.genSalt(10)
+    const securePassword = await bcrypt.hash(req.body.password, saltPassword)
+
+    const registeredUser = new registerTemplateCopy({
+        firstName: req.body.firstName, 
+        lastName: req.body.lastName,
+        phoneNumber: req.body.phoneNumber,
+        email: req.body.email,
+        company: req.body.company,
+        password: securePassword
+    })
+    registeredUser.save()
+    .then(data => {
+        res.json(data)
+    })
+    .catch(error => {
+        res.json(error)
+    })
 })
 
 module.exports = app;
