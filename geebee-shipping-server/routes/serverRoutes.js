@@ -6,7 +6,7 @@ const itemModel = require('../models/Items.js')
 const companyModel = require('../models/Companies.js')
 const bcrypt = require('bcrypt')
 const app = express();
-const router = express.Router();
+// const router = express.Router();
 
 //CRUD Operations + routes
 
@@ -70,23 +70,30 @@ app.get('/items', async (req, res) => {
 
 //==============================================POST FUNCTIONS==================================================//
 
+//POST for Login Form
+
 //POST for Users Table
-app.post('/users', async (req, res) => {
-    const newUser = new userModel(req.body);
-    try {
-        await newUser.save((err) => {
-            if(err) {
-                //error handling
-                res.send(err)
-            }
-            else{
-                res.send(newUser);
-            }
-        });
-    }
-    catch(err) {
-        res.status(500).send(err);
-    }
+app.post('/register', async (req, res) => {
+    // generating salt password to hash and encrypt
+    console.log(req)
+    const saltPassword = await bcrypt.genSalt(10)
+    const securePassword = await bcrypt.hash(req.body.password, saltPassword)
+
+    const registeredUser = new userModel({
+        firstName: req.body.firstName, 
+        lastName: req.body.lastName,
+        phoneNumber: req.body.phoneNumber,
+        email: req.body.email,
+        company: req.body.company,
+        password: securePassword
+    })
+    registeredUser.save()
+    .then(data => {
+        res.json(data)
+    })
+    .catch(error => {
+        res.json(error)
+    })
 })
 
 //POST for Companies Table
@@ -165,27 +172,6 @@ app.post('/items', async (req, res) => {
     }
 })
 
-// POST for register
-app.post('/register', async (req, res) => {
-    // generating salt password to hash and encrypt
-    const saltPassword = await bcrypt.genSalt(10)
-    const securePassword = await bcrypt.hash(req.body.password, saltPassword)
 
-    const registeredUser = new userModel({
-        firstName: req.body.firstName, 
-        lastName: req.body.lastName,
-        phoneNumber: req.body.phoneNumber,
-        email: req.body.email,
-        company: req.body.company,
-        password: securePassword
-    })
-    registeredUser.save()
-    .then(data => {
-        res.json(data)
-    })
-    .catch(error => {
-        res.json(error)
-    })
-})
 
 module.exports = app;
