@@ -1,18 +1,35 @@
 const mongoose = require('mongoose');
 
 var UserSchema = new mongoose.Schema({
-    firstname: String,
-    lastname: String,
-    email: String,
-    password: String,
-    /*
-    phonenumber: {
+    firstName: {
         type: String,
         required: true
     },
-    company_id: String, //FOREIGN KEY
-    
-    */
+    lastName: {
+        type: String,
+        required: true
+    },
+    phoneNumber: {
+        type: Number,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true
+    },
+    company: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    // triggered when user is created
+    date: {
+        type: Date,
+        default: Date.now
+    }
 })
 
 const User = mongoose.model("User", UserSchema);

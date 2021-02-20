@@ -5,7 +5,6 @@ const orderModel = require('../models/Orders.js')
 const itemModel = require('../models/Items.js')
 const companyModel = require('../models/Companies.js')
 const bcrypt = require('bcrypt')
-const registerTemplateCopy = require('../models/RegisterModels.js')
 const app = express();
 const router = express.Router();
 
@@ -172,7 +171,7 @@ app.post('/register', async (req, res) => {
     const saltPassword = await bcrypt.genSalt(10)
     const securePassword = await bcrypt.hash(req.body.password, saltPassword)
 
-    const registeredUser = new registerTemplateCopy({
+    const registeredUser = new userModel({
         firstName: req.body.firstName, 
         lastName: req.body.lastName,
         phoneNumber: req.body.phoneNumber,
