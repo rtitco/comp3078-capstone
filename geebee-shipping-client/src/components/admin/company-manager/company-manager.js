@@ -4,11 +4,11 @@ import axios from 'axios'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-export default class UserManager extends Component {
+export default class CompanyManager extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      userData: [],
+      data: [],
       loading: true,
       showModal: false
     }
@@ -24,7 +24,7 @@ export default class UserManager extends Component {
   async getUsersData() {
     const res = await axios.get('http://localhost:8081/users')
     console.log(res.data)
-    this.setState({ loading: false, userData: res.data })
+    this.setState({ loading: false, data: res.data })
   }
   componentDidMount() {
     this.getUsersData()
@@ -50,13 +50,12 @@ export default class UserManager extends Component {
       }
     ]
     return (
-      <>
-        <h1>User Manager</h1>
-        <Button onClick={this.handleModalShow} className="float-right mr-5 mb-2" variant="success">Add User</Button>{''}
+      <div>
+        <h1>Company Manager</h1>
+        <Button onClick={this.handleModalShow} className="float-right mr-5 mb-2" variant="success">Add Company</Button>{''}
         <div className="mx-5">
-          <Table columns={columns} data={this.state.userData} />
+          <Table columns={columns} data={this.state.data} />
         </div>
-
 
         <Modal
         show={this.state.showModal}
@@ -78,8 +77,7 @@ export default class UserManager extends Component {
           <Button variant="primary">Understood</Button>
         </Modal.Footer>
       </Modal>
-      </>
-
+      </div>
     )
   }
 }

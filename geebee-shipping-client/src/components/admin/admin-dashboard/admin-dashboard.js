@@ -8,10 +8,10 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 //Switch to logged in header (keeping for formatting), which will have the logo at the top and the logout / profile access
 import NavBarHeader from '../../shared/navbar/navbar';
+import CompanyManager from '../company-manager/company-manager';
 
 function AdminDashboard() {
-    return (
-        <>
+    return (<>
             <NavBarHeader />
             <Container className="mt-4" fluid>
                 <Row className="">
@@ -25,6 +25,7 @@ function AdminDashboard() {
                         */}
                         <Switch>
                             <Route path="/dashboard/admin/" component={UserManager} />
+                            <Route path="/admin/company-manager" component={CompanyManager} />
                         </Switch>
                     </Col>
                 </Row>

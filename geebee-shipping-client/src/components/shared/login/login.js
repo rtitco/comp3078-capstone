@@ -72,7 +72,7 @@ class LoginForm extends Component {
 
     render() {
         if (this.state.loggedIn === true) {
-            return <Redirect to='/dashboard/admin' />
+            return <Redirect to='/admin' />
         }
 
         return (
