@@ -79,6 +79,7 @@ app.post('/login', async (req, loginRes) => {
     //find user with email in db
     var foundBool = false;
     var foundUser = "";
+    // Why aren't you using find one, to get one user, (SHOULD ONLY BE ONE)
     await userModel.find({ email: req.body.email }, (err, userRes) => {
         // console.log("========================")
         console.log(userRes)
@@ -87,6 +88,20 @@ app.post('/login', async (req, loginRes) => {
     });
     if (foundBool) {
         //check if the req.body.password matches the db entry
+        // console.log("Input Pass: ")
+        // console.log(req.body.password);
+
+
+        // console.log("User Pass: ")
+        // console.log(foundUser.password);
+
+        // const match = await bcrypt.compare(req.body.password, foundUser.password);
+
+        // if (match) {
+        //     console.log("Successfully Logged in")
+        //     store("currentUser", foundUser);
+        //     loginRes.send(store("currentUser"))
+        // }
 
             bcrypt.compare(req.body.password, foundUser.password, (err, res) => {
                 console.log("Comparing")
@@ -95,14 +110,17 @@ app.post('/login', async (req, loginRes) => {
                     console.log(err)
                 }
                 if (res) {
-                    console.log("Success")
-                    store("currentUser", foundUser);
-                    loginRes.send(store("currentUser"))
+                    // store("currentUser", foundUser);
+                    // console.log("RESULTS: ")
+                    // console.log(store("currentUser"));
                     // res.json({success: true, message: 'passwords do match'});
+                    console.log("Successfully Logged in")
+                    store("currentUser", foundUser);
+                    loginRes.send({user: store("currentUser"), success: true, message: "Login Successful." })
                     // return "SOMETHING"
                 } else {
                     console.log("In Else")
-                    return "NOTHING?"
+                    loginRes.send({user: null, success: false, message: "Incorrect Email/Password Provided."})
                 }
             })
             // console.log("Wrong password.")

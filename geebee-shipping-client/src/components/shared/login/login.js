@@ -14,7 +14,10 @@ class LoginForm extends Component {
         super()
         this.state = {
             email: '',
-            password: ''
+            password: '',
+            loggedIn: false,
+            currentUser: null,
+            errorMessage: "",
         }
         this.changeEmail = this.changeEmail.bind(this)
         this.changePassword = this.changePassword.bind(this)
@@ -44,8 +47,21 @@ class LoginForm extends Component {
         axios.post('http://localhost:8081/login', loginUser)
             .then(res => {
                 console.log("Successful POST")
-                console.log(res.data)
-                return <Redirect to="/register" /> //This Doesn't work!!! 
+                // REMOVE THIS CONSOLE.LOG
+                // console.log(res.data)
+                if(res.data.success === true){
+                    this.setState({
+                        loggedIn: true,
+                        currentUser: res.data.user
+                    })
+                }
+                else{
+                    // It's false, you should show wrong password
+                    this.setState({
+                        errorMessage: res.data.message
+                    })
+                }
+                // Else Error, to show wrong password.
             })
             .catch(err => {
                 console.log(err);
@@ -59,6 +75,10 @@ class LoginForm extends Component {
     }
 
     render() {
+        if (this.state.loggedIn === true) {
+            return <Redirect to='/dashboard/admin' />
+        }
+
         return (
             <Container>
                 <Row className="justify-content-md-center">
@@ -86,6 +106,7 @@ class LoginForm extends Component {
                                     value={this.state.password}
                                 />
                             </Form.Group>
+                            <span>{this.state.errorMessage}</span>
                             <Button variant="primary" className="btn-block" type="submit">
                                 Submit
                     </Button>
