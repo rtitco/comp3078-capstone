@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Table from '../../shared/react-table/react-table'
 import axios from 'axios'
-
+import Button from 'react-bootstrap/Button';
 
 export default class UserManager extends Component {
   constructor(props){
@@ -43,6 +43,7 @@ export default class UserManager extends Component {
     return (
       <div>
         <h1>User Manager</h1>
+        <Button className="float-right mr-5 mb-2" variant="success">Add User</Button>{''}
         <Table columns={columns} data={this.state.data} />
       </div>
     )
