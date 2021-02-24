@@ -5,9 +5,9 @@ import Col from 'react-bootstrap/Col';
 
 function AdminSideNav() {
     return (
-        <div id="mySidenav" class="sidenav mt-5 py-4">
+        <div id="mySidenav" class="sidenav py-4">
         <a href="#">User Manager</a>
-        <a href="#">Company Manager</a>
+        <a href="./admin/company-manager">Company Manager</a>
         <a href="#">System Manager</a>
       </div>
     );
