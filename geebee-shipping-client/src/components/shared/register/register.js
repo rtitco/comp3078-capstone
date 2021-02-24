@@ -80,7 +80,7 @@ class RegisterForm extends Component{
         // everything stored in registered will send to backend (url) then to mongo
         axios.post('http://localhost:8081/register', registered)
         .then(res => {
-            console.log(res.data)
+            console.log(res)
         }, (error) => {
             console.log(error);
         })

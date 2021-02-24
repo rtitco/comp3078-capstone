@@ -80,22 +80,34 @@ app.post('/login', async (req, loginRes) => {
     var foundBool = false;
     var foundUser = "";
     await userModel.find({ email: req.body.email }, (err, userRes) => {
-        console.log("========================")
+        // console.log("========================")
         console.log(userRes)
         foundBool = true;
-        foundUser = userRes
+        foundUser = userRes[0]
     });
     if (foundBool) {
         //check if the req.body.password matches the db entry
-        await bcrypt.compare(req.body.password, foundUser.password, (err, res) => {
-            store("currentUser", foundUser);
-            console.log("RESULTS: ")
-            console.log(store("currentUser"));
-            loginRes.redirect('http://localhost:3000/dashboard/admin')//This isn't working
-        })
-        // console.log("Wrong password.")
-    }
-})
+
+            bcrypt.compare(req.body.password, foundUser.password, (err, res) => {
+                console.log("Comparing")
+                if (err) {
+                    console.log("Error")
+                    console.log(err)
+                }
+                if (res) {
+                    console.log("Success")
+                    store("currentUser", foundUser);
+                    loginRes.send(store("currentUser"))
+                    // res.json({success: true, message: 'passwords do match'});
+                    // return "SOMETHING"
+                } else {
+                    console.log("In Else")
+                    return "NOTHING?"
+                }
+            })
+            // console.log("Wrong password.")
+        }
+    })
 
 //POST for Users Table
 app.post('/register', async (req, res) => {

@@ -1,6 +1,7 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import axios from 'axios';
 import './login.css';
+import { Redirect } from "react-router-dom";
 
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -38,16 +39,19 @@ class LoginForm extends Component {
             email: this.state.email,
             password: this.state.password
         }
-        // everything stored in registered will send to backend (url) then to mongo
+
+        console.log("Pre-Post");
         axios.post('http://localhost:8081/login', loginUser)
             .then(res => {
-                // console.log(res.data)
-            }, (error) => {
-                // console.log(error);
+                console.log("Successful POST")
+                console.log(res.data)
+                return <Redirect to="/register" /> //This Doesn't work!!! 
             })
+            .catch(err => {
+                console.log(err);
+            })
+        console.log("Post-Post")
 
-        // here you redirect to profile page or home page
-        // window.location = '/'
         this.setState({
             email: '',
             password: ''
