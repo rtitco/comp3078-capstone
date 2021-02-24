@@ -82,13 +82,26 @@ app.post('/login', async (req, loginRes) => {
     // Why aren't you using find one, to get one user, (SHOULD ONLY BE ONE)
     await userModel.find({ email: req.body.email }, (err, userRes) => {
         // console.log("========================")
-        // console.log(userRes)
+        console.log(userRes)
         foundBool = true;
         foundUser = userRes[0]
     });
     if (foundBool) {
         //check if the req.body.password matches the db entry
+        // console.log("Input Pass: ")
+        // console.log(req.body.password);
+
+
+        // console.log("User Pass: ")
+        // console.log(foundUser.password);
+
         // const match = await bcrypt.compare(req.body.password, foundUser.password);
+
+        // if (match) {
+        //     console.log("Successfully Logged in")
+        //     store("currentUser", foundUser);
+        //     loginRes.send(store("currentUser"))
+        // }
 
             bcrypt.compare(req.body.password, foundUser.password, (err, res) => {
                 console.log("Comparing")
