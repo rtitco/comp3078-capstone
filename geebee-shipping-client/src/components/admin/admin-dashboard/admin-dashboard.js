@@ -11,16 +11,10 @@ import NavBarHeader from '../../shared/navbar/navbar';
 import CompanyManager from '../company-manager/company-manager';
 
 function AdminDashboard() {
-    return (
-        <>
+    return (<>
             <NavBarHeader />
-<<<<<<< HEAD
-            <Container class="mt-4" fluid>
-                <Row>
-=======
             <Container className="mt-4" fluid>
                 <Row className="">
->>>>>>> 8ec34bb83351c88fe384c2c262895078d4a2fd5a
                     <Col sm="4" md="4" lg="3" xl="2">
                         {/*This will be the side navigation the routes links here must start with /dashboard/admin/ */}
                         <AdminSideNav />
