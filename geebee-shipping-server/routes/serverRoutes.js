@@ -2,7 +2,6 @@ const express = require('express');
 const userModel = require('../models/Users.js');
 const vehicleModel = require('../models/Vehicles.js')
 const orderModel = require('../models/Orders.js')
-const itemModel = require('../models/Items.js')
 const companyModel = require('../models/Companies.js')
 const bcrypt = require('bcrypt')
 const store = require('store2');
@@ -59,22 +58,11 @@ app.get('/orders', async (req, res) => {
     }
 });
 
-//GET for Items
-app.get('/items', async (req, res) => {
-    const Items = await itemModel.find({}); //Async function. Wait for results before posting
-    try {
-        res.send(Items);
-    }
-    catch (err) {
-        res.status(500).send(err);
-    }
-});
-
 //==============================================POST FUNCTIONS==================================================//
 
 //POST for Login Form
 app.post('/login', async (req, loginRes) => {
-    console.log(req.body.email)
+    // console.log(req.body.email)
     //get the email and pw from the req.body
     //find user with email in db
     var foundBool = false;
@@ -104,7 +92,7 @@ app.post('/login', async (req, loginRes) => {
         }
     })
 
-//POST for Users Table
+//POST ==> Admin Creating New User
 app.post('/admin/users/add', async (req, res) => {
     // generating salt password to hash and encrypt
     console.log("PRE POST")
@@ -129,6 +117,11 @@ app.post('/admin/users/add', async (req, res) => {
         .catch(error => {
             res.json(error)
         })
+})
+
+//POST ==> Updating User Profile
+app.post('/profile', async (req, res) => {
+
 })
 
 //POST for Companies Table
@@ -180,25 +173,6 @@ app.post('/orders', async (req, res) => {
             }
             else {
                 res.send(newOrder);
-            }
-        });
-    }
-    catch (err) {
-        res.status(500).send(err);
-    }
-})
-
-//POST for Items Table
-app.post('/items', async (req, res) => {
-    const newItem = new itemModel(req.body);
-    try {
-        await newItem.save((err) => {
-            if (err) {
-                //error handling
-                res.send(err)
-            }
-            else {
-                res.send(newItem);
             }
         });
     }

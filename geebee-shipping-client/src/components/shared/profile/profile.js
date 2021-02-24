@@ -100,7 +100,7 @@ class ProfileForm extends Component{
         return (
             <div>
                 <img src={logo} className="text-center" alt='logo'/>
-                    <h1 className='text-center'>Register New User</h1>
+                    <h1 className='text-center'>Update User Profile</h1>
                 <div>
                     <div className='container form-div d-flex justify-content-center'>
                         <form onSubmit={this.onSubmit}>
