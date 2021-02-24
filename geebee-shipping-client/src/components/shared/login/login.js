@@ -48,9 +48,7 @@ class LoginForm extends Component {
         console.log("Pre-Post");
         axios.post('http://localhost:8081/login', loginUser)
             .then(res => {
-                console.log("Successful POST")
-                // REMOVE THIS CONSOLE.LOG
-                // console.log(res.data)
+                // console.log("Successful POST")
                 if(res.data.success === true){
                     this.setState({
                         loggedIn: true,
@@ -58,12 +56,10 @@ class LoginForm extends Component {
                     })
                 }
                 else{
-                    // It's false, you should show wrong password
                     this.setState({
                         errorMessage: res.data.message
                     })
                 }
-                // Else Error, to show wrong password.
             })
             .catch(err => {
                 console.log(err);
