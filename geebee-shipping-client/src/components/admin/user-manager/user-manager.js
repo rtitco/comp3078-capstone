@@ -10,7 +10,16 @@ export default class UserManager extends Component {
     this.state = {
       userData: [],
       loading: true,
-      showModal: false
+      showModal: false,
+      company_id: '',
+      company_name: '',
+      company_address: {
+          building_no: '',
+          street_name: '',
+          city: '',
+          postal_code: ''
+      },
+      company_phone: ''
     }
   }
 
@@ -62,6 +71,7 @@ export default class UserManager extends Component {
         show={this.state.showModal}
         onHide={this.handleModalClose}
         backdrop="static"
+        className="mt-5"
         keyboard={false}
       >
         <Modal.Header closeButton>
@@ -75,7 +85,7 @@ export default class UserManager extends Component {
           <Button variant="secondary" onClick={this.handleModalClose}>
             Close
           </Button>
-          <Button variant="primary">Understood</Button>
+          <Button variant="primary">Submit</Button>
         </Modal.Footer>
       </Modal>
       </>

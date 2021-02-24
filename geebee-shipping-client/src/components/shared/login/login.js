@@ -9,6 +9,8 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
+import LoginNavBar from '../../shared/navbar/login-navbar';
+
 class LoginForm extends Component {
     constructor() {
         super()
@@ -80,6 +82,8 @@ class LoginForm extends Component {
         }
 
         return (
+            <>
+            <LoginNavBar/>
             <Container>
                 <Row className="justify-content-md-center">
                     <Col className="login-box p-5" lg="3" md="6" sm="8">
@@ -114,6 +118,7 @@ class LoginForm extends Component {
                     </Col>
                 </Row>
             </Container>
+            </>
         )
 
     }
