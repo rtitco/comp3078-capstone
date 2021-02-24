@@ -79,23 +79,53 @@ app.post('/login', async (req, loginRes) => {
     //find user with email in db
     var foundBool = false;
     var foundUser = "";
+    // Why aren't you using find one, to get one user, (SHOULD ONLY BE ONE)
     await userModel.find({ email: req.body.email }, (err, userRes) => {
-        console.log("========================")
+        // console.log("========================")
         console.log(userRes)
         foundBool = true;
-        foundUser = userRes
+        foundUser = userRes[0]
     });
     if (foundBool) {
         //check if the req.body.password matches the db entry
-        await bcrypt.compare(req.body.password, foundUser.password, (err, res) => {
-            store("currentUser", foundUser);
-            console.log("RESULTS: ")
-            console.log(store("currentUser"));
-            loginRes.redirect('http://localhost:3000/dashboard/admin')//This isn't working
-        })
-        // console.log("Wrong password.")
-    }
-})
+        // console.log("Input Pass: ")
+        // console.log(req.body.password);
+
+
+        // console.log("User Pass: ")
+        // console.log(foundUser.password);
+
+        // const match = await bcrypt.compare(req.body.password, foundUser.password);
+
+        // if (match) {
+        //     console.log("Successfully Logged in")
+        //     store("currentUser", foundUser);
+        //     loginRes.send(store("currentUser"))
+        // }
+
+            bcrypt.compare(req.body.password, foundUser.password, (err, res) => {
+                console.log("Comparing")
+                if (err) {
+                    console.log("Error")
+                    console.log(err)
+                }
+                if (res) {
+                    // store("currentUser", foundUser);
+                    // console.log("RESULTS: ")
+                    // console.log(store("currentUser"));
+                    // res.json({success: true, message: 'passwords do match'});
+                    console.log("Successfully Logged in")
+                    store("currentUser", foundUser);
+                    loginRes.send({user: store("currentUser"), success: true, message: "Login Successful." })
+                    // return "SOMETHING"
+                } else {
+                    console.log("In Else")
+                    loginRes.send({user: null, success: false, message: "Incorrect Email/Password Provided."})
+                }
+            })
+            // console.log("Wrong password.")
+        }
+    })
 
 //POST for Users Table
 app.post('/register', async (req, res) => {

@@ -13,7 +13,7 @@ function AdminDashboard() {
     return (
         <>
             <NavBarHeader />
-            <Container class="mt-4" fluid>
+            <Container className="mt-4" fluid>
                 <Row className="">
                     <Col sm="4" md="4" lg="3" xl="2">
                         {/*This will be the side navigation the routes links here must start with /dashboard/admin/ */}
