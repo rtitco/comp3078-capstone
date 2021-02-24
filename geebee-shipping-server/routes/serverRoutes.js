@@ -105,9 +105,10 @@ app.post('/login', async (req, loginRes) => {
     })
 
 //POST for Users Table
-app.post('/profile', async (req, res) => {
+app.post('/admin/users/add', async (req, res) => {
     // generating salt password to hash and encrypt
-    console.log(req)
+    console.log("PRE POST")
+    console.log(req.body)
     const saltPassword = await bcrypt.genSalt(10)
     const securePassword = await bcrypt.hash(req.body.password, saltPassword)
 
@@ -117,7 +118,9 @@ app.post('/profile', async (req, res) => {
         phoneNumber: req.body.phoneNumber,
         email: req.body.email,
         company: req.body.company,
-        password: securePassword
+        role: req.body.role,
+        password: securePassword,
+        firstLogin: true
     })
     registeredUser.save()
         .then(data => {
