@@ -1,0 +1,23 @@
+.sidenav {
+    border-right: #242423 1px solid;
+  }
+  
+  /* The navigation menu links */
+  .sidenav a {
+    padding-left: 10px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    text-decoration: none;
+    font-size: 18px;
+    color: #242423;
+    display: block;
+    transition: 0.3s;
+  }
+  
+  /* When you mouse over the navigation links, change their color */
+  .sidenav a:hover {
+    color: white;
+    background-color:#333533;
+    box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+  }
+  

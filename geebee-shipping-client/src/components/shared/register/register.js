@@ -102,7 +102,7 @@ class RegisterForm extends Component{
     render(){
         return (
             <div>
-                <img src={logo} alt='logo'/>
+                <img src={logo} className="text-center" alt='logo'/>
                     <h1 className='text-center'>Register New User</h1>
                 <div>
                     <div className='container form-div d-flex justify-content-center'>
