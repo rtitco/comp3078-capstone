@@ -22,9 +22,7 @@ class ProfileForm extends Component{
         this.changePassword = this.changePassword.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
     }
-    // changes state values 
-    // takes value of event and saves it to fullname, username, etc
-    // used in onChange in form fields, used to check any change in field
+
     changeFirstName(event){
         this.setState({
             firstName: event.target.value
