@@ -2,7 +2,7 @@ import React from 'react'
 import { Navbar, Nav } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 
-const NavBarHeader = () => {
+const LoginNavBar = () => {
   return (
     <Navbar bg="light" expand="lg">
       <LinkContainer to="/">
@@ -10,12 +10,12 @@ const NavBarHeader = () => {
       </LinkContainer>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="mr-auto">
-          <LinkContainer to="/dashboard">
-            <Nav.Link>Service</Nav.Link>
+        <Nav className="ml-auto">
+          <LinkContainer to="/login">
+            <Nav.Link>Login</Nav.Link>
           </LinkContainer>
-          <LinkContainer to="/about">
-            <Nav.Link>About</Nav.Link>
+          <LinkContainer to="/register">
+            <Nav.Link>Register</Nav.Link>
           </LinkContainer>
         </Nav>
       </Navbar.Collapse>
@@ -23,4 +23,4 @@ const NavBarHeader = () => {
   )
 }
 
-export default NavBarHeader;
+export default LoginNavBar;
