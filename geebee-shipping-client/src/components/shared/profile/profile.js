@@ -78,7 +78,7 @@ class RegisterForm extends Component{
             password: this.state.password
         }
         // everything stored in registered will send to backend (url) then to mongo
-        axios.post('http://localhost:8081/register', registered)
+        axios.post('http://localhost:8081/profile', registered)
         .then(res => {
             console.log(res)
         }, (error) => {
