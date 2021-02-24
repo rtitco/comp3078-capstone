@@ -5,6 +5,8 @@ const orderModel = require('../models/Orders.js')
 const itemModel = require('../models/Items.js')
 const companyModel = require('../models/Companies.js')
 const bcrypt = require('bcrypt')
+const store = require('store2');
+const { json } = require('express');
 const app = express();
 // const router = express.Router();
 
@@ -71,6 +73,29 @@ app.get('/items', async (req, res) => {
 //==============================================POST FUNCTIONS==================================================//
 
 //POST for Login Form
+app.post('/login', async (req, loginRes) => {
+    console.log(req.body.email)
+    //get the email and pw from the req.body
+    //find user with email in db
+    var foundBool = false;
+    var foundUser = "";
+    await userModel.find({ email: req.body.email }, (err, userRes) => {
+        console.log("========================")
+        console.log(userRes)
+        foundBool = true;
+        foundUser = userRes
+    });
+    if (foundBool) {
+        //check if the req.body.password matches the db entry
+        await bcrypt.compare(req.body.password, foundUser.password, (err, res) => {
+            store("currentUser", foundUser);
+            console.log("RESULTS: ")
+            console.log(store("currentUser"));
+            loginRes.redirect('http://localhost:3000/dashboard/admin')//This isn't working
+        })
+        // console.log("Wrong password.")
+    }
+})
 
 //POST for Users Table
 app.post('/register', async (req, res) => {
@@ -80,7 +105,7 @@ app.post('/register', async (req, res) => {
     const securePassword = await bcrypt.hash(req.body.password, saltPassword)
 
     const registeredUser = new userModel({
-        firstName: req.body.firstName, 
+        firstName: req.body.firstName,
         lastName: req.body.lastName,
         phoneNumber: req.body.phoneNumber,
         email: req.body.email,
@@ -88,12 +113,12 @@ app.post('/register', async (req, res) => {
         password: securePassword
     })
     registeredUser.save()
-    .then(data => {
-        res.json(data)
-    })
-    .catch(error => {
-        res.json(error)
-    })
+        .then(data => {
+            res.json(data)
+        })
+        .catch(error => {
+            res.json(error)
+        })
 })
 
 //POST for Companies Table
@@ -101,16 +126,16 @@ app.post('/companies', async (req, res) => {
     const newCompany = new companyModel(req.body);
     try {
         await newCompany.save((err) => {
-            if(err) {
+            if (err) {
                 //error handling
                 res.send(err)
             }
-            else{
+            else {
                 res.send(newCompany);
             }
         });
     }
-    catch(err) {
+    catch (err) {
         res.status(500).send(err);
     }
 })
@@ -120,16 +145,16 @@ app.post('/trucks', async (req, res) => {
     const newTruck = new vehicleModel(req.body);
     try {
         await newTruck.save((err) => {
-            if(err) {
+            if (err) {
                 //error handling
                 res.send(err)
             }
-            else{
+            else {
                 res.send(newTruck);
             }
         });
     }
-    catch(err) {
+    catch (err) {
         res.status(500).send(err);
     }
 })
@@ -139,16 +164,16 @@ app.post('/orders', async (req, res) => {
     const newOrder = new orderModel(req.body);
     try {
         await newOrder.save((err) => {
-            if(err) {
+            if (err) {
                 //error handling
                 res.send(err)
             }
-            else{
+            else {
                 res.send(newOrder);
             }
         });
     }
-    catch(err) {
+    catch (err) {
         res.status(500).send(err);
     }
 })
@@ -158,20 +183,18 @@ app.post('/items', async (req, res) => {
     const newItem = new itemModel(req.body);
     try {
         await newItem.save((err) => {
-            if(err) {
+            if (err) {
                 //error handling
                 res.send(err)
             }
-            else{
+            else {
                 res.send(newItem);
             }
         });
     }
-    catch(err) {
+    catch (err) {
         res.status(500).send(err);
     }
 })
-
-
 
 module.exports = app;
