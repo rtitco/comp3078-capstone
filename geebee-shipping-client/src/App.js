@@ -15,7 +15,7 @@ function App() {
           </Route>
           <Route path="/login" component={LoginForm} />
           <Route path="/profile" component={ProfileForm} />
-          <Route path="/dashboard/admin" component={AdminDashboard} />
+          <Route path="/admin" component={AdminDashboard} />
         </Switch>
       </Router>
   );
