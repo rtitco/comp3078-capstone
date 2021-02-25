@@ -2,10 +2,7 @@ import React, { Component } from 'react'
 import Table from '../../shared/react-table/react-table'
 import axios from 'axios'
 
-import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 
 export default class CompanyManager extends Component {
   constructor(props) {
@@ -18,38 +15,46 @@ export default class CompanyManager extends Component {
   }
 
  
-  async getUsersData() {
-    const res = await axios.get('http://localhost:8081/users')
+  async getCompaniesData() {
+    const res = await axios.get('http://localhost:8081/companies')
     console.log(res.data)
     this.setState({ loading: false, data: res.data })
   }
   componentDidMount() {
-    this.getUsersData()
+    this.getCompaniesData()
   }
 
   render() {
     const columns = [
       {
-        Header: 'First Name',
-        accessor: 'firstName',
-      },
-      {
-        Header: 'Last Name',
-        accessor: 'lastName',
-      },
-      {
-        Header: 'Phone #',
-        accessor: 'phoneNumber',
-      },
-      {
         Header: 'Company',
-        accessor: 'company',
+        accessor: 'company_name',
+      },
+      {
+        Header: 'Address',
+        accessor: 'address',
+      },
+      {
+        Header: 'City',
+        accessor: 'city',
+      },
+      {
+        Header: 'Province',
+        accessor: 'province',
+      }, 
+      {
+        Header: 'Postal Code',
+        accessor: 'postal_code',
+      },
+      {
+        Header: 'Phone',
+        accessor: 'company_phone',
       }
     ]
     return (
       <div>
         <h1>Company Manager</h1>
-        <Button href="/admin/company-manager/create" className="float-right mr-5 mb-2" variant="success">Add Company</Button>{''}
+        <Button href="/admin/company-manager/add" className="float-right mr-5 mb-2" variant="success">Add Company</Button>{''}
         <div className="mx-5">
           <Table columns={columns} data={this.state.data} />
         </div>

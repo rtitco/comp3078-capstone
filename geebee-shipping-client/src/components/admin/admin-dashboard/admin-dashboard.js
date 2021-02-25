@@ -35,10 +35,7 @@ function AdminDashboard() {
                         <Route exact path="/admin/users/add" component={CreateUser} />
 
                         <Route exact path="/admin/company-manager" component={CompanyManager} />
-                        <Route exact path="/admin/company-manager/create" component={CreateCompany} />
-                   
-                        
-
+                        <Route exact path="/admin/company-manager/add" component={CreateCompany} />
                     </Switch>
                 </Col>
             </Row>
