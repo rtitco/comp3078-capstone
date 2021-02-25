@@ -20,6 +20,7 @@ class LoginForm extends Component {
             loggedIn: false,
             currentUser: null,
             errorMessage: "",
+            firstLogin: false
         }
         this.changeEmail = this.changeEmail.bind(this)
         this.changePassword = this.changePassword.bind(this)
@@ -51,9 +52,11 @@ class LoginForm extends Component {
                 console.log("Successful POST")
                 console.log(res.data.user)
                 if(res.data.success === true){
+                    sessionStorage.setItem("currentUser", JSON.stringify(res.data.user))
                     this.setState({
                         loggedIn: true,
-                        currentUser: res.data.user
+                        currentUser: res.data.user,
+                        firstLogin: res.data.user.firstLogin
                     })
                 }
                 else{

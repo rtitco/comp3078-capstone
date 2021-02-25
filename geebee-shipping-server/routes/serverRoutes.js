@@ -4,7 +4,7 @@ const vehicleModel = require('../models/Vehicles.js')
 const orderModel = require('../models/Orders.js')
 const companyModel = require('../models/Companies.js')
 const bcrypt = require('bcrypt')
-const store = require('store2');
+// const store = require('store2');
 const { json } = require('express');
 const app = express();
 // const router = express.Router();
@@ -60,38 +60,6 @@ app.get('/orders', async (req, res) => {
 
 //==============================================POST FUNCTIONS==================================================//
 
-//POST for Login Form
-app.post('/login', async (req, loginRes) => {
-    // console.log(req.body.email)
-    //get the email and pw from the req.body
-    //find user with email in db
-    var foundBool = false;
-    var foundUser = "";
-    await userModel.find({ email: req.body.email }, (err, userRes) => {
-        foundBool = true;
-        foundUser = userRes[0]
-    });
-    if (foundBool) {
-        //check if the req.body.password matches the db entry
-            bcrypt.compare(req.body.password, foundUser.password, (err, res) => {
-                console.log("Comparing")
-                if (err) {
-                    console.log("Error")
-                    console.log(err)
-                }
-                if (res) {
-                    console.log("Successfully Logged in")
-                    store("currentUser", foundUser);
-                    loginRes.send({user: store("currentUser"), success: true, message: "Login Successful." })
-                    // return "SOMETHING"
-                } else {
-                    console.log("In Else")
-                    loginRes.send({user: null, success: false, message: "Incorrect Email/Password Provided."})
-                }
-            })
-        }
-    })
-
 //POST ==> Admin Creating New User
 app.post('/admin/users/add', async (req, res) => {
     // generating salt password to hash and encrypt
@@ -119,9 +87,83 @@ app.post('/admin/users/add', async (req, res) => {
         })
 })
 
-//POST ==> Updating User Profile
-app.post('/profile', async (req, res) => {
+//POST for Login Form
+app.post('/login', async (req, loginRes) => {
+    //get the email and pw from the req.body
+    //find user with email in db
+    var foundBool = false;
+    var foundUser = "";
 
+    //find matching email address in the database
+    //check if email or password fields are empty
+    if (req.body.email.length < 1 || req.body.password.length < 1) {
+        loginRes.send({ success: false, message: "Fields cannot be empty." })
+    }
+    else {
+        await userModel.find({ email: req.body.email }, (err, userRes) => {
+            if (err) {
+                loginRes.send({success: false, message: "Incorrect Email/Password Provided." })
+            }
+            if (userRes) {
+                foundBool = true;
+                foundUser = userRes[0]
+            }
+        });
+
+        if (foundBool) {
+            //check if the req.body.password matches the db entry
+            bcrypt.compare(req.body.password, foundUser.password, (err, res) => {
+                console.log("Comparing")
+                if (err) {
+                    // console.log("Error")
+                    loginRes.send({success: false, message: "Incorrect Email/Password Provided." })
+                }
+                if (res) {
+                    // console.log("Successfully Logged in")
+                    loginRes.send({ user: foundUser, success: true, message: "Login Successful." })
+                } else {
+                    // console.log("In Else")
+                    loginRes.send({success: false, message: "Incorrect Email/Password Provided." })
+                }
+            })
+        }
+        else {
+            loginRes.send({success: false, message: "Incorrect Email/Password Provided." })
+        }
+    }
+
+    //if email found, check for pw
+
+})
+
+//POST ==> Updating User Profile
+app.post('/profile', async (req, updateRes) => {
+    if (true) {
+        //hash the input password
+        const saltPassword = await bcrypt.genSalt(10)
+        const securePassword = await bcrypt.hash(req.body.password, saltPassword)
+
+        //find the entry in the database and update the data
+        userModel.findByIdAndUpdate(req.body.userID, {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            phoneNumber: req.body.phoneNumber,
+            email: req.body.email,
+            password: securePassword,
+            firstLogin: false
+        }, { useFindAndModify: false }, (err, res) => {
+            if (err) {
+                updateRes.send({ user: null, updateSuccess: false, message: "Incorrect Data." })
+            }
+            if (res) {
+                updateRes.send({ updateSuccess: true, message: "Update Successful." })
+            }
+            else {
+                // console.log("In Else")
+                updateRes.send({ user: null, updateSuccess: false, message: "Incorrect Data." })
+            }
+        })
+    }
 })
 
 //POST for Companies Table
