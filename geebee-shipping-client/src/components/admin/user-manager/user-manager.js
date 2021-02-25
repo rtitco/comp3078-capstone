@@ -10,18 +10,9 @@ export default class UserManager extends Component {
     this.state = {
       userData: [],
       loading: true,
-      showModal: false,
-      company_id: '',
-      company_name: '',
-      company_address: {
-          building_no: '',
-          street_name: '',
-          city: '',
-          postal_code: ''
-      },
-      company_phone: ''
-    }
+      showModal: false
   }
+}
 
   handleModalShow = () =>{
     this.setState({ showModal: true})

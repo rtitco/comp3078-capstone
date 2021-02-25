@@ -125,7 +125,8 @@ app.post('/profile', async (req, res) => {
 })
 
 //POST for Companies Table
-app.post('/companies', async (req, res) => {
+app.post('/admin/company-manager/add', async (req, res) => {
+    console.log(req.body);
     const newCompany = new companyModel(req.body);
     try {
         await newCompany.save((err) => {
@@ -134,7 +135,7 @@ app.post('/companies', async (req, res) => {
                 res.send(err)
             }
             else {
-                res.send(newCompany);
+                res.send({success: true})
             }
         });
     }
