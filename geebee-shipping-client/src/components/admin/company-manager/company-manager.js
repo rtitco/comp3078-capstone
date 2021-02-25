@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 import Table from '../../shared/react-table/react-table'
 import axios from 'axios'
+
+import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 export default class CompanyManager extends Component {
   constructor(props) {
@@ -10,17 +13,11 @@ export default class CompanyManager extends Component {
     this.state = {
       data: [],
       loading: true,
-      showModal: false
+      showModal: false,
     }
   }
 
-  handleModalShow = () =>{
-    this.setState({ showModal: true})
-  } 
-  handleModalClose = () =>{
-    this.setState({ showModal: false})
-  } 
-
+ 
   async getUsersData() {
     const res = await axios.get('http://localhost:8081/users')
     console.log(res.data)
@@ -52,31 +49,10 @@ export default class CompanyManager extends Component {
     return (
       <div>
         <h1>Company Manager</h1>
-        <Button onClick={this.handleModalShow} className="float-right mr-5 mb-2" variant="success">Add Company</Button>{''}
+        <Button href="/admin/company-manager/create" className="float-right mr-5 mb-2" variant="success">Add Company</Button>{''}
         <div className="mx-5">
           <Table columns={columns} data={this.state.data} />
         </div>
-
-        <Modal
-        show={this.state.showModal}
-        onHide={this.handleModalClose}
-        backdrop="static"
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Modal title</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          I will not close if you click outside me. Don't even try to press
-          escape key.
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={this.handleModalClose}>
-            Close
-          </Button>
-          <Button variant="primary">Understood</Button>
-        </Modal.Footer>
-      </Modal>
       </div>
     )
   }
