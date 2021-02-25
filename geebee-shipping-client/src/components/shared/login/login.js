@@ -78,11 +78,48 @@ class LoginForm extends Component {
 
     render() {
         if (this.state.loggedIn === true) {
-            if (this.state.currentUser.firstLogin === true){
-                return <Redirect to='/profile' />
+            if(this.state.currentUser.role == "Admin"){
+                if (this.state.currentUser.firstLogin === true){
+                    return <Redirect to='/profile' />
+                }
+                else{
+                    return <Redirect to='/admin' />
+                }
+            }
+            if(this.state.currentUser.role == "Driver"){
+                if (this.state.currentUser.firstLogin === true){
+                    return <Redirect to='/profile' />
+                }
+                else{
+                    return <Redirect to='/admin' />
+                }
+            }
+            if(this.state.currentUser.role == "Dispatcher"){
+                if (this.state.currentUser.firstLogin === true){
+                    return <Redirect to='/profile' />
+                }
+                else{
+                    return <Redirect to='/admin' />
+                }
+            }
+            if(this.state.currentUser.role == "Distribution"){
+                if (this.state.currentUser.firstLogin === true){
+                    return <Redirect to='/profile' />
+                }
+                else{
+                    return <Redirect to='/admin' />
+                }
+            }
+            if(this.state.currentUser.role == "Retail"){
+                if (this.state.currentUser.firstLogin === true){
+                    return <Redirect to='/profile' />
+                }
+                else{
+                    return <Redirect to='/admin' />
+                }
             }
             else{
-                return <Redirect to='/admin' />
+                this.setState({errorMessage: "Please log in."})
             }
         }
 

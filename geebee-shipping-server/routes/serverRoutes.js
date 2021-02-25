@@ -61,7 +61,7 @@ app.get('/orders', async (req, res) => {
 //==============================================POST FUNCTIONS==================================================//
 
 //POST ==> Admin Creating New User
-app.post('/admin/users/add', async (req, res) => {
+app.post('/admin/users/add', async (req, newUser) => {
     // generating salt password to hash and encrypt
     console.log("PRE POST")
     console.log(req.body)
@@ -78,13 +78,20 @@ app.post('/admin/users/add', async (req, res) => {
         password: securePassword,
         firstLogin: true
     })
-    registeredUser.save()
-        .then(data => {
-            res.json(data)
-        })
-        .catch(error => {
-            res.json(error)
-        })
+    registeredUser.save( (err, res) => {
+        if (err){
+            newUser.send({message: "Incorrect Email/Password Provided." })
+        }
+        else{
+            newUser.send({message: "New User Created." })
+        }
+    })
+        // .then(data => {
+        //     res.json(data)
+        // })
+        // .catch(error => {
+        //     res.json(error)
+        // })
 })
 
 //POST for Login Form
