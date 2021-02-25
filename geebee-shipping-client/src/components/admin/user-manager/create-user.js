@@ -1,10 +1,11 @@
+import { Redirect } from "react-router-dom";
 import React, { Component } from 'react';
 import axios from 'axios'
 import logo from '../../shared/profile/gb.png'
 
-class CreateUser extends Component{
-    
-    constructor(){
+class CreateUser extends Component {
+
+    constructor() {
         super()
         this.state = {
             firstName: '',
@@ -13,43 +14,41 @@ class CreateUser extends Component{
             email: '',
             company: '',
             role: '',
-            password: ''
+            password: '',
+
+            updateSuccess: false,
+            errorMessage: ''
         }
-        this.changeEmail = this.changeEmail.bind(this)
-        this.changeCompany = this.changeCompany.bind(this)
-        this.changeRole = this.changeRole.bind(this)
-        this.changePassword = this.changePassword.bind(this)
-        this.onSubmit = this.onSubmit.bind(this)
     }
     // changes state values 
     // takes value of event and saves it to fullname, username, etc
     // used in onChange in form fields, used to check any change in field
 
-    changeEmail(event){
+    changeEmail = (event) => {
         this.setState({
             email: event.target.value
         })
     }
 
-    changeCompany(event){
+    changeCompany = (event) => {
         this.setState({
             company: event.target.value
         })
     }
 
-    changeRole(event){
+    changeRole = (event) => {
         this.setState({
             role: event.target.value
         })
     }
 
-    changePassword(event){
+    changePassword = (event) => {
         this.setState({
             password: event.target.value
         })
     }
 
-    onSubmit(event){
+    onSubmit = (event) => {
         // prevents form from acting in default way, stops refreshing
         event.preventDefault()
         const registered = {
@@ -63,11 +62,15 @@ class CreateUser extends Component{
         }
         // everything stored in registered will send to backend (url) then to mongo
         axios.post('http://localhost:8081/admin/users/add', registered)
-        .then(res => {
-            console.log(res)
-        }, (error) => {
-            console.log(error);
-        })
+            .then(res => {
+                this.setState({
+                    errorMessage: res.data.message
+                })
+            }, (error) => {
+                this.setState({
+                    errorMessage: "Update Failed. Please Fill All Fields."
+                })
+            })
 
         // here you redirect to profile page or home page
         // window.location = '/'
@@ -82,26 +85,39 @@ class CreateUser extends Component{
         })
     }
 
-    render(){
+    render() {
+        if (this.state.email == '') {
+            return <Redirect to='/login' />
+        }
+        else {
+            if (this.state.updateSuccess === true) {
+                return <Redirect to='/admin' />
+            }
+            else {
+                this.setState({
+                    errorMessage: "Update Failed. Please Fill All Fields."
+                })
+            }
+        }
         return (
             <div>
-                <img src={logo} className="text-center" alt='logo'/>
-                    <h1 className='text-center'>Register New User</h1>
+                <img src={logo} className="text-center" alt='logo' />
+                <h1 className='text-center'>Register New User</h1>
                 <div>
                     <div className='container form-div d-flex justify-content-center'>
                         <form onSubmit={this.onSubmit}>
-                            
+                        
                             <input type='text'
-                            placeholder='E-mail'
-                            onChange={this.changeEmail}
-                            value={this.state.email}
-                            className='form-control form-group'/>
+                                placeholder='E-mail'
+                                onChange={this.changeEmail}
+                                value={this.state.email}
+                                className='form-control form-group' />
 
                             <input type='text'
-                            placeholder='Company'
-                            onChange={this.changeCompany}
-                            value={this.state.company}
-                            className='form-control form-group'/>
+                                placeholder='Company'
+                                onChange={this.changeCompany}
+                                value={this.state.company}
+                                className='form-control form-group' />
 
                             <label>Select a Role:</label>
                             <select value={this.state.role} name="roles" onChange={this.changeRole}>
@@ -114,18 +130,21 @@ class CreateUser extends Component{
                             </select>
 
                             <input type='password'
-                            placeholder='Password'
-                            onChange={this.changePassword}
-                            value={this.state.password}
-                            className='form-control form-group'/>
+                                placeholder='Password'
+                                onChange={this.changePassword}
+                                value={this.state.password}
+                                className='form-control form-group' />
+
+                            <span>{this.state.errorMessage}</span>
+
 
                             <input type='submit' className='btn btn-primary btn-block'
-                            value='Submit'/>
+                                value='Submit' />
                         </form>
                     </div>
                 </div>
             </div>
-        
+
         );
     }
 }

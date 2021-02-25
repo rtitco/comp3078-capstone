@@ -94,16 +94,29 @@ class ProfileForm extends Component {
                     })
                 }
             }, (error) => {
-                console.log(error);
+                this.setState({
+                    errorMessage: "Update Failed. Please Fill All Fields."
+                })
             })
 
     }
 
     render() {
         //After successful update, redirect to dashboard
-        if (this.state.updateSuccess === true) {
-            return <Redirect to='/admin' />
+        if (this.state.email == '') {
+            return <Redirect to='/login' />
         }
+        else {
+            if (this.state.updateSuccess === true) {
+                return <Redirect to='/admin' />
+            }
+            else {
+                this.setState({
+                    errorMessage: "Update Failed. Please Fill All Fields."
+                })
+            }
+        }
+
 
         return (
             <div>
