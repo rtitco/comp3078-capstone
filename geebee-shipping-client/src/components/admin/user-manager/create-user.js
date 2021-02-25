@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios'
-import logo from './gb.png'
+import logo from '../../shared/profile/gb.png'
 
 class CreateUser extends Component{
     
@@ -48,12 +48,7 @@ class CreateUser extends Component{
             password: event.target.value
         })
     }
-    
-    checkboxHandler(){
-        
-    }
-    // will grab all details user typed in and saved in 'registered' after user clicks submit
-    // want to send 'registered' to the backend, use axios
+
     onSubmit(event){
         // prevents form from acting in default way, stops refreshing
         event.preventDefault()
@@ -67,7 +62,7 @@ class CreateUser extends Component{
             password: this.state.password
         }
         // everything stored in registered will send to backend (url) then to mongo
-        axios.post('http://localhost:8081/profile', registered)
+        axios.post('http://localhost:8081/admin/users/add', registered)
         .then(res => {
             console.log(res)
         }, (error) => {
@@ -126,12 +121,6 @@ class CreateUser extends Component{
 
                             <input type='submit' className='btn btn-primary btn-block'
                             value='Submit'/>
-
-                            <div className='text-center'>
-                            <input type='checkbox' id='agree' 
-                            onChange={this.checkboxHandler}/>
-                            <label className='p-1'type='text'> I accept the terms & conditions </label>
-                            </div>
                         </form>
                     </div>
                 </div>

@@ -48,7 +48,8 @@ class LoginForm extends Component {
         console.log("Pre-Post");
         axios.post('http://localhost:8081/login', loginUser)
             .then(res => {
-                // console.log("Successful POST")
+                console.log("Successful POST")
+                console.log(res.data.user)
                 if(res.data.success === true){
                     this.setState({
                         loggedIn: true,
@@ -74,7 +75,12 @@ class LoginForm extends Component {
 
     render() {
         if (this.state.loggedIn === true) {
-            return <Redirect to='/admin' />
+            if (this.state.currentUser.firstLogin === true){
+                return <Redirect to='/profile' />
+            }
+            else{
+                return <Redirect to='/admin' />
+            }
         }
 
         return (
