@@ -29,7 +29,8 @@ var UserSchema = new mongoose.Schema({
     firstLogin: {
         type: Boolean,
         required: true
-    }
+    },
+    ObjectId: String
 })
 
 const User = mongoose.model("User", UserSchema);
