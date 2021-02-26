@@ -7,7 +7,7 @@ function AdminSideNav() {
     return (
         <div id="mySidenav" className="sidenav mt-5 py-4">
         <a href="admin/user-manager">User Manager</a>
-        <a href="./admin/company-manager">Company Manager</a>
+        <a href="admin/company-manager">Company Manager</a>
         <a href="#">System Manager</a>
       </div>
     );

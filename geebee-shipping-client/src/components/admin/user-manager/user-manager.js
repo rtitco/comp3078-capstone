@@ -21,6 +21,7 @@ export default class UserManager extends Component {
     this.setState({ showModal: false})
   } 
 
+  //gets the user data from db
   async getUsersData() {
     const res = await axios.get('http://localhost:8081/users')
     console.log(res.data)
@@ -31,7 +32,12 @@ export default class UserManager extends Component {
   }
 
   render() {
+    // columns for data table
     const columns = [
+      // {
+      //   Header: 'ID',
+      //   accessor: '_id'
+      // },
       {
         Header: 'First Name',
         accessor: 'firstName',
@@ -41,8 +47,12 @@ export default class UserManager extends Component {
         accessor: 'lastName',
       },
       {
-        Header: 'Phone #',
-        accessor: 'phoneNumber',
+        Header: 'Email',
+        accessor: 'email',
+      },
+      {
+        Header: 'Role',
+        accessor: 'role'
       },
       {
         Header: 'Company',
@@ -54,6 +64,7 @@ export default class UserManager extends Component {
         <h1>User Manager</h1>
         <Button onClick={this.handleModalShow} className="float-right mr-5 mb-2" variant="success">Add User</Button>{''}
         <div className="mx-5">
+          {/* this is the data table */}
           <Table columns={columns} data={this.state.userData} />
         </div>
 

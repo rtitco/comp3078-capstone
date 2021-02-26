@@ -107,13 +107,11 @@ class ProfileForm extends Component {
             return <Redirect to='/login' />
         }
         else {
-            if (this.state.updateSuccess === true) {
+            if (this.state.updateSuccess == true) {
                 return <Redirect to='/admin' />
             }
             else {
-                this.setState({
-                    errorMessage: "Update Failed. Please Fill All Fields."
-                })
+                
             }
         }
 

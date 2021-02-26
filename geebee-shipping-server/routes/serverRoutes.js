@@ -1,6 +1,6 @@
 const express = require('express');
 const userModel = require('../models/Users.js');
-const vehicleModel = require('../models/Vehicles.js')
+const vehicleModel = require('../models/Vehicle.js')
 const orderModel = require('../models/Orders.js')
 const companyModel = require('../models/Companies.js')
 const bcrypt = require('bcrypt')
@@ -37,7 +37,7 @@ app.get('/companies', async (req, res) => {
 
 
 //GET for Trucks
-app.get('/vehicles', async (req, res) => {
+app.get('/fleet', async (req, res) => {
     const Vehicles = await vehicleModel.find({}); //Async function. Wait for results before posting
     try {
         res.send(Vehicles);

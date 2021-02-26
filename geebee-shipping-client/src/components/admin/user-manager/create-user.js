@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import axios from 'axios'
 import logo from '../../shared/profile/gb.png'
 
-class CreateUser extends Component {
+class CreateUserForm extends Component {
 
     constructor() {
         super()
@@ -86,19 +86,19 @@ class CreateUser extends Component {
     }
 
     render() {
-        if (this.state.email == '') {
-            return <Redirect to='/login' />
-        }
-        else {
-            if (this.state.updateSuccess === true) {
-                return <Redirect to='/admin' />
-            }
-            else {
-                this.setState({
-                    errorMessage: "Update Failed. Please Fill All Fields."
-                })
-            }
-        }
+        // if (this.state.email == '') {
+        //     return <Redirect to='/login' />
+        // }
+        // else {
+        //     if (this.state.updateSuccess === true) {
+        //         return <Redirect to='/admin' />
+        //     }
+        //     else {
+                // this.setState({
+                //     errorMessage: "Update Failed. Please Fill All Fields."
+                // })
+        //     }
+        // }
         return (
             <div>
                 <img src={logo} className="text-center" alt='logo' />
@@ -149,4 +149,4 @@ class CreateUser extends Component {
     }
 }
 
-export default CreateUser;
+export default CreateUserForm;
