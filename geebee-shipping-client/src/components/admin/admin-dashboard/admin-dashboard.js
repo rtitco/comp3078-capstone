@@ -6,9 +6,12 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-d
 
 //Switch to logged in header (keeping for formatting), which will have the logo at the top and the logout / profile access
 import LoginNavBar from '../../shared/navbar/login-navbar';
-import CompanyManager from '../company-manager/company-manager';
-import UserManager from '../user-manager/user-manager';
 import AdminSideNav from '../admin-side-nav/admin-side-nav';
+//Company
+import CompanyManager from '../company-manager/company-manager';
+import CreateCompany from '../company-manager/create-company';
+//user
+import UserManager from '../user-manager/user-manager';
 import CreateUser from '../user-manager/create-user';
 
 function AdminDashboard() {
@@ -28,10 +31,11 @@ function AdminDashboard() {
                         <Route exact path="/admin">
                             <Redirect to="/admin/user-manager" />
                         </Route>
-                        <Route path="/admin/user-manager" component={UserManager} />
-                        <Route path="/admin/company-manager" component={CompanyManager} />
-                        <Route path="/admin/users/add" component={CreateUser} />
+                        <Route exact path="/admin/user-manager" component={UserManager} />
+                        <Route exact path="/admin/users/add" component={CreateUser} />
 
+                        <Route exact path="/admin/company-manager" component={CompanyManager} />
+                        <Route exact path="/admin/company-manager/add" component={CreateCompany} />
                     </Switch>
                 </Col>
             </Row>
