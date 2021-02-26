@@ -81,7 +81,7 @@ export default class CreateCompany extends Component {
           //redirect to another page
           this.setState({
             sendSuccess: true
-        })
+          })
         }
       }, (error) => {
         console.log(error);

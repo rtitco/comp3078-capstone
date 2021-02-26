@@ -22,24 +22,24 @@ class LoginForm extends Component {
             errorMessage: "",
             firstLogin: false
         }
-        this.changeEmail = this.changeEmail.bind(this)
-        this.changePassword = this.changePassword.bind(this)
-        this.onSubmit = this.onSubmit.bind(this)
+        // this.changeEmail = this.changeEmail.bind(this)
+        // this.changePassword = this.changePassword.bind(this)
+        // this.onSubmit = this.onSubmit.bind(this)
     }
 
-    changeEmail(event) {
+    changeEmail = (event) => {
         this.setState({
             email: event.target.value
         })
     }
 
-    changePassword(event) {
+    changePassword = (event) => {
         this.setState({
             password: event.target.value
         })
     }
 
-    onSubmit(event) {
+    onSubmit = (event) => {
         event.preventDefault()
         const loginUser = {
             email: this.state.email,
@@ -94,30 +94,30 @@ class LoginForm extends Component {
                     return <Redirect to='/admin' />
                 }
             }
-            if(this.state.currentUser.role == "Dispatcher"){
+            if(this.state.currentUser.role == "Dispatcher" || this.state.currentUser.role == "Distribution" || this.state.currentUser.role == "Retail"){
                 if (this.state.currentUser.firstLogin === true){
                     return <Redirect to='/profile' />
                 }
                 else{
-                    return <Redirect to='/admin' />
+                    return <Redirect to='/dashboard' />
                 }
             }
-            if(this.state.currentUser.role == "Distribution"){
-                if (this.state.currentUser.firstLogin === true){
-                    return <Redirect to='/profile' />
-                }
-                else{
-                    return <Redirect to='/admin' />
-                }
-            }
-            if(this.state.currentUser.role == "Retail"){
-                if (this.state.currentUser.firstLogin === true){
-                    return <Redirect to='/profile' />
-                }
-                else{
-                    return <Redirect to='/admin' />
-                }
-            }
+            // if(this.state.currentUser.role == "Distribution"){
+            //     if (this.state.currentUser.firstLogin === true){
+            //         return <Redirect to='/profile' />
+            //     }
+            //     else{
+            //         return <Redirect to='/dashboard' />
+            //     }
+            // }
+            // if(this.state.currentUser.role == "Retail"){
+            //     if (this.state.currentUser.firstLogin === true){
+            //         return <Redirect to='/profile' />
+            //     }
+            //     else{
+            //         return <Redirect to='/dashboard' />
+            //     }
+            // }
             else{
                 this.setState({errorMessage: "Please log in."})
             }
