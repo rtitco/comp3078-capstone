@@ -3,6 +3,8 @@ import axios from 'axios';
 import './login.css';
 import { Redirect } from "react-router-dom";
 
+import logo from '../profile/gb.png'
+
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
@@ -51,7 +53,7 @@ class LoginForm extends Component {
             .then(res => {
                 console.log("Successful POST")
                 console.log(res.data.user)
-                if(res.data.success === true){
+                if (res.data.success === true) {
                     sessionStorage.setItem("currentUser", JSON.stringify(res.data.user))
                     this.setState({
                         loggedIn: true,
@@ -59,7 +61,7 @@ class LoginForm extends Component {
                         firstLogin: res.data.user.firstLogin
                     })
                 }
-                else{
+                else {
                     this.setState({
                         errorMessage: res.data.message
                     })
@@ -78,27 +80,27 @@ class LoginForm extends Component {
 
     render() {
         if (this.state.loggedIn === true) {
-            if(this.state.currentUser.role == "Admin"){
-                if (this.state.currentUser.firstLogin === true){
+            if (this.state.currentUser.role == "Admin") {
+                if (this.state.currentUser.firstLogin === true) {
                     return <Redirect to='/profile' />
                 }
-                else{
+                else {
                     return <Redirect to='/admin' />
                 }
             }
-            if(this.state.currentUser.role == "Driver"){
-                if (this.state.currentUser.firstLogin === true){
+            if (this.state.currentUser.role == "Driver") {
+                if (this.state.currentUser.firstLogin === true) {
                     return <Redirect to='/profile' />
                 }
-                else{
+                else {
                     return <Redirect to='/admin' />
                 }
             }
-            if(this.state.currentUser.role == "Dispatcher" || this.state.currentUser.role == "Distribution" || this.state.currentUser.role == "Retail"){
-                if (this.state.currentUser.firstLogin === true){
+            if (this.state.currentUser.role == "Dispatcher" || this.state.currentUser.role == "Distribution" || this.state.currentUser.role == "Retail") {
+                if (this.state.currentUser.firstLogin === true) {
                     return <Redirect to='/profile' />
                 }
-                else{
+                else {
                     return <Redirect to='/dashboard' />
                 }
             }
@@ -118,48 +120,48 @@ class LoginForm extends Component {
             //         return <Redirect to='/dashboard' />
             //     }
             // }
-            else{
-                this.setState({errorMessage: "Please log in."})
+            else {
+                this.setState({ errorMessage: "Please log in." })
             }
         }
 
         return (
-            <div>
-            <LoginNavBar/>
-            <Container>
-                <Row className="justify-content-md-center">
-                    <Col className="login-box p-5" lg="3" md="6" sm="8">
-                        <h1 className="h3 text-center">Geebee Shipping Solutions</h1>
-                        <h2 className="h5 text-center">Login</h2>
-                        <hr />
-                        <Form onSubmit={this.onSubmit}>
-                            <Form.Group controlId="formBasicEmail">
-                                <Form.Label>Email address</Form.Label>
-                                <Form.Control
-                                    type="email"
-                                    placeholder="Enter email"
-                                    onChange={this.changeEmail}
-                                    value={this.state.email}
-                                />
-                            </Form.Group>
+            <div className="login-bg">
+                <LoginNavBar />
+                <Container className="login-bg">
+                    <Row className="justify-content-md-center">
+                        <Col className="login-box p-5" lg="3" md="6" sm="8">
+                            <p className="text-center">
+                                <img src={logo} alt='logo' />
+                            </p>
+                            <Form onSubmit={this.onSubmit}>
+                                <Form.Group controlId="formBasicEmail">
+                                    <Form.Label>Email address</Form.Label>
+                                    <Form.Control
+                                        type="email"
+                                        placeholder="Enter email"
+                                        onChange={this.changeEmail}
+                                        value={this.state.email}
+                                    />
+                                </Form.Group>
 
-                            <Form.Group controlId="formBasicPassword">
-                                <Form.Label>Password</Form.Label>
-                                <Form.Control
-                                    type="password"
-                                    placeholder="Password"
-                                    onChange={this.changePassword}
-                                    value={this.state.password}
-                                />
-                            </Form.Group>
-                            <span>{this.state.errorMessage}</span>
-                            <Button variant="primary" className="btn-block" type="submit">
-                                Submit
+                                <Form.Group controlId="formBasicPassword">
+                                    <Form.Label>Password</Form.Label>
+                                    <Form.Control
+                                        type="password"
+                                        placeholder="Password"
+                                        onChange={this.changePassword}
+                                        value={this.state.password}
+                                    />
+                                </Form.Group>
+                                <span className=" text-center alert-danger">{this.state.errorMessage}</span>
+                                <Button variant="primary" className="btn-block" type="submit">
+                                    Log In
                     </Button>
-                        </Form>
-                    </Col>
-                </Row>
-            </Container>
+                            </Form>
+                        </Col>
+                    </Row>
+                </Container>
             </div>
         )
 

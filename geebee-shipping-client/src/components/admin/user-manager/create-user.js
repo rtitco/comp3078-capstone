@@ -2,7 +2,8 @@ import { Redirect } from "react-router-dom";
 import React, { Component } from 'react';
 import axios from 'axios'
 import logo from '../../shared/profile/gb.png'
-
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 class CreateUserForm extends Component {
 
     constructor() {
@@ -94,55 +95,60 @@ class CreateUserForm extends Component {
         //         return <Redirect to='/admin' />
         //     }
         //     else {
-                // this.setState({
-                //     errorMessage: "Update Failed. Please Fill All Fields."
-                // })
+        // this.setState({
+        //     errorMessage: "Update Failed. Please Fill All Fields."
+        // })
         //     }
         // }
         return (
             <div>
-                <img src={logo} className="text-center" alt='logo' />
-                <h1 className='text-center'>Register New User</h1>
-                <div>
-                    <div className='container form-div d-flex justify-content-center'>
-                        <form onSubmit={this.onSubmit}>
-                        
-                            <input type='text'
-                                placeholder='E-mail'
-                                onChange={this.changeEmail}
-                                value={this.state.email}
-                                className='form-control form-group' />
+                <p className="text-center mt-5">
+                    <img src={logo} alt='logo' />
+                </p>
+                <h1 className='text-center h2'>Register New User</h1>
+                <Row className="justify-content-center">
+                    <Col md="6">
+                        <div>
+                            <div className='form-div mt-2'>
+                                <form onSubmit={this.onSubmit}>
 
-                            <input type='text'
-                                placeholder='Company'
-                                onChange={this.changeCompany}
-                                value={this.state.company}
-                                className='form-control form-group' />
+                                    <input type='text'
+                                        placeholder='E-mail'
+                                        onChange={this.changeEmail}
+                                        value={this.state.email}
+                                        className='form-control form-group' />
 
-                            <label>Select a Role:</label>
-                            <select value={this.state.role} name="roles" onChange={this.changeRole}>
-                                <option value="">---</option>
-                                <option value="Retail">Retail</option>
-                                <option value="Distribution">Distribution</option>
-                                <option value="Driver">Driver</option>
-                                <option value="Dispatcher">Dispatcher</option>
-                                <option value="Admin">Admin</option>
-                            </select>
+                                    <input type='text'
+                                        placeholder='Company'
+                                        onChange={this.changeCompany}
+                                        value={this.state.company}
+                                        className='form-control form-group' />
 
-                            <input type='password'
-                                placeholder='Password'
-                                onChange={this.changePassword}
-                                value={this.state.password}
-                                className='form-control form-group' />
+                                    <select className='form-control form-group' value={this.state.role} name="roles" onChange={this.changeRole}>
+                                        <option disabled selected hidden value="">Select a Role</option>
+                                        <option value="Retail">Retail</option>
+                                        <option value="Distribution">Distribution</option>
+                                        <option value="Driver">Driver</option>
+                                        <option value="Dispatcher">Dispatcher</option>
+                                        <option value="Admin">Admin</option>
+                                    </select>
 
-                            <span>{this.state.errorMessage}</span>
+                                    <input type='password'
+                                        placeholder='Password'
+                                        onChange={this.changePassword}
+                                        value={this.state.password}
+                                        className='form-control form-group' />
+
+                                    <span>{this.state.errorMessage}</span>
 
 
-                            <input type='submit' className='btn btn-primary btn-block'
-                                value='Submit' />
-                        </form>
-                    </div>
-                </div>
+                                    <input type='submit' className='btn btn-primary btn-block'
+                                        value='Submit' />
+                                </form>
+                            </div>
+                        </div>
+                    </Col>
+                </Row>
             </div>
 
         );
