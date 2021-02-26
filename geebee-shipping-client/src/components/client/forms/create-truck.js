@@ -1,7 +1,10 @@
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import React, { Component } from 'react';
 import axios from 'axios'
 import logo from '../../shared/profile/gb.png'
+
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 class CreateTruckForm extends Component {
 
@@ -112,33 +115,37 @@ class CreateTruckForm extends Component {
         // }
         return (
             <div>
-                <img src={logo} className="text-center" alt='logo' />
-                <h1 className='text-center'>Add New Truck to Fleet</h1>
+                <p className="text-center mt-5">
+                <img src={logo}  alt='logo' />
+                </p>
+                <h1 className='h3 text-center'>Add Truck to Fleet</h1>
                 <div>
-                    <div className='container form-div d-flex justify-content-center'>
+                <Row className="justify-content-center">
+                    <Col md="6">
                         <form onSubmit={this.onSubmit}>
-
+                        <label>Brand:</label>
                             <input type='text'
                                 placeholder='Brand'
                                 onChange={this.changeBrand}
                                 value={this.state.brand}
                                 className='form-control form-group' />
-
+                            <label>Model:</label>
                             <input type='text'
-                                placeholder='Company'
+                                placeholder='Model'
                                 onChange={this.changeModel}
                                 value={this.state.model}
                                 className='form-control form-group' />
 
-                            <label>Year</label>
-                            <input type='Number'
+                            <label>Year:</label>
+                            <input type='text'
                                 placeholder='2020'
                                 onChange={this.changeYear}
                                 value={this.state.year}
                                 className='form-control form-group' />
 
                             <label>Truck Class:</label>
-                            <select value={this.state.truckClass} name="roles" onChange={this.changeTruckClassa}>
+                            <select  className='form-control form-group' value={this.state.truckClass} name="roles" onChange={this.changeTruckClassa}>
+                            <option disabled selected hidden value="">Select a truck class.</option>
                                 <option value="5">5</option>
                                 <option value="6">6</option>
                                 <option value="7">7</option>
@@ -146,7 +153,7 @@ class CreateTruckForm extends Component {
                                 <option value="9">9</option>
 
                             </select>
-
+                            <label>License:</label>
                             <input type='text'
                                 placeholder='PLATE###'
                                 onChange={this.changeLicensePlate}
@@ -154,7 +161,8 @@ class CreateTruckForm extends Component {
                                 className='form-control form-group' />
 
                             <label>Status:</label>
-                            <select value={this.state.status} name="roles" onChange={this.changeStatus}>
+                            <select  className='form-control form-group' value={this.state.status} name="roles" onChange={this.changeStatus}>
+                                <option disabled selected hidden value="">Select a status.</option>
                                 <option value="In Service">In Service</option>
                                 <option value="Out of Service">Out of Service</option>
                                 <option value="Maintenance">Maintenance</option>
@@ -162,11 +170,12 @@ class CreateTruckForm extends Component {
 
                             <span>{this.state.errorMessage}</span>
 
-
                             <input type='submit' className='btn btn-primary btn-block'
                                 value='Submit' />
+                                <Link className="mt-3 btn btn-warning btn-block"to='/dashboard'>Go back</Link>
                         </form>
-                    </div>
+                        </Col>
+                        </Row>
                 </div>
             </div>
 

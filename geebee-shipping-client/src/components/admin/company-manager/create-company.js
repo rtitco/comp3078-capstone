@@ -171,9 +171,6 @@ export default class CreateCompany extends Component {
                 <Button variant="primary" type="submit">
                   Submit
                     </Button>
-                <Button variant="secondary" className="ml-2" onClick={this.handleModalClose}>
-                  Close
-                  </Button>
               </div>
             </Form>
           </Col>

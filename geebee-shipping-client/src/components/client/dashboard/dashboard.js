@@ -31,10 +31,10 @@ class ClientDashboard extends Component {
         this.setState({ loading: false, mongoData: fleetRes.data })
     }
     componentDidMount() {
-        if (this.state.currentUser.role == "Retail" || this.state.currentUser.role == "Distribution") {
+        if (this.state.currentUser.role === "Retail" || this.state.currentUser.role === "Distribution") {
             this.getOrderData()
         }
-        if (this.state.currentUser.role == "Dispatcher") {
+        if (this.state.currentUser.role === "Dispatcher") {
             this.getFleetData()
         }
     }
@@ -53,7 +53,7 @@ class ClientDashboard extends Component {
         let buttonLabel = '';
         let redirectTo = '';
 
-        if (this.state.currentUser.role == "Retail") {
+        if (this.state.currentUser.role === "Retail") {
             columns = [
                 {
                     Header: 'Order ID',
@@ -73,7 +73,7 @@ class ClientDashboard extends Component {
                 }
             ]
         }
-        if (this.state.currentUser.role == "Distribution") {
+        if (this.state.currentUser.role === "Distribution") {
             buttonLabel = "Create Order";
             redirectTo = "/orders/add";
 
@@ -108,7 +108,7 @@ class ClientDashboard extends Component {
                 }
             ]
         }
-        if (this.state.currentUser.role == "Dispatcher") {
+        if (this.state.currentUser.role === "Dispatcher") {
             buttonLabel = "Add Truck"
             redirectTo = "/fleet/add"
             columns = [
@@ -142,13 +142,14 @@ class ClientDashboard extends Component {
         return (
             <div>
                 <LoginNavBar />
-                <Container fluid className="">
-                    <label>{this.state.currentUser.role}</label>
+                <Container fluid>
+                    <Row className="">
+                    {/* <label>{this.state.currentUser.role}</label> */}
                     <br />
-                    <Link to={redirectTo}>
-                        <button>{buttonLabel}</button>
+                    <Link className="btn btn-primary" to={redirectTo}>
+                        {buttonLabel}
                     </Link>
-
+                    </Row>
                     <div className="mx-5">
                         {/* this is the data table */}
                         <Table columns={columns} data={this.state.mongoData} />
@@ -157,6 +158,7 @@ class ClientDashboard extends Component {
                         <Col md="6">
                         </Col>
                     </Row> */}
+                  
                 </Container>
             </div>
         );

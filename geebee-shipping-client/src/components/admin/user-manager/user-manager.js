@@ -3,7 +3,6 @@ import Table from '../../shared/react-table/react-table'
 import { Redirect, Link } from "react-router-dom";
 import axios from 'axios'
 import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
 
 export default class UserManager extends Component {
   constructor(props) {
@@ -11,16 +10,9 @@ export default class UserManager extends Component {
     this.state = {
       userData: [],
       loading: true,
-      showModal: false
     }
   }
 
-  handleModalShow = () => {
-    this.setState({ showModal: true })
-  }
-  handleModalClose = () => {
-    this.setState({ showModal: false })
-  }
 
   //gets the user data from db
   async getUsersData() {
@@ -63,37 +55,14 @@ export default class UserManager extends Component {
     return (
       <div>
         <h1>User Manager</h1>
-        <Link to="users/add">
+        <Link to="./users/add">
           <Button className="float-right mr-5 mb-2" variant="success">Add User</Button>
         </Link>
         <div className="mx-5">
           {/* this is the data table */}
           <Table columns={columns} data={this.state.userData} />
         </div>
-
-        <Modal
-          show={this.state.showModal}
-          onHide={this.handleModalClose}
-          backdrop="static"
-          className="mt-5"
-          keyboard={false}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Modal title</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            I will not close if you click outside me. Don't even try to press
-            escape key.
-        </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={this.handleModalClose}>
-              Close
-          </Button>
-            <Button variant="primary">Submit</Button>
-          </Modal.Footer>
-        </Modal>
       </div>
-
     )
   }
 }

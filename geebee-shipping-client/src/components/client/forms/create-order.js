@@ -1,8 +1,10 @@
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import React, { Component } from 'react';
 import axios from 'axios'
 import logo from '../../shared/profile/gb.png'
 
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 class CreateOrderForm extends Component {
 
     constructor() {
@@ -49,7 +51,7 @@ class CreateOrderForm extends Component {
     onSubmit = (event) => {
         // prevents form from acting in default way, stops refreshing
         event.preventDefault()
-        if (this.state.deliveryDate == '' || this.state.street == '' || this.state.city == '' || this.state.postalCode == '') {
+        if (this.state.deliveryDate === '' || this.state.street === '' || this.state.city === '' || this.state.postalCode === '') {
             this.setState({
                 updateSuccess: false
             })
@@ -91,10 +93,15 @@ class CreateOrderForm extends Component {
 
 
             <div>
-                <img src={logo} className="text-center" alt='logo' />
+                <p className="text-center">
+                <img src={logo}  alt='logo' />
+      
+                </p>
                 <h1 className='text-center'>Create New Delivery Order</h1>
+                
                 <div>
-                    <div className='container form-div d-flex justify-content-center'>
+                        <Row className="justify-content-center">
+                            <Col md="6">
                         <form onSubmit={this.onSubmit}>
 
                             <label>Delivery Date</label>
@@ -128,8 +135,10 @@ class CreateOrderForm extends Component {
 
                             <input type='submit' className='btn btn-primary btn-block'
                                 value='Submit' />
+                            <Link className="mt-3 btn btn-warning btn-block"to='/dashboard'>Go back</Link>
                         </form>
-                    </div>
+                        </Col>
+                        </Row>
                 </div>
             </div>
 
