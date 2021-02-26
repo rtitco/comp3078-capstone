@@ -68,7 +68,7 @@ app.post('/admin/users/add', async (req, newUser) => {
     const saltPassword = await bcrypt.genSalt(10)
     const securePassword = await bcrypt.hash(req.body.password, saltPassword)
 
-    const registeredUser = new userModel({
+    let registeredUser = new userModel({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         phoneNumber: req.body.phoneNumber,
@@ -78,20 +78,20 @@ app.post('/admin/users/add', async (req, newUser) => {
         password: securePassword,
         firstLogin: true
     })
-    registeredUser.save( (err, res) => {
-        if (err){
-            newUser.send({message: "Incorrect Email/Password Provided." })
+    registeredUser.save((err, res) => {
+        if (err) {
+            newUser.send({ message: "Incorrect Email/Password Provided." })
         }
-        else{
-            newUser.send({message: "New User Created." })
+        else {
+            newUser.send({ message: "New User Created." })
         }
     })
-        // .then(data => {
-        //     res.json(data)
-        // })
-        // .catch(error => {
-        //     res.json(error)
-        // })
+    // .then(data => {
+    //     res.json(data)
+    // })
+    // .catch(error => {
+    //     res.json(error)
+    // })
 })
 
 //POST for Login Form
@@ -109,7 +109,7 @@ app.post('/login', async (req, loginRes) => {
     else {
         await userModel.find({ email: req.body.email }, (err, userRes) => {
             if (err) {
-                loginRes.send({success: false, message: "Incorrect Email/Password Provided." })
+                loginRes.send({ success: false, message: "Incorrect Email/Password Provided." })
             }
             if (userRes) {
                 foundBool = true;
@@ -123,19 +123,19 @@ app.post('/login', async (req, loginRes) => {
                 console.log("Comparing")
                 if (err) {
                     // console.log("Error")
-                    loginRes.send({success: false, message: "Incorrect Email/Password Provided." })
+                    loginRes.send({ success: false, message: "Incorrect Email/Password Provided." })
                 }
                 if (res) {
                     // console.log("Successfully Logged in")
                     loginRes.send({ user: foundUser, success: true, message: "Login Successful." })
                 } else {
                     // console.log("In Else")
-                    loginRes.send({success: false, message: "Incorrect Email/Password Provided." })
+                    loginRes.send({ success: false, message: "Incorrect Email/Password Provided." })
                 }
             })
         }
         else {
-            loginRes.send({success: false, message: "Incorrect Email/Password Provided." })
+            loginRes.send({ success: false, message: "Incorrect Email/Password Provided." })
         }
     }
 
@@ -176,7 +176,7 @@ app.post('/profile', async (req, updateRes) => {
 //POST for Companies Table
 app.post('/admin/company-manager/add', async (req, res) => {
     console.log(req.body);
-    const newCompany = new companyModel(req.body);
+    let newCompany = new companyModel(req.body);
     try {
         await newCompany.save((err) => {
             if (err) {
@@ -184,7 +184,7 @@ app.post('/admin/company-manager/add', async (req, res) => {
                 res.send(err)
             }
             else {
-                res.send({success: true})
+                res.send({ success: true })
             }
         });
     }
@@ -193,42 +193,52 @@ app.post('/admin/company-manager/add', async (req, res) => {
     }
 })
 
-//POST for Trucks Table
-app.post('/trucks', async (req, res) => {
-    const newTruck = new vehicleModel(req.body);
+//POST for Adding New Truck to Database
+app.post('/fleet/add', async (req, truck) => {
+    let newTruck = new vehicleModel({
+        vehicleBrand: req.body.brand,
+        vehicleModel: req.body.model,
+        vehicle_year: req.body.year,
+        truck_class: req.body.truckClass,
+        license_plate: req.body.licensePlate,
+        status: req.body.status
+    });
     try {
-        await newTruck.save((err) => {
+        await newTruck.save((err, res) => {
             if (err) {
                 //error handling
-                res.send(err)
+                truck.send({ message: "Failed to add new truck." })
             }
             else {
-                res.send(newTruck);
+                truck.send({ message: "New truck added to fleet." });
             }
         });
     }
     catch (err) {
         res.status(500).send(err);
+
     }
 })
 
 //POST for Orders Table
-app.post('/orders', async (req, res) => {
-    const newOrder = new orderModel(req.body);
-    try {
-        await newOrder.save((err) => {
-            if (err) {
-                //error handling
-                res.send(err)
-            }
-            else {
-                res.send(newOrder);
-            }
-        });
-    }
-    catch (err) {
-        res.status(500).send(err);
-    }
+app.post('/orders/add', async (req, order) => {
+    let newOrder = new orderModel({
+        order_date: new Date().toISOString().split('T')[0].toString(),
+        delivery_date: req.body.deliveryDate.toString(),
+        destination_street: req.body.street,
+        destination_city: req.body.city,
+        destination_postalCode: req.body.postalCode,
+        order_status: "Processing"
+    });
+    newOrder.save((err, res) => {
+        if (err) {
+            //error handling
+            order.send({ message: "Error creating order." })
+        }
+        else {
+            order.send({ message: "Order completed." });
+        }
+    });
 })
 
 module.exports = app;

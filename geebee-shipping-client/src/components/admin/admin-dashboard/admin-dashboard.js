@@ -15,7 +15,8 @@ import UserManager from '../user-manager/user-manager';
 import CreateUser from '../user-manager/create-user';
 
 function AdminDashboard() {
-    return (<>
+    return (
+    <div>
         <LoginNavBar />
         <Container className="mt-4" fluid>
             <Row className="">
@@ -40,7 +41,7 @@ function AdminDashboard() {
                 </Col>
             </Row>
         </Container>
-    </>
+    </div>
     );
 }
 
