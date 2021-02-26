@@ -124,7 +124,7 @@ class LoginForm extends Component {
         }
 
         return (
-            <>
+            <div>
             <LoginNavBar/>
             <Container>
                 <Row className="justify-content-md-center">
@@ -160,7 +160,7 @@ class LoginForm extends Component {
                     </Col>
                 </Row>
             </Container>
-            </>
+            </div>
         )
 
     }

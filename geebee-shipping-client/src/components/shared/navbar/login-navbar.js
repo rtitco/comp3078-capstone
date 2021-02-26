@@ -3,6 +3,11 @@ import { Navbar, Nav } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 
 const LoginNavBar = () => {
+
+  function logout(){
+    sessionStorage.clear();
+  }
+
   return (
     <Navbar bg="light" expand="lg">
       <LinkContainer to="/">
@@ -11,9 +16,10 @@ const LoginNavBar = () => {
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="ml-auto">
-          <LinkContainer to="/login" onClick={sessionStorage.clear()}>
-            <Nav.Link>Logout</Nav.Link>
-          </LinkContainer>
+          {/* <LinkContainer to="/login"> */}
+            <Nav.Link href="/profile">Profile</Nav.Link>
+            <Nav.Link href="/login" onClick={logout}>Logout</Nav.Link>
+          {/* </LinkContainer> */}
         </Nav>
       </Navbar.Collapse>
     </Navbar>

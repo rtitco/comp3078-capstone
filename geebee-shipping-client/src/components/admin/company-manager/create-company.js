@@ -105,7 +105,7 @@ export default class CreateCompany extends Component {
       return <Redirect to='/admin/company-manager' />
     }
     return (
-      <>
+      <div>
 
         <Row className="justify-content-md-center mt-5">
           <Col lg="6" >
@@ -178,7 +178,7 @@ export default class CreateCompany extends Component {
             </Form>
           </Col>
         </Row>
-      </>
+      </div>
     )
   }
 }

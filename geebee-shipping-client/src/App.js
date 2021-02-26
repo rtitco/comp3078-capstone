@@ -5,6 +5,8 @@ import ProfileForm from './components/shared/profile/profile';
 import AdminDashboard from './components/admin/admin-dashboard/admin-dashboard';
 import ClientDashboard from './components/client/dashboard/dashboard';
 import CreateUserForm from './components/admin/user-manager/create-user';
+import CreateTruckForm from './components/client/forms/create-truck';
+import CreateOrderForm from './components/client/forms/create-order';
 
 
 function App() {
@@ -19,6 +21,8 @@ function App() {
           <Route path="/admin" component={AdminDashboard} />
           <Route path="/dashboard" component={ClientDashboard} />
           <Route path="/admin/users/add" component={CreateUserForm} />
+          <Route path="/fleet/add" component={CreateTruckForm} />
+          <Route path="/orders/add" component={CreateOrderForm} />
         </Switch>
       </Router>
   );

@@ -1,6 +1,7 @@
 import './dashboard.css';
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Redirect, Link } from "react-router-dom";
 
 import LoginNavBar from '../../shared/navbar/login-navbar';
 import Container from 'react-bootstrap/Container';
@@ -16,7 +17,7 @@ class ClientDashboard extends Component {
             currentUser: sessionUser,
             // currentUserRole: sessionUser.role,
             loading: true,
-            mongoData: []
+            mongoData: [],
         }
     }
 
@@ -38,8 +39,20 @@ class ClientDashboard extends Component {
         }
     }
 
+    // buttonLink(){
+    //     if(this.state.currentUser.role=="Distribution"){
+    //         return <Redirect to='/orders/add' />
+    //     }
+    //     if(this.state.currentUser.role=="Dispatcher"){
+    //         return <Redirect to='/fleet/add' />
+    //     }
+    // }
+
     render() {
-        let columns = []
+        let columns = [];
+        let buttonLabel = '';
+        let redirectTo = '';
+
         if (this.state.currentUser.role == "Retail") {
             columns = [
                 {
@@ -61,6 +74,9 @@ class ClientDashboard extends Component {
             ]
         }
         if (this.state.currentUser.role == "Distribution") {
+            buttonLabel = "Create Order";
+            redirectTo = "/orders/add";
+
             columns = [
                 {
                     Header: 'Order ID',
@@ -93,6 +109,8 @@ class ClientDashboard extends Component {
             ]
         }
         if (this.state.currentUser.role == "Dispatcher") {
+            buttonLabel = "Add Truck"
+            redirectTo = "/fleet/add"
             columns = [
                 {
                     Header: 'Truck Class',
@@ -100,7 +118,7 @@ class ClientDashboard extends Component {
                 },
                 {
                     Header: 'Brand',
-                    accessor: 'vehicle_make',
+                    accessor: 'vehicle_brand',
                 },
                 {
                     Header: 'Model',
@@ -112,7 +130,7 @@ class ClientDashboard extends Component {
                 },
                 {
                     Header: 'License Plate',
-                    accessor: 'license_Plate',
+                    accessor: 'license_plate',
                 },
                 {
                     Header: 'Status',
@@ -122,10 +140,15 @@ class ClientDashboard extends Component {
         }
 
         return (
-            <>
+            <div>
                 <LoginNavBar />
                 <Container fluid className="">
                     <label>{this.state.currentUser.role}</label>
+                    <br />
+                    <Link to={redirectTo}>
+                        <button>{buttonLabel}</button>
+                    </Link>
+
                     <div className="mx-5">
                         {/* this is the data table */}
                         <Table columns={columns} data={this.state.mongoData} />
@@ -135,7 +158,7 @@ class ClientDashboard extends Component {
                         </Col>
                     </Row> */}
                 </Container>
-            </>
+            </div>
         );
     }
 
