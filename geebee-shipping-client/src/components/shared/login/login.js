@@ -154,7 +154,7 @@ class LoginForm extends Component {
                                         value={this.state.password}
                                     />
                                 </Form.Group>
-                                <span className=" text-center alert-danger">{this.state.errorMessage}</span>
+                                <span className="text-center alert-danger">{this.state.errorMessage}</span>
                                 <Button variant="primary" className="btn-block" type="submit">
                                     Log In
                     </Button>

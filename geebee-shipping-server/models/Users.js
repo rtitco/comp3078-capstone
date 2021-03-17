@@ -12,22 +12,20 @@ var UserSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: true,
+        required: [true, "Email cannot be empty"],
         match: [/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/, "Not a valid email address"]
     },
     company: {
         type: String,
-        required: true,
-        minlength: [2, "Not a valid company name"]
+        required: [true, "Company cannot be empty"],
     },
     role: {
         type: String,
-        required: true
+        required: [true, "Role must be selected"]
     },
     password: {
         type: String,
-        required: true,
-        minlength: [6, "Password must be min 6 characters"]
+        required: [true, "Password required"],
     },
     firstLogin: {
         type: Boolean,
