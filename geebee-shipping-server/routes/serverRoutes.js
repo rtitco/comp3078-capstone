@@ -65,27 +65,52 @@ app.post('/admin/users/add', async (req, newUser) => {
     // generating salt password to hash and encrypt
     console.log("PRE POST")
     console.log(req.body)
-    const saltPassword = await bcrypt.genSalt(10)
-    const securePassword = await bcrypt.hash(req.body.password, saltPassword)
 
-    let registeredUser = new userModel({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        phoneNumber: req.body.phoneNumber,
-        email: req.body.email,
-        company: req.body.company,
-        role: req.body.role,
-        password: securePassword,
-        firstLogin: true
-    })
-    registeredUser.save((err, res) => {
-        if (err) {
-            newUser.send({ message: "Incorrect Email/Password Provided." })
-        }
-        else {
-            newUser.send({ message: "New User Created." })
-        }
-    })
+    if (req.body.password.length < 1 || req.body.email.length < 1 || req.body.company.length < 1) {
+        newUser.send({ message: "Fields cannot be empty." })
+    }
+    else{
+        const saltPassword = await bcrypt.genSalt(10)
+        const securePassword = await bcrypt.hash(req.body.password, saltPassword)
+    
+        let registeredUser = new userModel({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            phoneNumber: req.body.phoneNumber,
+            email: req.body.email,
+            company: req.body.company,
+            role: req.body.role,
+            password: securePassword,
+            firstLogin: true
+        })
+        registeredUser.save((err, res) => {
+            if (err) {
+                // if (err.errors['email']){
+                //     newUser.send({ messageEmail: err.errors['email'].message })
+                // }
+                // if (err.errors['company']){
+                //     newUser.send({ messageCompany: err.errors['company'].message })
+                // }
+                // if (err.errors['password']){
+                //     newUser.send({ messagePw: err.errors['password'].message })
+                // }
+                // if (err.errors['role']){
+                //     newUser.send({ messageRole: err.errors['role'].message })
+                // }
+                newUser.send({ 
+                    message: "Failed to create user. Please try again." ,
+                    messageEmail: err.errors['email'].message,
+                    messageCompany: err.errors['company'].message,
+                    messagePw: err.errors['password'].message,
+                    messageRole: err.errors['role'].message
+                })
+            }
+            else {
+                newUser.send({ message: "New User Created." })
+            }
+        })
+    }
+    
     // .then(data => {
     //     res.json(data)
     // })
@@ -111,36 +136,30 @@ app.post('/login', async (req, loginRes) => {
             if (err) {
                 loginRes.send({ success: false, message: "Incorrect Email/Password Provided." })
             }
-            if (userRes) {
+            if (userRes.length > 0) {
                 foundBool = true;
                 foundUser = userRes[0]
+            }
+            else{
+                loginRes.send({message: "Incorrect Email/Password Provided." })
             }
         });
 
         if (foundBool) {
             //check if the req.body.password matches the db entry
             bcrypt.compare(req.body.password, foundUser.password, (err, res) => {
-                console.log("Comparing")
                 if (err) {
-                    // console.log("Error")
                     loginRes.send({ success: false, message: "Incorrect Email/Password Provided." })
                 }
-                if (res) {
-                    // console.log("Successfully Logged in")
+                if (res == true) {
                     loginRes.send({ user: foundUser, success: true, message: "Login Successful." })
-                } else {
-                    // console.log("In Else")
+                } 
+                if (res == false) {
                     loginRes.send({ success: false, message: "Incorrect Email/Password Provided." })
                 }
             })
         }
-        else {
-            loginRes.send({ success: false, message: "Incorrect Email/Password Provided." })
-        }
     }
-
-    //if email found, check for pw
-
 })
 
 //POST ==> Updating User Profile

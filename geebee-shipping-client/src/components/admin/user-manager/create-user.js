@@ -18,7 +18,11 @@ class CreateUserForm extends Component {
             password: '',
 
             updateSuccess: false,
-            errorMessage: ''
+            errorMessage: '',
+            errorEmail: '',
+            errorCompany: '',
+            errorPw: '',
+            errorRole: ''
         }
     }
     // changes state values 
@@ -65,7 +69,11 @@ class CreateUserForm extends Component {
         axios.post('http://localhost:8081/admin/users/add', registered)
             .then(res => {
                 this.setState({
-                    errorMessage: res.data.message
+                    errorMessage: res.data.message,
+                    errorEmail: res.data.messageEmail,
+                    errorCompany: res.data.messageCompany,
+                    errorPw: res.data.messagePw,
+                    errorRole: res.data.messageRole
                 })
             }, (error) => {
                 this.setState({
@@ -112,18 +120,21 @@ class CreateUserForm extends Component {
                             <div className='form-div mt-2'>
                                 <form onSubmit={this.onSubmit}>
 
+                                    <span>{this.state.errorEmail}</span>
                                     <input type='text'
                                         placeholder='E-mail'
                                         onChange={this.changeEmail}
                                         value={this.state.email}
                                         className='form-control form-group' />
 
+                                    <span>{this.state.errorCompany}</span>
                                     <input type='text'
                                         placeholder='Company'
                                         onChange={this.changeCompany}
                                         value={this.state.company}
                                         className='form-control form-group' />
 
+                                    <span>{this.state.errorRole}</span>
                                     <select className='form-control form-group' value={this.state.role} name="roles" onChange={this.changeRole}>
                                         <option disabled selected hidden value="">Select a Role</option>
                                         <option value="Retail">Retail</option>
@@ -133,6 +144,7 @@ class CreateUserForm extends Component {
                                         <option value="Admin">Admin</option>
                                     </select>
 
+                                    <span>{this.state.errorPw}</span>
                                     <input type='password'
                                         placeholder='Password'
                                         onChange={this.changePassword}
@@ -140,7 +152,6 @@ class CreateUserForm extends Component {
                                         className='form-control form-group' />
 
                                     <span>{this.state.errorMessage}</span>
-
 
                                     <input type='submit' className='btn btn-primary btn-block'
                                         value='Submit' />
