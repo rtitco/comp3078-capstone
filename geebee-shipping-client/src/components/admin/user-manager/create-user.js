@@ -4,6 +4,7 @@ import axios from 'axios'
 import logo from '../../shared/profile/gb.png'
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+
 class CreateUserForm extends Component {
 
     constructor() {
@@ -120,21 +121,21 @@ class CreateUserForm extends Component {
                             <div className='form-div mt-2'>
                                 <form onSubmit={this.onSubmit}>
 
-                                    <span>{this.state.errorEmail}</span>
+                                    <span className="text-center alert-danger">{this.state.errorEmail}</span>
                                     <input type='text'
                                         placeholder='E-mail'
                                         onChange={this.changeEmail}
                                         value={this.state.email}
                                         className='form-control form-group' />
 
-                                    <span>{this.state.errorCompany}</span>
+                                    <span className="text-center alert-danger">{this.state.errorCompany}</span>
                                     <input type='text'
                                         placeholder='Company'
                                         onChange={this.changeCompany}
                                         value={this.state.company}
                                         className='form-control form-group' />
 
-                                    <span>{this.state.errorRole}</span>
+                                    <span className="text-center alert-danger">{this.state.errorRole}</span>
                                     <select className='form-control form-group' value={this.state.role} name="roles" onChange={this.changeRole}>
                                         <option disabled selected hidden value="">Select a Role</option>
                                         <option value="Retail">Retail</option>
@@ -144,14 +145,14 @@ class CreateUserForm extends Component {
                                         <option value="Admin">Admin</option>
                                     </select>
 
-                                    <span>{this.state.errorPw}</span>
+                                    <span className="text-center alert-danger">{this.state.errorPw}</span>
                                     <input type='password'
                                         placeholder='Password'
                                         onChange={this.changePassword}
                                         value={this.state.password}
                                         className='form-control form-group' />
 
-                                    <span>{this.state.errorMessage}</span>
+                                    <span className="text-center alert-danger">{this.state.errorMessage}</span>
 
                                     <input type='submit' className='btn btn-primary btn-block'
                                         value='Submit' />

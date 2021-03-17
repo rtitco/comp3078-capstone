@@ -62,86 +62,96 @@ app.get('/orders', async (req, res) => {
 
 //POST ==> Admin Creating New User
 app.post('/admin/users/add', async (req, newUser) => {
-    // generating salt password to hash and encrypt
-    console.log("PRE POST")
-    console.log(req.body)
 
-    if (req.body.password.length < 1 || req.body.email.length < 1 || req.body.company.length < 1) {
+    //check for empty fields
+    if (req.body.password.length < 6 || req.body.email.length < 1 || req.body.company.length < 1) {
         newUser.send({ message: "Fields cannot be empty." })
     }
-    else{
-        const saltPassword = await bcrypt.genSalt(10)
-        const securePassword = await bcrypt.hash(req.body.password, saltPassword)
-    
-        let registeredUser = new userModel({
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            phoneNumber: req.body.phoneNumber,
-            email: req.body.email,
-            company: req.body.company,
-            role: req.body.role,
-            password: securePassword,
-            firstLogin: true
-        })
-        registeredUser.save((err, res) => {
-            if (err) {
-                // if (err.errors['email']){
-                //     newUser.send({ messageEmail: err.errors['email'].message })
-                // }
-                // if (err.errors['company']){
-                //     newUser.send({ messageCompany: err.errors['company'].message })
-                // }
-                // if (err.errors['password']){
-                //     newUser.send({ messagePw: err.errors['password'].message })
-                // }
-                // if (err.errors['role']){
-                //     newUser.send({ messageRole: err.errors['role'].message })
-                // }
-                newUser.send({ 
-                    message: "Failed to create user. Please try again." ,
-                    messageEmail: err.errors['email'].message,
-                    messageCompany: err.errors['company'].message,
-                    messagePw: err.errors['password'].message,
-                    messageRole: err.errors['role'].message
-                })
-            }
-            else {
-                newUser.send({ message: "New User Created." })
-            }
-        })
+    else {
+        //regex email
+        if (req.body.email.match(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/) == null) {
+            newUser.send({
+                messageEmail: "Invalid email address."
+            })
+        }
+        else {
+            //check for existing email
+            await userModel.find({ email: req.body.email }, (err, exists) => {
+                if (err) {
+                    newUser.send({
+                        message: "Entry Failed. Please try again."
+                    })
+                }
+                if (exists.length > 0) {
+                    newUser.send({
+                        messageEmail: "Email Address already exists."
+                    })
+                }
+                //no existing accounts with email
+                else {
+                    //regex password
+                    if (req.body.password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&\-_])[A-Za-z\d@$!%*?&\-_]{8,}$/) == null) {
+                        newUser.send({
+                            message: "Entry Failed. Please try again.",
+                            messagePw: "Passwords must be at least 6 characters in length, and include at least one(1) Capital letter, one(1) lowercase, one(1) number, and one(1) special character @$!%*?&-_"
+                        })
+                    }
+                    else {
+                        // generating salt password to hash and encrypt input pw
+                        const saltPassword = bcrypt.genSalt(10)
+                        const securePassword = bcrypt.hash(req.body.password, saltPassword)
+
+                        let registeredUser = new userModel({
+                            firstName: req.body.firstName,
+                            lastName: req.body.lastName,
+                            phoneNumber: req.body.phoneNumber,
+                            email: req.body.email,
+                            company: req.body.company,
+                            role: req.body.role,
+                            password: securePassword,
+                            firstLogin: true
+                        })
+                        //try to save entry
+                        registeredUser.save((err, res) => {
+                            if (err) {
+                                newUser.send({
+                                    message: "Failed to create user. Please try again.",
+                                })
+                            }
+                            else {
+                                newUser.send({ message: "New User Created." })
+                            }
+                        })
+                    }
+                }
+            })
+
+        }
     }
-    
-    // .then(data => {
-    //     res.json(data)
-    // })
-    // .catch(error => {
-    //     res.json(error)
-    // })
 })
 
 //POST for Login Form
 app.post('/login', async (req, loginRes) => {
-    //get the email and pw from the req.body
-    //find user with email in db
     var foundBool = false;
     var foundUser = "";
 
-    //find matching email address in the database
-    //check if email or password fields are empty
+    //check if email or password fields are empty from req.body
     if (req.body.email.length < 1 || req.body.password.length < 1) {
         loginRes.send({ success: false, message: "Fields cannot be empty." })
     }
     else {
+        //find matching email address in the database
         await userModel.find({ email: req.body.email }, (err, userRes) => {
             if (err) {
                 loginRes.send({ success: false, message: "Incorrect Email/Password Provided." })
             }
+            //if db entry found, save to foundUser
             if (userRes.length > 0) {
                 foundBool = true;
                 foundUser = userRes[0]
             }
-            else{
-                loginRes.send({message: "Incorrect Email/Password Provided." })
+            else {
+                loginRes.send({ message: "Incorrect Email/Password Provided." })
             }
         });
 
@@ -153,7 +163,7 @@ app.post('/login', async (req, loginRes) => {
                 }
                 if (res == true) {
                     loginRes.send({ user: foundUser, success: true, message: "Login Successful." })
-                } 
+                }
                 if (res == false) {
                     loginRes.send({ success: false, message: "Incorrect Email/Password Provided." })
                 }

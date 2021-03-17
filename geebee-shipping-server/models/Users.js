@@ -13,7 +13,6 @@ var UserSchema = new mongoose.Schema({
     email: {
         type: String,
         required: [true, "Email cannot be empty"],
-        match: [/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/, "Not a valid email address"]
     },
     company: {
         type: String,
