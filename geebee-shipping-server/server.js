@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }))
 
 //connect to mongo db 
-mongoose.connect('mongodb+srv://capstone:lHdhx33DbwgHo8NT@capstone.fixfl.mongodb.net/geebeeshipping?retryWrites=true&w=majority', {
+mongoose.connect('mongodb+srv://busybee:busybee123@capstone.9de0p.mongodb.net/busybee-shipping?retryWrites=true&w=majority', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
