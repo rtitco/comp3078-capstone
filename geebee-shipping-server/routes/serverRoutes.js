@@ -125,7 +125,6 @@ app.post('/admin/users/add', async (req, newUser) => {
                     }
                 }
             })
-
         }
     }
 })
@@ -224,29 +223,34 @@ app.post('/admin/company-manager/add', async (req, res) => {
 
 //POST for Adding New Truck to Database
 app.post('/fleet/add', async (req, truck) => {
+    // if (req.body.brand.length < 1 || req.body.model.length < 1 ||
+    //     req.body.year.length < 1 || req.body.licensePlate.length < 1) {
+    //     truck.send({ message: "Fields cannot be empty." })
+    // }
+    // else {
+    //     if (req.body.year <= 1990 || req.body.year >= 2022) {
+
+    //         truck.send({ messageYear: "Invalid year.", message: "Failed to add new truck." })
+    //     }
+    // }
+
     let newTruck = new vehicleModel({
-        vehicleBrand: req.body.brand,
-        vehicleModel: req.body.model,
+        vehicle_brand: req.body.brand,
+        vehicle_model: req.body.model,
         vehicle_year: req.body.year,
         truck_class: req.body.truckClass,
         license_plate: req.body.licensePlate,
-        status: req.body.status
+        vehicle_status: req.body.status
     });
-    try {
-        await newTruck.save((err, res) => {
-            if (err) {
-                //error handling
-                truck.send({ message: "Failed to add new truck." })
-            }
-            else {
-                truck.send({ message: "New truck added to fleet." });
-            }
-        });
-    }
-    catch (err) {
-        res.status(500).send(err);
-
-    }
+    await newTruck.save((err, res) => {
+        if (err) {
+            //error handling
+            truck.send({ message: "Failed to add new truck." })
+        }
+        else {
+            truck.send({ message: "New truck added to fleet." });
+        }
+    });
 })
 
 //POST for Orders Table

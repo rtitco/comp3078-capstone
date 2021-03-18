@@ -22,6 +22,12 @@ class CreateTruckForm extends Component {
             status: '',
 
             updateSuccess: false,
+            errorBrand: '',
+            errorModel: '',
+            errorYear: '',
+            errorClass: '',
+            errorLicensePlate: '',
+            errorStatus: '',
             errorMessage: ''
         }
     }
@@ -77,7 +83,13 @@ class CreateTruckForm extends Component {
         axios.post('http://localhost:8081/fleet/add', registered)
             .then(res => {
                 this.setState({
-                    errorMessage: res.data.message
+                    errorMessage: res.data.message,
+                    errorBrand: res.data.messageBrand,
+                    errorModel: res.data.messageModel,
+                    errorYear: res.data.messageYear,
+                    errorClass: res.data.messageClass,
+                    errorLicensePlate: res.data.messageLicensePlate,
+                    errorStatus: res.data.messageStatus,
                 })
             }, (error) => {
                 this.setState({
@@ -88,13 +100,12 @@ class CreateTruckForm extends Component {
         // here you redirect to profile page or home page
         // window.location = '/'
         this.setState({
-            firstName: '',
-            lastName: '',
-            phoneNumber: '',
-            email: '',
-            company: '',
-            role: '',
-            password: ''
+            brand: '',
+            model: '',
+            year: '',
+            truckClass: '',
+            licensePlate: '',
+            status: ''
         })
     }
 
@@ -116,69 +127,69 @@ class CreateTruckForm extends Component {
         return (
             <div>
                 <p className="text-center mt-5">
-                <img src={logo}  alt='logo' />
+                    <img src={logo} alt='logo' />
                 </p>
                 <h1 className='h3 text-center'>Add Truck to Fleet</h1>
                 <div>
-                <Row className="justify-content-center">
-                    <Col md="6">
-                        <form onSubmit={this.onSubmit}>
-                        <label>Brand:</label>
-                            <input type='text'
-                                placeholder='Brand'
-                                onChange={this.changeBrand}
-                                value={this.state.brand}
-                                className='form-control form-group' />
-                            <label>Model:</label>
-                            <input type='text'
-                                placeholder='Model'
-                                onChange={this.changeModel}
-                                value={this.state.model}
-                                className='form-control form-group' />
+                    <Row className="justify-content-center">
+                        <Col md="6">
+                            <form onSubmit={this.onSubmit}>
+                                <label>Brand: <span className="text-center alert-danger">{this.state.errorBrand}</span></label>
+                                <input type='text'
+                                    placeholder='Brand'
+                                    onChange={this.changeBrand}
+                                    value={this.state.brand}
+                                    className='form-control form-group' />
 
-                            <label>Year:</label>
-                            <input type='text'
-                                placeholder='2020'
-                                onChange={this.changeYear}
-                                value={this.state.year}
-                                className='form-control form-group' />
+                                <label>Model: <span className="text-center alert-danger">{this.state.errorModel}</span></label>
+                                <input type='text'
+                                    placeholder='Model'
+                                    onChange={this.changeModel}
+                                    value={this.state.model}
+                                    className='form-control form-group' />
 
-                            <label>Truck Class:</label>
-                            <select  className='form-control form-group' value={this.state.truckClass} name="roles" onChange={this.changeTruckClassa}>
-                            <option disabled selected hidden value="">Select a truck class.</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
+                                <label>Year: <span className="text-center alert-danger">{this.state.errorYear}</span></label>
+                                <input type='text'
+                                    placeholder='2020'
+                                    onChange={this.changeYear}
+                                    value={this.state.year}
+                                    className='form-control form-group' />
 
-                            </select>
-                            <label>License:</label>
-                            <input type='text'
-                                placeholder='PLATE###'
-                                onChange={this.changeLicensePlate}
-                                value={this.state.licensePlate}
-                                className='form-control form-group' />
+                                <label>Truck Class: <span className="text-center alert-danger">{this.state.errorClass}</span></label>
+                                <select className='form-control form-group' value={this.state.truckClass} name="class" onChange={this.changeTruckClass}>
+                                    <option disabled selected hidden value="">Select a truck class.</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
 
-                            <label>Status:</label>
-                            <select  className='form-control form-group' value={this.state.status} name="roles" onChange={this.changeStatus}>
-                                <option disabled selected hidden value="">Select a status.</option>
-                                <option value="In Service">In Service</option>
-                                <option value="Out of Service">Out of Service</option>
-                                <option value="Maintenance">Maintenance</option>
-                            </select>
+                                </select>
+                                <label>License Plate: <span className="text-center alert-danger">{this.state.errorLicensePlate}</span></label>
+                                <input type='text'
+                                    placeholder='PLATE###'
+                                    onChange={this.changeLicensePlate}
+                                    value={this.state.licensePlate}
+                                    className='form-control form-group' />
 
-                            <span>{this.state.errorMessage}</span>
+                                <label>Status: <span className="text-center alert-danger">{this.state.errorStatus}</span></label>
+                                <select className='form-control form-group' value={this.state.status} name="roles" onChange={this.changeStatus}>
+                                    <option disabled selected hidden value="">Select a status.</option>
+                                    <option value="In Service">In Service</option>
+                                    <option value="Out of Service">Out of Service</option>
+                                    <option value="Maintenance">Maintenance</option>
+                                </select>
 
-                            <input type='submit' className='btn btn-primary btn-block'
-                                value='Submit' />
-                                <Link className="mt-3 btn btn-warning btn-block"to='/dashboard'>Go back</Link>
-                        </form>
+                                <span>{this.state.errorMessage}</span>
+
+                                <input type='submit' className='btn btn-primary btn-block'
+                                    value='Submit' />
+                                <Link className="mt-3 btn btn-warning btn-block" to='/dashboard'>Go back</Link>
+                            </form>
                         </Col>
-                        </Row>
+                    </Row>
                 </div>
             </div>
-
         );
     }
 }
