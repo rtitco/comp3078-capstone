@@ -29,8 +29,11 @@ class AdminDashboard extends Component {
     }
 
     render() {
-        if (this.state.currentUser.role != "Admin" || this.state.currentUser == null) {
+        if (this.state.currentUser == null) {
             return <Redirect to='/login' />
+        }
+        if (this.state.currentUser.role != "Admin") {
+            return <Redirect to='/dashboard' />
         }
         return (
             <div>
