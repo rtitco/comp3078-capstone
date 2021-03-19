@@ -95,16 +95,21 @@ class ClientDashboard extends Component {
                     accessor: 'delivery_date',
                 },
                 {
-                    Header: 'Address',
-                    accessor: 'destination_street',
+                    Header: 'Origin Address',
+                    // id: 'origin_address',
+                    accessor: data => data.origin_address + ', ' + data.origin_city + ', ' + data.origin_postalCode
                 },
                 {
-                    Header: 'City',
-                    accessor: 'destination_city',
+                    Header: 'Destination Address',
+                    accessor: data => data.destination_address + ', ' + data.destination_city + ', ' + data.destination_postalCode,
                 },
                 {
-                    Header: 'Postal Code',
-                    accessor: 'destination_postalCode',
+                    Header: 'Cargo Type',
+                    accessor: 'cargo_type',
+                },
+                {
+                    Header: 'Cargo Weight (kg)',
+                    accessor: 'cargo_weight',
                 },
                 {
                     Header: 'Status',
@@ -147,7 +152,7 @@ class ClientDashboard extends Component {
             <div>
                 <LoginNavBar />
                 <Container fluid>
-                    <Row className="">
+                    <Row className="float-right mr-5 mb-2">
                     {/* <label>{this.state.currentUser.role}</label> */}
                     <br />
                     <Link className="btn btn-primary" to={redirectTo}>

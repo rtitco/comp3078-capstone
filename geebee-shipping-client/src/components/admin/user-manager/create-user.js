@@ -1,4 +1,4 @@
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import React, { Component } from 'react';
 import axios from 'axios'
 import logo from '../../shared/profile/gb.png'
@@ -9,7 +9,10 @@ class CreateUserForm extends Component {
 
     constructor() {
         super()
+        let sessionUser = JSON.parse(window.sessionStorage.getItem("currentUser"))
+
         this.state = {
+            currentUser: sessionUser,
             firstName: '',
             lastName: '',
             phoneNumber: '',
@@ -156,6 +159,8 @@ class CreateUserForm extends Component {
 
                                     <input type='submit' className='btn btn-primary btn-block'
                                         value='Submit' />
+                                    <Link className="mt-3 btn btn-warning btn-block" to='/admin/user-manager'>Back</Link>
+
                                 </form>
                             </div>
                         </div>
