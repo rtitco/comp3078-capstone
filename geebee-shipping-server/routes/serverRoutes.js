@@ -223,34 +223,77 @@ app.post('/admin/company-manager/add', async (req, res) => {
 
 //POST for Adding New Truck to Database
 app.post('/fleet/add', async (req, truck) => {
-    // if (req.body.brand.length < 1 || req.body.model.length < 1 ||
-    //     req.body.year.length < 1 || req.body.licensePlate.length < 1) {
-    //     truck.send({ message: "Fields cannot be empty." })
-    // }
-    // else {
-    //     if (req.body.year <= 1990 || req.body.year >= 2022) {
-
-    //         truck.send({ messageYear: "Invalid year.", message: "Failed to add new truck." })
-    //     }
-    // }
-
-    let newTruck = new vehicleModel({
-        vehicle_brand: req.body.brand,
-        vehicle_model: req.body.model,
-        vehicle_year: req.body.year,
-        truck_class: req.body.truckClass,
-        license_plate: req.body.licensePlate,
-        vehicle_status: req.body.status
-    });
-    await newTruck.save((err, res) => {
-        if (err) {
-            //error handling
-            truck.send({ message: "Failed to add new truck." })
+    //CHECK FOR EMPTY FIELDS
+    if (req.body.brand.length < 1 || req.body.model.length < 1 ||
+        req.body.year.length < 1 || req.body.licensePlate.length < 1 ||
+        req.body.truckClass.length < 1 || req.body.status.length < 1) {
+        truck.send({ message: "Fields cannot be empty." })
+    }
+    //IF FIELDS NOT EMPTY:
+    else {
+        //Regex Brand
+        if (req.body.brand.match(/^[a-zA-Z]{3,}$/) == null) {
+            truck.send({
+                messageBrand: "Brand must contain only letters",
+                message: "Failed to add new truck."
+            })
         }
         else {
-            truck.send({ message: "New truck added to fleet." });
+            //regex model
+            if (req.body.model.match(/^[a-zA-Z\d]{3,}$/) == null) {
+                truck.send({
+                    messageModel: "Model can only contain letters or numbers",
+                    message: "Failed to add new truck."
+                })
+            }
+            else {
+                //regex year
+                if (req.body.year.match(/^[\d]{4}$/) == null) {
+                    truck.send({
+                        messageYear: "Invalid year.",
+                        message: "Failed to add new truck."
+                    })
+                }
+                else {
+                    //check if year within valid range
+                    if (req.body.year <= 1990 || req.body.year >= 2022) {
+                        truck.send({
+                            messageYear: "Invalid year.",
+                            message: "Failed to add new truck."
+                        })
+                    }
+                    else {
+                        //check if license plate contains numbers and letters
+                        if (req.body.licensePlate.match(/^[A-Z]{3,5}[ ]{0,1}[\d]{3,5}$/) == null) {
+                            truck.send({
+                                messageLicensePlate: "Invalid license plate.",
+                                message: "Failed to add new truck."
+                            })
+                        }
+                        else {
+                            let newTruck = new vehicleModel({
+                                vehicle_brand: req.body.brand,
+                                vehicle_model: req.body.model,
+                                vehicle_year: req.body.year,
+                                truck_class: req.body.truckClass,
+                                license_plate: req.body.licensePlate,
+                                vehicle_status: req.body.status
+                            });
+                            await newTruck.save((err, res) => {
+                                if (err) {
+                                    //error handling
+                                    truck.send({ message: "Failed to add new truck." })
+                                }
+                                else {
+                                    truck.send({ message: "New truck added to fleet." });
+                                }
+                            });
+                        }
+                    }
+                }
+            }
         }
-    });
+    }
 })
 
 //POST for Orders Table
