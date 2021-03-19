@@ -229,7 +229,14 @@ app.post('/admin/company-manager/add', async (req, company) => {
         company.send({ messagePhone: "Invalid Phone Number", message: "Failed to add." })
     }
     else {
-        let newCompany = new companyModel(req.body);
+        let newCompany = new companyModel({
+            company_name: req.body.company_name.toUpperCase(),
+            address: req.body.address.toUpperCase(),
+            city: req.body.city.toUpperCase(),
+            province: req.body.province.toUpperCase(),
+            postal_code: req.body.postal_code.toUpperCase(),
+            company_phone: req.body.company_phone,
+        });
         await newCompany.save((err) => {
             if (err) {
                 //error handling
@@ -248,6 +255,7 @@ app.post('/fleet/add', async (req, truck) => {
     let rgx_truck_brand = /^[a-zA-Z]{3,}$/;
     let rgx_truck_model = /^[a-zA-Z\d]{3,}$/;
     let rgx_truck_year = /^[\d]{4}$/;
+    let rgx_truck_plate = /^[A-Za-z]{3,5}[ ]{0,1}[\d]{3,5}$/;
 
     //CHECK FOR EMPTY FIELDS
     if (req.body.brand.length < 1 || req.body.model.length < 1 ||
@@ -280,7 +288,7 @@ app.post('/fleet/add', async (req, truck) => {
             message: "Failed to add new truck."
         })
     }
-    else if (req.body.licensePlate.match(/^[A-Z]{3,5}[ ]{0,1}[\d]{3,5}$/) == null) {
+    else if (req.body.licensePlate.match(rgx_truck_plate) == null) {
         truck.send({
             messageLicensePlate: "Invalid license plate.",
             message: "Failed to add new truck."
@@ -288,11 +296,11 @@ app.post('/fleet/add', async (req, truck) => {
     }
     else {
         let newTruck = new vehicleModel({
-            vehicle_brand: req.body.brand,
-            vehicle_model: req.body.model,
+            vehicle_brand: req.body.brand.toUpperCase(),
+            vehicle_model: req.body.model.toUpperCase(),
             vehicle_year: req.body.year,
             truck_class: req.body.truckClass,
-            license_plate: req.body.licensePlate,
+            license_plate: req.body.licensePlate.toUpperCase(),
             vehicle_status: req.body.status
         });
         await newTruck.save((err, res) => {
