@@ -71,7 +71,7 @@ class CreateTruckForm extends Component {
     onSubmit = (event) => {
         // prevents form from acting in default way, stops refreshing
         event.preventDefault()
-        const registered = {
+        const truckData = {
             brand: this.state.brand,
             model: this.state.model,
             year: this.state.year,
@@ -80,7 +80,7 @@ class CreateTruckForm extends Component {
             status: this.state.status
         }
         // everything stored in registered will send to backend (url) then to mongo
-        axios.post('http://localhost:8081/fleet/add', registered)
+        axios.post('http://localhost:8081/fleet/add', truckData)
             .then(res => {
                 this.setState({
                     errorMessage: res.data.message,
