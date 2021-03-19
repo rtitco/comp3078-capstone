@@ -263,7 +263,7 @@ app.post('/fleet/add', async (req, truck) => {
         req.body.truckClass.length < 1 || req.body.status.length < 1) {
         truck.send({ message: "Fields cannot be empty." })
     }
-    //IF FIELDS NOT EMPTY:
+    //REGEX CHECKS:
     else if (req.body.brand.match(rgx_truck_brand) == null) {
         truck.send({
             messageBrand: "Brand must contain only letters",
@@ -318,23 +318,44 @@ app.post('/fleet/add', async (req, truck) => {
 
 //POST for Orders Table
 app.post('/orders/add', async (req, order) => {
-    let newOrder = new orderModel({
-        order_date: new Date().toISOString().split('T')[0].toString(),
-        delivery_date: req.body.deliveryDate.toString(),
-        destination_street: req.body.street,
-        destination_city: req.body.city,
-        destination_postalCode: req.body.postalCode,
-        order_status: "Processing"
-    });
-    newOrder.save((err, res) => {
-        if (err) {
-            //error handling
-            order.send({ message: "Error creating order." })
-        }
-        else {
-            order.send({ message: "Order completed." });
-        }
-    });
+    let rgx_order_address = /^([\d]{1,5}[a-mA-M]{0,1}){1}[ ]{0,1}([A-Za-z]{1}[a-z]{1,}[ ]{0,1}){1,}$/;
+    let rgx_order_city = /^([A-Za-z]{1}[a-z]{1,}){1}([ ]{0,1}([A-Za-z]{1}[a-z]{1,}))*$/;
+    let rgx_order_postalCode = /^([a-zA-z]{1}[\d]{1}[a-zA-z]{1}){1}[ ]{0,1}([\d]{1}[a-zA-z]{1}[\d]{1}){1}$/;
+
+    if (req.body.deliveryDate.length < 1 || req.body.street.length < 1 ||
+        req.body.city.length < 1 || req.body.postalCode.length < 1) {
+        order.send({ message: "Fields cannot be empty." })
+    }
+    else if (req.body.street.match(rgx_order_address) == null) {
+        order.send({ messageAddress: "Invalid Address", message: "Order Failed." })
+    }
+    else if (req.body.city.match(rgx_order_city) == null) {
+        order.send({ messageCity: "Invalid City", message: "Order Failed." })
+    }
+    else if (req.body.postalCode.match(rgx_order_postalCode) == null) {
+        order.send({ messagePostalCode: "Invalid Postal Code", message: "Order Failed." })
+    }
+    else {
+        let newOrder = new orderModel({
+            order_date: new Date().toISOString().split('T')[0].toString(),
+            delivery_date: req.body.deliveryDate.toString(),
+            destination_street: req.body.street.toUpperCase(),
+            destination_city: req.body.city.toUpperCase(),
+            destination_postalCode: req.body.postalCode.toUpperCase(),
+            order_status: "Processing"
+        });
+        newOrder.save((err, res) => {
+            if (err) {
+                //error handling
+                order.send({ message: "Error creating order." })
+            }
+            else {
+                order.send({ message: "Order completed." });
+            }
+        });
+    }
+
+
 })
 
 module.exports = app;

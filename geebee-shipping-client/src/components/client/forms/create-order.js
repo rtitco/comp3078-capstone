@@ -17,8 +17,11 @@ class CreateOrderForm extends Component {
             city: '',
             postalCode: '',
 
-            updateSuccess: false,
-            errorMessage: ''
+            errorMessage: '',
+            errorDate: '',
+            errorAddress: '',
+            errorCity: '',
+            errorPostalCode: ''
         }
 
         console.log(this.state.currentUser);
@@ -51,32 +54,28 @@ class CreateOrderForm extends Component {
     onSubmit = (event) => {
         // prevents form from acting in default way, stops refreshing
         event.preventDefault()
-        if (this.state.deliveryDate === '' || this.state.street === '' || this.state.city === '' || this.state.postalCode === '') {
-            this.setState({
-                updateSuccess: false
-            })
-        }
-        else {
-            const registered = {
-                deliveryDate: this.state.deliveryDate,
-                street: this.state.street,
-                city: this.state.city,
-                postalCode: this.state.postalCode
-            }
-            axios.post('http://localhost:8081/orders/add', registered)
-                .then(res => {
-                    this.setState({
-                        errorMessage: res.data.message,
-                        updateSuccess: true,
-                    })
-                }, (error) => {
-                    this.setState({
-                        errorMessage: "Update Failed. Please Fill All Fields."
-                        // errorMessage: "Entry Failed."
-                    })
-                })
-        }
 
+        const orderData = {
+            deliveryDate: this.state.deliveryDate,
+            street: this.state.street,
+            city: this.state.city,
+            postalCode: this.state.postalCode
+        }
+        axios.post('http://localhost:8081/orders/add', orderData)
+            .then(res => {
+                this.setState({
+                    errorMessage: res.data.message,
+                    errorDate: res.data.messageDate,
+                    errorAddress: res.data.messageAddress,
+                    errorCity: res.data.messageCity,
+                    errorPostalCode: res.data.messagePostalCode
+                })
+            }, (error) => {
+                this.setState({
+                    errorMessage: "Update Failed. Please Fill All Fields."
+                    // errorMessage: "Entry Failed."
+                })
+            })
 
     }
 
@@ -90,55 +89,52 @@ class CreateOrderForm extends Component {
         }
 
         return (
-
-
             <div>
                 <p className="text-center">
-                <img src={logo}  alt='logo' />
-      
+                    <img src={logo} alt='logo' />
                 </p>
                 <h1 className='text-center'>Create New Delivery Order</h1>
-                
+
                 <div>
-                        <Row className="justify-content-center">
-                            <Col md="6">
-                        <form onSubmit={this.onSubmit}>
+                    <Row className="justify-content-center">
+                        <Col md="6">
+                            <form onSubmit={this.onSubmit}>
 
-                            <label>Delivery Date</label>
-                            <input type='date'
-                                onChange={this.changeDeliveryDate}
-                                value={this.state.deliveryDate}
-                                className='form-control form-group' />
+                                <label>Delivery Date: <span className="text-center alert-danger">{this.state.errorDate}</span></label>
+                                <input type='date'
+                                    onChange={this.changeDeliveryDate}
+                                    value={this.state.deliveryDate}
+                                    className='form-control form-group' />
 
-                            <label>Address</label>
-                            <input type='text'
-                                placeholder='123 Example Street'
-                                onChange={this.changeStreet}
-                                value={this.state.street}
-                                className='form-control form-group' />
+                                <label>Address: <span className="text-center alert-danger">{this.state.errorAddress}</span></label>
+                                <input type='text'
+                                    placeholder='123 Example Street'
+                                    onChange={this.changeStreet}
+                                    value={this.state.street}
+                                    className='form-control form-group' />
 
-                            <label>City</label>
-                            <input type='text'
-                                placeholder='Toronto'
-                                onChange={this.changeCity}
-                                value={this.state.city}
-                                className='form-control form-group' />
+                                <label>City: <span className="text-center alert-danger">{this.state.errorCity}</span></label>
+                                <input type='text'
+                                    placeholder='Toronto'
+                                    onChange={this.changeCity}
+                                    value={this.state.city}
+                                    className='form-control form-group' />
 
-                            <label>Postal Code</label>
-                            <input type='text'
-                                placeholder='A1A 1A1'
-                                onChange={this.changePostalCode}
-                                value={this.state.postalCode}
-                                className='form-control form-group' />
+                                <label>Postal Code: <span className="text-center alert-danger">{this.state.errorPostalCode}</span></label>
+                                <input type='text'
+                                    placeholder='A1A 1A1'
+                                    onChange={this.changePostalCode}
+                                    value={this.state.postalCode}
+                                    className='form-control form-group' />
 
-                            <span>{this.state.errorMessage}</span>
+                                <span className="text-center alert-danger">{this.state.errorMessage}</span>
 
-                            <input type='submit' className='btn btn-primary btn-block'
-                                value='Submit' />
-                            <Link className="mt-3 btn btn-warning btn-block"to='/dashboard'>Go back</Link>
-                        </form>
+                                <input type='submit' className='btn btn-primary btn-block'
+                                    value='Submit' />
+                                <Link className="mt-3 btn btn-warning btn-block" to='/dashboard'>Go back</Link>
+                            </form>
                         </Col>
-                        </Row>
+                    </Row>
                 </div>
             </div>
 
