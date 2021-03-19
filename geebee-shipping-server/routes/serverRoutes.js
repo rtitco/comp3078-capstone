@@ -6,6 +6,7 @@ const companyModel = require('../models/Companies.js')
 const bcrypt = require('bcrypt')
 // const store = require('store2');
 const { json } = require('express');
+const e = require('express');
 const app = express();
 // const router = express.Router();
 
@@ -62,6 +63,9 @@ app.get('/orders', async (req, res) => {
 
 //POST ==> Admin Creating New User
 app.post('/admin/users/add', async (req, newUser) => {
+    let rgx_user_email = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
+    let rgx_user_pw = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&\-_])[A-Za-z\d@$!%*?&\-_]{8,}$/;
+
 
     //check for empty fields
     if (req.body.password.length < 6 || req.body.email.length < 1 || req.body.company.length < 1) {
@@ -69,7 +73,7 @@ app.post('/admin/users/add', async (req, newUser) => {
     }
     else {
         //regex email
-        if (req.body.email.match(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/) == null) {
+        if (req.body.email.match(rgx_user_email) == null) {
             newUser.send({
                 messageEmail: "Invalid email address."
             })
@@ -90,7 +94,7 @@ app.post('/admin/users/add', async (req, newUser) => {
                 //no existing accounts with email
                 else {
                     //regex password
-                    if (req.body.password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&\-_])[A-Za-z\d@$!%*?&\-_]{8,}$/) == null) {
+                    if (req.body.password.match(rgx_user_pw) == null) {
                         newUser.send({
                             message: "Entry Failed. Please try again.",
                             messagePw: "Passwords must be at least 6 characters in length, and include at least one(1) Capital letter, one(1) lowercase, one(1) number, and one(1) special character @$!%*?&-_"
@@ -202,27 +206,53 @@ app.post('/profile', async (req, updateRes) => {
 })
 
 //POST for Companies Table
-app.post('/admin/company-manager/add', async (req, res) => {
-    console.log(req.body);
-    let newCompany = new companyModel(req.body);
-    try {
+app.post('/admin/company-manager/add', async (req, company) => {
+    let rgx_company_name = /^([A-Za-z]{1}[a-z]{1,}){1}([ ]{0,1}([A-Za-z]{1}[a-z]{1,}))*$/
+    let rgx_company_address = /^([\d]{1,5}[a-mA-M]{0,1}){1}[ ]{0,1}([A-Za-z]{1}[a-z]{1,}[ ]{0,1}){1,}$/;
+    let rgx_company_city = /^([A-Za-z]{1}[a-z]{1,}){1}([ ]{0,1}([A-Za-z]{1}[a-z]{1,}))*$/;
+    let rgx_company_postalCode = /^([a-zA-z]{1}[\d]{1}[a-zA-z]{1}){1}[ ]{0,1}([\d]{1}[a-zA-z]{1}[\d]{1}){1}$/;
+    let rgx_company_phone = /^[+]{0,1}[\d]*[- ]{0,1}([\d]{3}[- ]{0,1}){2}[\d]{4}$/;
+
+    if (req.body.company_name.length < 1 || req.body.address.length < 1 || req.body.city.length < 1 ||
+        req.body.province.length < 1 || req.body.postal_code.length < 1 || req.body.company_phone.length < 1) {
+        company.send({ message: "Fields cannot be empty." })
+    }
+    else if (req.body.company_name.match(rgx_company_name) == null) {
+        company.send({ messageCompany: "Invalid company name.", message: "Failed to add." })
+    }
+    else if (req.body.address.match(rgx_company_address) == null) {
+        company.send({ messageAddress: "Invalid Address", message: "Failed to add." })
+    }
+    else if (req.body.city.match(rgx_company_city) == null) {
+        company.send({ messageCity: "Invalid City", message: "Failed to add." })
+    }
+    else if (req.body.postal_code.match(rgx_company_postalCode) == null) {
+        company.send({ messagePostalCode: "Invalid Postal Code", message: "Failed to add." })
+    }
+    else if (req.body.company_phone.match(rgx_company_phone) == null) {
+        company.send({ messagePhone: "Invalid Phone Number", message: "Failed to add." })
+    }
+    else {
+        let newCompany = new companyModel(req.body);
         await newCompany.save((err) => {
             if (err) {
                 //error handling
-                res.send(err)
+                company.send({ message: "Failed to add." })
             }
             else {
-                res.send({ success: true })
+                company.send({ success: true, message: "Company successfully added." })
             }
         });
     }
-    catch (err) {
-        res.status(500).send(err);
-    }
+
 })
 
 //POST for Adding New Truck to Database
 app.post('/fleet/add', async (req, truck) => {
+    let rgx_truck_brand = /^[a-zA-Z]{3,}$/;
+    let rgx_truck_model = /^[a-zA-Z\d]{3,}$/;
+    let rgx_truck_year = /^[\d]{4}$/;
+
     //CHECK FOR EMPTY FIELDS
     if (req.body.brand.length < 1 || req.body.model.length < 1 ||
         req.body.year.length < 1 || req.body.licensePlate.length < 1 ||
@@ -232,7 +262,7 @@ app.post('/fleet/add', async (req, truck) => {
     //IF FIELDS NOT EMPTY:
     else {
         //Regex Brand
-        if (req.body.brand.match(/^[a-zA-Z]{3,}$/) == null) {
+        if (req.body.brand.match(rgx_truck_brand) == null) {
             truck.send({
                 messageBrand: "Brand must contain only letters",
                 message: "Failed to add new truck."
@@ -240,7 +270,7 @@ app.post('/fleet/add', async (req, truck) => {
         }
         else {
             //regex model
-            if (req.body.model.match(/^[a-zA-Z\d]{3,}$/) == null) {
+            if (req.body.model.match(rgx_truck_model) == null) {
                 truck.send({
                     messageModel: "Model can only contain letters or numbers",
                     message: "Failed to add new truck."
@@ -248,7 +278,7 @@ app.post('/fleet/add', async (req, truck) => {
             }
             else {
                 //regex year
-                if (req.body.year.match(/^[\d]{4}$/) == null) {
+                if (req.body.year.match(rgx_truck_year) == null) {
                     truck.send({
                         messageYear: "Invalid year.",
                         message: "Failed to add new truck."
