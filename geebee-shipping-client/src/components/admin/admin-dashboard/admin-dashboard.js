@@ -13,36 +13,58 @@ import CreateCompany from '../company-manager/create-company';
 //user
 import UserManager from '../user-manager/user-manager';
 import CreateUser from '../user-manager/create-user';
+import { Component } from 'react';
 
-function AdminDashboard() {
-    return (
-    <div>
-        <LoginNavBar />
-        <Container className="mt-4" fluid>
-            <Row className="">
-                <Col sm="4" md="4" lg="3" xl="2">
-                    {/*This will be the side navigation the routes links here must start with /dashboard/admin/ */}
-                    <AdminSideNav />
-                </Col>
-                <Col sm="8" md="8" lg="9" xl="10">
-                    {/*https://reactrouter.com/web/example/nesting for example of nested router
-                        These routes will always start with /dashboard/admin/ as well (the default being the table view).
-                        */}
-                    <Switch>
-                        <Route exact path="/admin">
-                            <Redirect to="/admin/user-manager" />
-                        </Route>
-                        <Route exact path="/admin/user-manager" component={UserManager} />
-                        <Route exact path="/admin/users/add" component={CreateUser} />
+class AdminDashboard extends Component {
 
-                        <Route exact path="/admin/company-manager" component={CompanyManager} />
-                        <Route exact path="/admin/company-manager/add" component={CreateCompany} />
-                    </Switch>
-                </Col>
-            </Row>
-        </Container>
-    </div>
-    );
+    constructor(props) {
+        super(props)
+        let sessionUser = JSON.parse(window.sessionStorage.getItem("currentUser"))
+        this.state = {
+            currentUser: sessionUser,
+            // currentUserRole: sessionUser.role,
+            loading: true,
+            mongoData: [],
+        }
+    }
+
+    render() {
+        if (this.state.currentUser == null) {
+            return <Redirect to='/login' />
+        }
+        if (this.state.currentUser.role != "Admin") {
+            return <Redirect to='/dashboard' />
+        }
+        return (
+            <div>
+                <LoginNavBar />
+                <Container className="mt-4" fluid>
+                    <Row className="">
+                        <Col sm="4" md="4" lg="3" xl="2">
+                            {/*This will be the side navigation the routes links here must start with /dashboard/admin/ */}
+                            <AdminSideNav />
+                        </Col>
+                        <Col sm="8" md="8" lg="9" xl="10">
+                            {/*https://reactrouter.com/web/example/nesting for example of nested router
+                            These routes will always start with /dashboard/admin/ as well (the default being the table view).
+                            */}
+                            <Switch>
+                                <Route exact path="/admin">
+                                    <Redirect to="/admin/user-manager" />
+                                </Route>
+                                <Route exact path="/admin/user-manager" component={UserManager} />
+                                <Route exact path="/admin/users/add" component={CreateUser} />
+
+                                <Route exact path="/admin/company-manager" component={CompanyManager} />
+                                <Route exact path="/admin/company-manager/add" component={CreateCompany} />
+                            </Switch>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
+        )
+
+    }
 }
 
 export default AdminDashboard;

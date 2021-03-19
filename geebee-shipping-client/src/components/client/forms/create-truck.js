@@ -83,6 +83,7 @@ class CreateTruckForm extends Component {
         axios.post('http://localhost:8081/fleet/add', truckData)
             .then(res => {
                 this.setState({
+                    updateSuccess: res.data.success,
                     errorMessage: res.data.message,
                     errorBrand: res.data.messageBrand,
                     errorModel: res.data.messageModel,
@@ -110,20 +111,13 @@ class CreateTruckForm extends Component {
     }
 
     render() {
-        // if (this.state.currentUser.role != "Dispatcher" ) {
-        //     return <Redirect to='/login' /> 
-        // }
-        console.log(this.state.currentUser.role)
-        // else {
-        //     if (this.state.updateSuccess === true) {
-        //         return <Redirect to='/admin' />
-        //     }
-        //     else {
-        // this.setState({
-        //     errorMessage: "Update Failed. Please Fill All Fields."
-        // })
-        //     }
-        // }
+        if (this.state.currentUser.role != "Dispatcher" || this.state.currentUser == null) {
+            return <Redirect to='/dashboard' />
+        }
+        else if (this.state.updateSuccess == true) {
+            return <Redirect to='/dashboard' />
+        }
+        
         return (
             <div>
                 <p className="text-center mt-5">
