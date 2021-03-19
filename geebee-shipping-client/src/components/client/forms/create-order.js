@@ -13,16 +13,27 @@ class CreateOrderForm extends Component {
         this.state = {
             currentUser: sessionUser,
             deliveryDate: '',
-            street: '',
-            city: '',
-            postalCode: '',
+            origin_address: '',
+            origin_city: '',
+            origin_postalCode: '',
+            dest_address: '',
+            dest_city: '',
+            dest_postalCode: '',
+            cargo_type: '',
+            cargo_weight: '',
+            assigned_truckClass: '',
+            assigned_truckPlate: '',
+            assigned_truckDriver: '',
 
             updateSuccess: false,
             errorMessage: '',
             errorDate: '',
-            errorAddress: '',
-            errorCity: '',
-            errorPostalCode: ''
+            errorOriginAddress: '',
+            errorOriginCity: '',
+            errorOriginPostalCode: '',
+            errorDestAddress: '',
+            errorDestCity: '',
+            errorDestPostalCode: ''
         }
 
         console.log(this.state.currentUser);
@@ -33,22 +44,53 @@ class CreateOrderForm extends Component {
             deliveryDate: event.target.value
         })
     }
-
-    changeStreet = (event) => {
+    // Origin
+    changeOriginAddress = (event) => {
         this.setState({
-            street: event.target.value
+            origin_address: event.target.value
         })
     }
 
-    changeCity = (event) => {
+    changeOriginCity = (event) => {
         this.setState({
-            city: event.target.value
+            origin_city: event.target.value
         })
     }
 
-    changePostalCode = (event) => {
+    changeOriginPostalCode = (event) => {
         this.setState({
-            postalCode: event.target.value
+            origin_postalCode: event.target.value
+        })
+    }
+    // Dest
+
+    changeDestAddress = (event) => {
+        this.setState({
+            dest_address: event.target.value
+        })
+    }
+
+    changeDestCity = (event) => {
+        this.setState({
+            dest_city: event.target.value
+        })
+    }
+
+    changeDestPostalCode = (event) => {
+        this.setState({
+            dest_postalCode: event.target.value
+        })
+    }
+
+    changeCargoType = (event) => {
+        this.setState({
+            cargo_type: event.target.value
+        })
+    }
+
+    changeCargoWeight = (event) => {
+        this.setState({
+            cargo_weight: event.target.value
         })
     }
 
@@ -58,9 +100,17 @@ class CreateOrderForm extends Component {
 
         const orderData = {
             deliveryDate: this.state.deliveryDate,
-            street: this.state.street,
-            city: this.state.city,
-            postalCode: this.state.postalCode
+            origin_address: this.state.origin_address,
+            origin_city: this.state.origin_city,
+            origin_postalCode: this.state.origin_postalCode,
+            dest_address: this.state.dest_address,
+            dest_city: this.state.dest_city,
+            dest_postalCode: this.state.dest_postalCode,
+            cargo_type: this.state.cargo_type,
+            cargo_weight: this.state.cargo_weight,
+            assigned_truckClass: this.state.assigned_truckClass,
+            assigned_truckPlate: this.state.assigned_truckPlate,
+            assigned_truckDriver: this.state.assigned_truckDriver
         }
         axios.post('http://localhost:8081/orders/add', orderData)
             .then(res => {
@@ -68,9 +118,14 @@ class CreateOrderForm extends Component {
                     updateSuccess: res.data.success,
                     errorMessage: res.data.message,
                     errorDate: res.data.messageDate,
-                    errorAddress: res.data.messageAddress,
-                    errorCity: res.data.messageCity,
-                    errorPostalCode: res.data.messagePostalCode
+                    errorOriginAddress: res.data.messageOriginAddress,
+                    errorOriginCity: res.data.messageOriginCity,
+                    errorOriginPostalCode: res.data.messageOriginPostalCode,
+                    errorDestAddress: res.data.messageDestAddress,
+                    errorDestCity: res.data.messageDestCity,
+                    errorDestPostalCode: res.data.messageDestPostalCode,
+                    errorCargoType: res.data.messageCargoType,
+                    errorCargoWeight: res.data.messageCargoWeight
                 })
             }, (error) => {
                 this.setState({
@@ -106,26 +161,82 @@ class CreateOrderForm extends Component {
                                     value={this.state.deliveryDate}
                                     className='form-control form-group' />
 
-                                <label>Address: <span className="text-center alert-danger">{this.state.errorAddress}</span></label>
+                                {/* Origin */}
+                                <label>Origin Address: <span className="text-center alert-danger">{this.state.errorOriginAddress}</span></label>
                                 <input type='text'
                                     placeholder='123 Example Street'
-                                    onChange={this.changeStreet}
-                                    value={this.state.street}
+                                    onChange={this.changeOriginAddress}
+                                    value={this.state.origin_address}
                                     className='form-control form-group' />
 
-                                <label>City: <span className="text-center alert-danger">{this.state.errorCity}</span></label>
+                                <Row>
+                                    <Col md="6">
+                                        <label>Origin City: <span className="text-center alert-danger">{this.state.errorOriginCity}</span></label>
+                                        <input type='text'
+                                            placeholder='Toronto'
+                                            onChange={this.changeOriginCity}
+                                            value={this.state.origin_city}
+                                            className='form-control form-group' />
+                                    </Col>
+                                    <Col md="6">
+                                        <label>Origin Postal Code: <span className="text-center alert-danger">{this.state.errorOriginPostalCode}</span></label>
+                                        <input type='text'
+                                            placeholder='A1A 1A1'
+                                            onChange={this.changeOriginPostalCode}
+                                            value={this.state.origin_postalCode}
+                                            className='form-control form-group' />
+                                    </Col>
+                                </Row>
+
+                                {/* Destination */}
+                                <label>Destination Address: <span className="text-center alert-danger">{this.state.errorDestAddress}</span></label>
                                 <input type='text'
-                                    placeholder='Toronto'
-                                    onChange={this.changeCity}
-                                    value={this.state.city}
+                                    placeholder='123 Example Street'
+                                    onChange={this.changeDestAddress}
+                                    value={this.state.dest_address}
                                     className='form-control form-group' />
 
-                                <label>Postal Code: <span className="text-center alert-danger">{this.state.errorPostalCode}</span></label>
-                                <input type='text'
-                                    placeholder='A1A 1A1'
-                                    onChange={this.changePostalCode}
-                                    value={this.state.postalCode}
-                                    className='form-control form-group' />
+                                <Row>
+                                    <Col md="6">
+                                        <label>Destination City: <span className="text-center alert-danger">{this.state.errorDestCity}</span></label>
+                                        <input type='text'
+                                            placeholder='Toronto'
+                                            onChange={this.changeDestCity}
+                                            value={this.state.dest_city}
+                                            className='form-control form-group' />
+                                    </Col>
+                                    <Col md="6">
+                                        <label>Destination Postal Code: <span className="text-center alert-danger">{this.state.errorDestPostalCode}</span></label>
+                                        <input type='text'
+                                            placeholder='A1A 1A1'
+                                            onChange={this.changeDestPostalCode}
+                                            value={this.state.dest_postalCode}
+                                            className='form-control form-group' />
+                                    </Col>
+                                </Row>
+
+                                <Row>
+                                    <Col md="6">
+                                        <label>Cargo Type: <span className="text-center alert-danger">{this.state.errorCargoType}</span></label>
+                                        <select className='form-control form-group' value={this.state.CargoType} name="cargoType" onChange={this.changeCargoType}>
+                                            <option disabled selected hidden value="">Select an Option</option>
+                                            <option value="Produce">Produce</option>
+                                            <option value="Dairy">Dairy</option>
+                                            <option value="Frozen Goods">Frozen Goods</option>
+                                            <option value="Furniture">Furniture</option>
+                                            <option value="Miscellaneous">Miscellaneous</option>
+                                        </select>
+                                    </Col>
+                                    <Col md="3">
+                                        <label>Cargo Weight (in kg): <span className="text-center alert-danger">{this.state.errorCargoWeight}</span></label>
+                                        <input type='text'
+                                            placeholder='0.0'
+                                            onChange={this.changeCargoWeight}
+                                            value={this.state.cargo_weight}
+                                            className='form-control form-group' />
+                                    </Col>
+
+                                </Row>
 
                                 <span className="text-center alert-danger">{this.state.errorMessage}</span>
 

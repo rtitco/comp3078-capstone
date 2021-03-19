@@ -10,7 +10,7 @@ function AdminSideNav() {
         {/* <a className="ml-4" href="./users/add">Add User</a> */}
         <Link to="/admin/company-manager">Company Manager</Link>
         {/* <a className="ml-4" href="./company-manager">Add Company</a> */}
-        <Link to="#">System Manager</Link>
+        <Link to="/admin/order-manager">Schedule Orders</Link>
       </div>
     );
 }
