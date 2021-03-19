@@ -53,6 +53,10 @@ class ClientDashboard extends Component {
         let buttonLabel = '';
         let redirectTo = '';
 
+        if (this.state.currentUser == null){
+            return <Redirect to='/login' />
+        }
+
         if (this.state.currentUser.role === "Retail") {
             columns = [
                 {

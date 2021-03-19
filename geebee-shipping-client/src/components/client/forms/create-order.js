@@ -17,6 +17,7 @@ class CreateOrderForm extends Component {
             city: '',
             postalCode: '',
 
+            updateSuccess: false,
             errorMessage: '',
             errorDate: '',
             errorAddress: '',
@@ -64,6 +65,7 @@ class CreateOrderForm extends Component {
         axios.post('http://localhost:8081/orders/add', orderData)
             .then(res => {
                 this.setState({
+                    updateSuccess: res.data.success,
                     errorMessage: res.data.message,
                     errorDate: res.data.messageDate,
                     errorAddress: res.data.messageAddress,
@@ -76,15 +78,13 @@ class CreateOrderForm extends Component {
                     // errorMessage: "Entry Failed."
                 })
             })
-
     }
 
     render() {
-        if (this.state.currentUser.role != "Distribution") {
+        if (this.state.currentUser.role != "Distribution" || this.state.currentUser == null) {
             return <Redirect to='/dashboard' />
         }
-
-        if (this.state.updateSuccess === true) {
+        else if (this.state.updateSuccess == true) {
             return <Redirect to='/dashboard' />
         }
 

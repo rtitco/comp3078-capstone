@@ -309,7 +309,7 @@ app.post('/fleet/add', async (req, truck) => {
                 truck.send({ message: "Failed to add new truck." })
             }
             else {
-                truck.send({ message: "New truck added to fleet." });
+                truck.send({ success: true, message: "New truck added to fleet." });
             }
         });
     }
@@ -350,7 +350,7 @@ app.post('/orders/add', async (req, order) => {
                 order.send({ message: "Error creating order." })
             }
             else {
-                order.send({ message: "Order completed." });
+                order.send({ success: true });
             }
         });
     }
