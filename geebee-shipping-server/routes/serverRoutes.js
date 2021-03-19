@@ -66,70 +66,66 @@ app.post('/admin/users/add', async (req, newUser) => {
     let rgx_user_email = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
     let rgx_user_pw = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&\-_])[A-Za-z\d@$!%*?&\-_]{8,}$/;
 
-
     //check for empty fields
     if (req.body.password.length < 6 || req.body.email.length < 1 || req.body.company.length < 1) {
         newUser.send({ message: "Fields cannot be empty." })
     }
+    else if (req.body.email.match(rgx_user_email) == null) {
+        newUser.send({
+            messageEmail: "Invalid email address."
+        })
+    }
     else {
-        //regex email
-        if (req.body.email.match(rgx_user_email) == null) {
-            newUser.send({
-                messageEmail: "Invalid email address."
-            })
-        }
-        else {
-            //check for existing email
-            await userModel.find({ email: req.body.email }, (err, exists) => {
-                if (err) {
+        //check for existing email
+        await userModel.find({ email: req.body.email }, (err, exists) => {
+            if (err) {
+                newUser.send({
+                    message: "Entry Failed. Please try again."
+                })
+            }
+            if (exists.length > 0) {
+                newUser.send({
+                    messageEmail: "Email Address already exists."
+                })
+            }
+            //no existing accounts with email
+            else {
+                //regex password
+                if (req.body.password.match(rgx_user_pw) == null) {
                     newUser.send({
-                        message: "Entry Failed. Please try again."
+                        message: "Entry Failed. Please try again.",
+                        messagePw: "Passwords must be at least 6 characters in length, and include at least one(1) Capital letter, one(1) lowercase, one(1) number, and one(1) special character @$!%*?&-_"
                     })
                 }
-                if (exists.length > 0) {
-                    newUser.send({
-                        messageEmail: "Email Address already exists."
-                    })
-                }
-                //no existing accounts with email
                 else {
-                    //regex password
-                    if (req.body.password.match(rgx_user_pw) == null) {
-                        newUser.send({
-                            message: "Entry Failed. Please try again.",
-                            messagePw: "Passwords must be at least 6 characters in length, and include at least one(1) Capital letter, one(1) lowercase, one(1) number, and one(1) special character @$!%*?&-_"
-                        })
-                    }
-                    else {
-                        // generating salt password to hash and encrypt input pw
-                        const saltPassword = bcrypt.genSalt(10)
-                        const securePassword = bcrypt.hash(req.body.password, saltPassword)
+                    // generating salt password to hash and encrypt input pw
+                    const saltPassword = bcrypt.genSalt(10)
+                    const securePassword = bcrypt.hash(req.body.password, saltPassword)
 
-                        let registeredUser = new userModel({
-                            firstName: req.body.firstName,
-                            lastName: req.body.lastName,
-                            phoneNumber: req.body.phoneNumber,
-                            email: req.body.email,
-                            company: req.body.company,
-                            role: req.body.role,
-                            password: securePassword,
-                            firstLogin: true
-                        })
-                        //try to save entry
-                        registeredUser.save((err, res) => {
-                            if (err) {
-                                newUser.send({
-                                    message: "Failed to create user. Please try again.",
-                                })
-                            }
-                            else {
-                                newUser.send({ message: "New User Created." })
-                            }
-                        })
-                    }
+                    let registeredUser = new userModel({
+                        firstName: req.body.firstName,
+                        lastName: req.body.lastName,
+                        phoneNumber: req.body.phoneNumber,
+                        email: req.body.email,
+                        company: req.body.company,
+                        role: req.body.role,
+                        password: securePassword,
+                        firstLogin: true
+                    })
+                    //try to save entry
+                    registeredUser.save((err, res) => {
+                        if (err) {
+                            newUser.send({
+                                message: "Failed to create user. Please try again.",
+                            })
+                        }
+                        else {
+                            newUser.send({ message: "New User Created." })
+                        }
+                    })
                 }
-            })
-        }
+            }
+        })
     }
 })
 
@@ -260,70 +256,56 @@ app.post('/fleet/add', async (req, truck) => {
         truck.send({ message: "Fields cannot be empty." })
     }
     //IF FIELDS NOT EMPTY:
+    else if (req.body.brand.match(rgx_truck_brand) == null) {
+        truck.send({
+            messageBrand: "Brand must contain only letters",
+            message: "Failed to add new truck."
+        })
+    }
+    else if (req.body.model.match(rgx_truck_model) == null) {
+        truck.send({
+            messageModel: "Model can only contain letters or numbers",
+            message: "Failed to add new truck."
+        })
+    }
+    else if (req.body.year.match(rgx_truck_year) == null) {
+        truck.send({
+            messageYear: "Invalid year.",
+            message: "Failed to add new truck."
+        })
+    }
+    else if (req.body.year <= 1990 || req.body.year >= 2022) {
+        truck.send({
+            messageYear: "Invalid year.",
+            message: "Failed to add new truck."
+        })
+    }
+    else if (req.body.licensePlate.match(/^[A-Z]{3,5}[ ]{0,1}[\d]{3,5}$/) == null) {
+        truck.send({
+            messageLicensePlate: "Invalid license plate.",
+            message: "Failed to add new truck."
+        })
+    }
     else {
-        //Regex Brand
-        if (req.body.brand.match(rgx_truck_brand) == null) {
-            truck.send({
-                messageBrand: "Brand must contain only letters",
-                message: "Failed to add new truck."
-            })
-        }
-        else {
-            //regex model
-            if (req.body.model.match(rgx_truck_model) == null) {
-                truck.send({
-                    messageModel: "Model can only contain letters or numbers",
-                    message: "Failed to add new truck."
-                })
+        let newTruck = new vehicleModel({
+            vehicle_brand: req.body.brand,
+            vehicle_model: req.body.model,
+            vehicle_year: req.body.year,
+            truck_class: req.body.truckClass,
+            license_plate: req.body.licensePlate,
+            vehicle_status: req.body.status
+        });
+        await newTruck.save((err, res) => {
+            if (err) {
+                //error handling
+                truck.send({ message: "Failed to add new truck." })
             }
             else {
-                //regex year
-                if (req.body.year.match(rgx_truck_year) == null) {
-                    truck.send({
-                        messageYear: "Invalid year.",
-                        message: "Failed to add new truck."
-                    })
-                }
-                else {
-                    //check if year within valid range
-                    if (req.body.year <= 1990 || req.body.year >= 2022) {
-                        truck.send({
-                            messageYear: "Invalid year.",
-                            message: "Failed to add new truck."
-                        })
-                    }
-                    else {
-                        //check if license plate contains numbers and letters
-                        if (req.body.licensePlate.match(/^[A-Z]{3,5}[ ]{0,1}[\d]{3,5}$/) == null) {
-                            truck.send({
-                                messageLicensePlate: "Invalid license plate.",
-                                message: "Failed to add new truck."
-                            })
-                        }
-                        else {
-                            let newTruck = new vehicleModel({
-                                vehicle_brand: req.body.brand,
-                                vehicle_model: req.body.model,
-                                vehicle_year: req.body.year,
-                                truck_class: req.body.truckClass,
-                                license_plate: req.body.licensePlate,
-                                vehicle_status: req.body.status
-                            });
-                            await newTruck.save((err, res) => {
-                                if (err) {
-                                    //error handling
-                                    truck.send({ message: "Failed to add new truck." })
-                                }
-                                else {
-                                    truck.send({ message: "New truck added to fleet." });
-                                }
-                            });
-                        }
-                    }
-                }
+                truck.send({ message: "New truck added to fleet." });
             }
-        }
+        });
     }
+
 })
 
 //POST for Orders Table
