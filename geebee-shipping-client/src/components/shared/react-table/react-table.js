@@ -3,6 +3,8 @@ import BTable from 'react-bootstrap/Table';
 import { useTable, useGlobalFilter } from 'react-table'
 
 
+
+
 const EditableCell = ({
   value: initialValue,
   row: { index },
@@ -11,6 +13,12 @@ const EditableCell = ({
 }) => {
   // We need to keep and update the state of the cell normally
   const [value, setValue] = useState(initialValue)
+  const [canEdit, setCanEdit] = useState(false);
+
+  //This returns a different element for input
+  const onClick = e => {
+      setCanEdit(true);
+  }
 
   const onChange = e => {
     setValue(e.target.value)
@@ -19,6 +27,7 @@ const EditableCell = ({
   // We'll only update the external data when the input is blurred
   const onBlur = () => {
     updateData(index, id, value)
+    setCanEdit(false);
   }
 
   // If the initialValue is changed external, sync it up with our state
@@ -26,7 +35,11 @@ const EditableCell = ({
     setValue(initialValue)
   }, [initialValue])
 
-  return <input value={value} onChange={onChange} onBlur={onBlur} />
+  if(!canEdit){
+    return <input value={value} className="form-control-plaintext" onClick={onClick}/>
+  } else {
+    return <input value={value} className="form-control" onChange={onChange} onClick={onClick} onBlur={onBlur} />
+  }
 }
 
 // Set our editable cell renderer as the default Cell renderer
@@ -36,11 +49,16 @@ const defaultColumn = {
 
 
 
-function Table({ columns, data }) {
+function Table({ columns, data, updateDB }) {
+  // 
+
+
+  //------Selected Row  will be passed to the updateData function so it may update the Data
+  const [selectedRow, setSelectedRow] = useState([]);
 
   //------Search Filter
   const [filterInput, setFilterInput] = useState("");
-
+  
   const handleFilterChange = e => {
     const value = e.target.value || undefined;
     setGlobalFilter(value)
@@ -50,6 +68,10 @@ function Table({ columns, data }) {
     //------Editable Column 
     const [lines, setLines] = useState([data]);
     const updateData = (rowIndex, columnID, value) => {
+      debugger
+      //We need the row information which has the old data, so we take the new value, figure out where it came from (fname, lName etc.)
+      //And update the new value accordingly
+      const x = selectedRow;
       setLines(old =>
         old.map((row, index) => {
           console.log(row, index)
@@ -63,6 +85,7 @@ function Table({ columns, data }) {
         })
       );
     };
+
 
   const {
     getTableProps,
@@ -83,8 +106,8 @@ function Table({ columns, data }) {
   // Render the UI for your table
   return (
     <div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="lblSearch">Search</span>
+      <div className="input-group mb-3">
+        <span className="input-group-text" id="lblSearch">Search</span>
         <input type="text" className={"form-control col-sm-5 col-md-3 col-lg-2"}
           value={filterInput}
           onChange={handleFilterChange}
@@ -106,7 +129,7 @@ function Table({ columns, data }) {
           {rows.map((row, i) => {
             prepareRow(row)
             return (
-              <tr {...row.getRowProps()}>
+              <tr {...row.getRowProps()} onClick={() => setSelectedRow(row.original)}>
                 {row.cells.map(cell => {
                   return (
                     <td {...cell.getCellProps()}>
