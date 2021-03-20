@@ -18,12 +18,13 @@ export default class UserManager extends Component {
   async getUsersData() {
     const res = await axios.get('http://localhost:8081/users')
     console.log(res.data)
-    this.setState({ loading: false, userData: res.data })
+    this.setState({ loading: false, userData: res.data})
   }
   componentDidMount() {
     this.getUsersData()
   }
 
+  
   render() {
     // columns for data table
     const columns = [
@@ -52,6 +53,7 @@ export default class UserManager extends Component {
         accessor: 'company',
       }
     ]
+
     return (
       <div>
         <h1>User Manager</h1>
