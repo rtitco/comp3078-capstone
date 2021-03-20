@@ -13,6 +13,9 @@ import CreateCompany from '../company-manager/create-company';
 //user
 import UserManager from '../user-manager/user-manager';
 import CreateUser from '../user-manager/create-user';
+//orders
+import OrderManager from '../order-manager/order-manager';
+import CreateAdminOrder from '../order-manager/create-admin-order';
 import { Component } from 'react';
 
 class AdminDashboard extends Component {
@@ -57,6 +60,9 @@ class AdminDashboard extends Component {
 
                                 <Route exact path="/admin/company-manager" component={CompanyManager} />
                                 <Route exact path="/admin/company-manager/add" component={CreateCompany} />
+
+                                <Route exact path="/admin/order-manager" component={OrderManager} />
+                                <Route exact path="/admin/order-manager/add" component={CreateAdminOrder} />
                             </Switch>
                         </Col>
                     </Row>

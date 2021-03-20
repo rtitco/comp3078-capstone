@@ -322,27 +322,52 @@ app.post('/orders/add', async (req, order) => {
     let rgx_order_city = /^([A-Za-z]{1}[a-z]{1,}){1}([ ]{0,1}([A-Za-z]{1}[a-z]{1,}))*$/;
     let rgx_order_postalCode = /^([a-zA-z]{1}[\d]{1}[a-zA-z]{1}){1}[ ]{0,1}([\d]{1}[a-zA-z]{1}[\d]{1}){1}$/;
 
-    if (req.body.deliveryDate.length < 1 || req.body.street.length < 1 ||
-        req.body.city.length < 1 || req.body.postalCode.length < 1) {
+    if (req.body.deliveryDate.length < 1 || req.body.origin_address.length < 1 || req.body.origin_city.length < 1 || 
+        req.body.origin_postalCode.length < 1 || req.body.dest_address.length < 1 || req.body.dest_city.length < 1 || 
+        req.body.dest_postalCode.length < 1 || req.body.cargo_type.length < 1 || req.body.cargo_weight.length < 1) {
         order.send({ message: "Fields cannot be empty." })
     }
-    else if (req.body.street.match(rgx_order_address) == null) {
-        order.send({ messageAddress: "Invalid Address", message: "Order Failed." })
+    else if (req.body.origin_address.match(rgx_order_address) == null) {
+        order.send({ messageOriginAddress: "Invalid Address", message: "Order Failed." })
     }
-    else if (req.body.city.match(rgx_order_city) == null) {
-        order.send({ messageCity: "Invalid City", message: "Order Failed." })
+    else if (req.body.origin_city.match(rgx_order_city) == null) {
+        order.send({ messageOriginCity: "Invalid City", message: "Order Failed." })
     }
-    else if (req.body.postalCode.match(rgx_order_postalCode) == null) {
-        order.send({ messagePostalCode: "Invalid Postal Code", message: "Order Failed." })
+    else if (req.body.origin_postalCode.match(rgx_order_postalCode) == null) {
+        order.send({ messageOriginPostalCode: "Invalid Postal Code", message: "Order Failed." })
+    }
+    else if (req.body.dest_address.match(rgx_order_address) == null) {
+        order.send({ messageDestAddress: "Invalid Address", message: "Order Failed." })
+    }
+    else if (req.body.dest_city.match(rgx_order_city) == null) {
+        order.send({ messageDestCity: "Invalid City", message: "Order Failed." })
+    }
+    else if (req.body.dest_postalCode.match(rgx_order_postalCode) == null) {
+        order.send({ messageDestPostalCode: "Invalid Postal Code", message: "Order Failed." })
+    }
+    else if (isNaN(req.body.cargo_weight) == true) {
+        order.send({ messageCargoWeight: "Invalid Weight", message: "Order Failed." })
+    }
+    else if (req.body.cargo_weight < 10 || req.body.cargo_weight > 15000) {
+        order.send({ messageCargoWeight: "Invalid Weight", message: "Order Failed." })
     }
     else {
         let newOrder = new orderModel({
             order_date: new Date().toISOString().split('T')[0].toString(),
             delivery_date: req.body.deliveryDate.toString(),
-            destination_street: req.body.street.toUpperCase(),
-            destination_city: req.body.city.toUpperCase(),
-            destination_postalCode: req.body.postalCode.toUpperCase(),
-            order_status: "Processing"
+            origin_address: req.body.origin_address.toUpperCase(),
+            origin_city: req.body.origin_city.toUpperCase(),
+            origin_postalCode: req.body.origin_postalCode.toUpperCase(),
+            destination_address: req.body.dest_address.toUpperCase(),
+            destination_city: req.body.dest_city.toUpperCase(),
+            destination_postalCode: req.body.dest_postalCode.toUpperCase(),
+            cargo_type: req.body.cargo_type.toUpperCase(),
+            cargo_weight: req.body.cargo_weight,
+            order_status: "Processing",
+            assigned_truck_class: req.body.assigned_truckClass,
+            assigned_truck_plate: req.body.assigned_truckPlate,
+            assigned_truck_driverId: req.body.assigned_truckDriver
+
         });
         newOrder.save((err, res) => {
             if (err) {
