@@ -1,14 +1,44 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import BTable from 'react-bootstrap/Table';
 import { useTable, useGlobalFilter } from 'react-table'
 
 
+const EditableCell = ({
+  value: initialValue,
+  row: { index },
+  column: { id },
+  updateData, // This is a custom function that we supplied to our table instance
+}) => {
+  // We need to keep and update the state of the cell normally
+  const [value, setValue] = useState(initialValue)
 
+  const onChange = e => {
+    setValue(e.target.value)
+  }
+
+  // We'll only update the external data when the input is blurred
+  const onBlur = () => {
+    updateData(index, id, value)
+  }
+
+  // If the initialValue is changed external, sync it up with our state
+  useEffect(() => {
+    setValue(initialValue)
+  }, [initialValue])
+
+  return <input value={value} onChange={onChange} onBlur={onBlur} />
+}
+
+// Set our editable cell renderer as the default Cell renderer
+const defaultColumn = {
+  Cell: EditableCell,
+}
 
 
 
 function Table({ columns, data }) {
 
+  //------Search Filter
   const [filterInput, setFilterInput] = useState("");
 
   const handleFilterChange = e => {
@@ -16,6 +46,23 @@ function Table({ columns, data }) {
     setGlobalFilter(value)
     setFilterInput(value);
   };
+
+    //------Editable Column 
+    const [lines, setLines] = useState([data]);
+    const updateData = (rowIndex, columnID, value) => {
+      setLines(old =>
+        old.map((row, index) => {
+          console.log(row, index)
+          if (index === rowIndex) {
+            return {
+              ...old[rowIndex],
+              [columnID]: value
+            };
+          }
+          return row;
+        })
+      );
+    };
 
   const {
     getTableProps,
@@ -28,6 +75,8 @@ function Table({ columns, data }) {
       {
         columns,
         data,
+        defaultColumn,
+        updateData,
       }, useGlobalFilter)
 
 
