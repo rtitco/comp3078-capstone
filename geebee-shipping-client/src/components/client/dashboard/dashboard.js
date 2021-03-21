@@ -56,7 +56,9 @@ class ClientDashboard extends Component {
         if (this.state.currentUser == null){
             return <Redirect to='/login' />
         }
-
+        if (this.state.currentUser.role == "Admin"){
+            return <Redirect to='/admin' />
+        }
         if (this.state.currentUser.role === "Retail") {
             columns = [
                 {
