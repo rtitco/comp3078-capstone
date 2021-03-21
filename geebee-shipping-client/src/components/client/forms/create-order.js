@@ -5,6 +5,7 @@ import logo from '../../shared/profile/gb.png'
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+
 class CreateOrderForm extends Component {
 
     constructor() {
@@ -35,8 +36,6 @@ class CreateOrderForm extends Component {
             errorDestCity: '',
             errorDestPostalCode: ''
         }
-
-        console.log(this.state.currentUser);
     }
 
     changeDeliveryDate = (event) => {
@@ -129,7 +128,7 @@ class CreateOrderForm extends Component {
                 })
             }, (error) => {
                 this.setState({
-                    errorMessage: "Update Failed. Please Fill All Fields."
+                    errorMessage: "Update Failed."
                     // errorMessage: "Entry Failed."
                 })
             })

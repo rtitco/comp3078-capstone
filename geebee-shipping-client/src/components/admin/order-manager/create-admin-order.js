@@ -16,41 +16,45 @@ class CreateAdminOrderForm extends Component {
     this.state = {
       currentUser: sessionUser,
       deliveryDate: '',
-      address: '',
-      city: '',
-      postalCode: '',
+      origin_address: '',
+      origin_city: '',
+      origin_postalCode: '',
+      dest_address: '',
+      dest_city: '',
+      dest_postalCode: '',
+      cargo_type: '',
+      cargo_weight: '',
+      assigned_truckClass: '',
+      assigned_truckPlate: '',
+      assigned_truckDriver: '',
 
       updateSuccess: false,
       errorMessage: '',
       errorDate: '',
-      errorAddress: '',
-      errorCity: '',
-      errorPostalCode: ''
+      errorOriginAddress: '',
+      errorOriginCity: '',
+      errorOriginPostalCode: '',
+      errorDestAddress: '',
+      errorDestCity: '',
+      errorDestPostalCode: ''
     }
-
   }
 
-  changeDeliveryDate = (event) => {
+  changeTruckClass = (event) => {
     this.setState({
-      deliveryDate: event.target.value
+      assigned_truckClass: event.target.value
     })
   }
 
-  changeAddress = (event) => {
+  changeTruckPlate = (event) => {
     this.setState({
-      address: event.target.value
+      assigned_truckPlate: event.target.value
     })
   }
 
-  changeCity = (event) => {
+  changeTruckDriver = (event) => {
     this.setState({
-      city: event.target.value
-    })
-  }
-
-  changePostalCode = (event) => {
-    this.setState({
-      postalCode: event.target.value
+      assigned_truckDriver: event.target.value
     })
   }
 
@@ -60,23 +64,29 @@ class CreateAdminOrderForm extends Component {
 
     const orderData = {
       deliveryDate: this.state.deliveryDate,
-      address: this.state.address,
-      city: this.state.city,
-      postalCode: this.state.postalCode
+      origin_address: this.state.origin_address,
+      origin_city: this.state.origin_city,
+      origin_postalCode: this.state.origin_postalCode,
+      dest_address: this.state.dest_address,
+      dest_city: this.state.dest_city,
+      dest_postalCode: this.state.dest_postalCode,
+      cargo_type: this.state.cargo_type,
+      cargo_weight: this.state.cargo_weight,
+      assigned_truckClass: this.state.assigned_truckClass,
+      assigned_truckPlate: this.state.assigned_truckPlate,
+      assigned_truckDriver: this.state.assigned_truckDriver
     }
-    axios.post('http://localhost:8081/orders/add', orderData)
+    axios.post('http://localhost:8081/admin/order-manager/schedule', orderData)
       .then(res => {
         this.setState({
           updateSuccess: res.data.success,
-          errorMessage: res.data.message,
-          errorDate: res.data.messageDate,
-          errorAddress: res.data.messageAddress,
-          errorCity: res.data.messageCity,
-          errorPostalCode: res.data.messagePostalCode
+          errorTruckClass: res.data.messageTruckClass,
+          errorTruckPlate: res.data.messageTruckPlate,
+          errorTruckDriver: res.data.messageTruckDriver
         })
       }, (error) => {
         this.setState({
-          errorMessage: "Update Failed. Please Fill All Fields."
+          errorMessage: "Update Failed."
           // errorMessage: "Entry Failed."
         })
       })
@@ -98,38 +108,107 @@ class CreateAdminOrderForm extends Component {
         <p className="text-center">
           <img src={logo} alt='logo' />
         </p>
-        <h1 className='text-center'>Create New Delivery Order</h1>
+        <h1 className='text-center'>Schedule Delivery Order</h1>
 
         <div>
           <Row className="justify-content-center">
             <Col md="6">
               <form onSubmit={this.onSubmit}>
 
-                <label>Delivery Date: <span className="text-center alert-danger">{this.state.errorDate}</span></label>
+                <label>Delivery Date: </label>
                 <input type='date'
-                  onChange={this.changeDeliveryDate}
+                  disabled
                   value={this.state.deliveryDate}
                   className='form-control form-group' />
 
-                <label>Address: <span className="text-center alert-danger">{this.state.errorAddress}</span></label>
+                {/* Origin */}
+                <label>Origin Address: </label>
                 <input type='text'
-                  placeholder='123 Example Street'
-                  onChange={this.changeAddress}
-                  value={this.state.address}
+                  disabled
+                  value={this.state.origin_address}
                   className='form-control form-group' />
 
-                <label>City: <span className="text-center alert-danger">{this.state.errorCity}</span></label>
+                <Row>
+                  <Col md="6">
+                    <label>Origin City: </label>
+                    <input type='text'
+                      disabled
+                      value={this.state.origin_city}
+                      className='form-control form-group' />
+                  </Col>
+                  <Col md="6">
+                    <label>Origin Postal Code: </label>
+                    <input type='text'
+                      disabled
+                      value={this.state.origin_postalCode}
+                      className='form-control form-group' />
+                  </Col>
+                </Row>
+
+                {/* Destination */}
+                <label>Destination Address: </label>
                 <input type='text'
-                  placeholder='Toronto'
-                  onChange={this.changeCity}
-                  value={this.state.city}
+                  disabled
+                  value={this.state.dest_address}
                   className='form-control form-group' />
 
-                <label>Postal Code: <span className="text-center alert-danger">{this.state.errorPostalCode}</span></label>
+                <Row>
+                  <Col md="6">
+                    <label>Destination City: </label>
+                    <input type='text'
+                      disabled
+                      value={this.state.dest_city}
+                      className='form-control form-group' />
+                  </Col>
+                  <Col md="6">
+                    <label>Destination Postal Code: </label>
+                    <input type='text'
+                      disabled
+                      value={this.state.dest_postalCode}
+                      className='form-control form-group' />
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col md="6">
+                    <label>Cargo Type: </label>
+                    <input type='text'
+                      disabled
+                      value={this.state.CargoType}
+                      className='form-control form-group' />
+                  </Col>
+                  <Col md="3">
+                    <label>Cargo Weight (in kg): </label>
+                    <input type='text'
+                      disabled
+                      value={this.state.cargo_weight}
+                      className='form-control form-group' />
+                  </Col>
+
+                </Row>
+
+                <label>Truck Class: <span className="text-center alert-danger">{this.state.errorTruckClass}</span></label>
+                <select className='form-control form-group' value={this.state.assigned_truckClass} name="class" onChange={this.changeTruckClass}>
+                  <option disabled selected hidden value="">Select a truck class.</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                </select>
+
+                <label>License Plate: <span className="text-center alert-danger">{this.state.errorTruckPlate}</span></label>
                 <input type='text'
-                  placeholder='A1A 1A1'
-                  onChange={this.changePostalCode}
-                  value={this.state.postalCode}
+                  placeholder='PLATE###'
+                  onChange={this.changeTruckPlate}
+                  value={this.state.assigned_truckPlate}
+                  className='form-control form-group' />
+
+                <label>Driver Email: <span className="text-center alert-danger">{this.state.errorTruckDriver}</span></label>
+                <input type='email'
+                  placeholder='john.doe@email.com'
+                  onChange={this.changeTruckDriver}
+                  value={this.state.assigned_truckDriver}
                   className='form-control form-group' />
 
                 <span className="text-center alert-danger">{this.state.errorMessage}</span>
