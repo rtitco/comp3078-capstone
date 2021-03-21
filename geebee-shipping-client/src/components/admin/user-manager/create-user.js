@@ -21,7 +21,7 @@ class CreateUserForm extends Component {
             role: '',
             password: '',
 
-            updateSuccess: false,
+            creationSuccess: false,
             errorMessage: '',
             errorEmail: '',
             errorCompany: '',
@@ -125,14 +125,14 @@ class CreateUserForm extends Component {
                 errorPw: "Passwords must be at least 8 characters in length one(1) letter, one(1) number, and one(1) special character"
             })
         } else {
-            passwordValid=true;
+            passwordValid = true;
             this.setState({
                 errorPw: ''
             })
         }
 
         if (emailValid && companyValid && roleValid && passwordValid) {
-        // if (this.state.formValid) {
+            // if (this.state.formValid) {
             const registered = {
                 firstName: this.state.firstName,
                 lastName: this.state.lastName,
@@ -147,27 +147,30 @@ class CreateUserForm extends Component {
                 .then(
                     res => {
                         this.setState({
+                            creationSuccess: res.data.success,
                             errorMessage: res.data.message,
                             errorEmail: res.data.messageEmail,
                             errorCompany: res.data.messageCompany,
                             errorPw: res.data.messagePw,
                             errorRole: res.data.messageRole
                         })
+                        if (this.state.creationSuccess) {
+                            this.setState({
+                                email: '',
+                                company: '',
+                                role: '',
+                                password: ''
+                            })
+                        } else {
+                            this.setState({
+                                password: ''
+                            })
+                        }
                     }, (error) => {
                         this.setState({
                             errorMessage: "Failed to create User."
                         })
                     })
-
-            this.setState({
-                firstName: '',
-                lastName: '',
-                phoneNumber: '',
-                email: '',
-                company: '',
-                role: '',
-                password: ''
-            })
         }
         else {
             this.setState({
