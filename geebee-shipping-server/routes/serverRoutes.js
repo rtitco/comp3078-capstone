@@ -249,24 +249,45 @@ app.post('/profile', async (req, updateRes) => {
 
 //POST for Companies Table
 app.post('/admin/company-manager/add', async (req, company) => {
-    let newCompany = new companyModel({
-        company_name: req.body.company_name.toUpperCase(),
-        address: req.body.address.toUpperCase(),
-        city: req.body.city.toUpperCase(),
-        province: req.body.province.toUpperCase(),
-        postal_code: req.body.postal_code.toUpperCase(),
-        company_phone: req.body.company_phone,
-    });
-
-    await newCompany.save((err) => {
+    console.log("PRE-COMPANY SEARCH")
+    await companyModel.find({ company_name: req.body.company_name.toUpperCase(), address: req.body.address.toUpperCase()}, (err, companySearch) => {
         if (err) {
-            //error handling
-            company.send({ message: "Failed to add." })
+            console.log("Search Error")
+            company.send({
+                message: "Company Database Search Failed."
+            })
+        }
+        else if (companySearch.length > 0) {
+            console.log("SEARCH SUCCESS - ENTRY FOUND")
+            company.send({
+                message: "Company Already Exists in the Database."
+            })
         }
         else {
-            company.send({ success: true, message: "Company successfully added." })
+            console.log("SEARCH SUCCESS - NO ENTRY FOUND")
+            console.log("PRE-SAVE")
+            let newCompany = new companyModel({
+                company_name: req.body.company_name.toUpperCase(),
+                address: req.body.address.toUpperCase(),
+                city: req.body.city.toUpperCase(),
+                province: req.body.province.toUpperCase(),
+                postal_code: req.body.postal_code.toUpperCase(),
+                company_phone: req.body.company_phone,
+            });
+
+            newCompany.save((err, res) => {
+                if (err) {
+                    //error handling
+                    company.send({ message: "Failed to add Company." })
+                }
+                else {
+                    company.send({ success: true, message: "Company successfully added." })
+                }
+            });
+            console.log("POST-SAVE")
         }
-    });
+    })
+    console.log("END")
 })
 
 //POST for Adding New Truck to Database

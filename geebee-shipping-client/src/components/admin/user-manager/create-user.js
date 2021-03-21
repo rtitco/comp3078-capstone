@@ -144,33 +144,32 @@ class CreateUserForm extends Component {
             }
             // everything stored in registered will send to backend (url) then to mongo
             axios.post('http://localhost:8081/admin/users/add', registered)
-                .then(
-                    res => {
-                        this.setState({
-                            creationSuccess: res.data.success,
-                            errorMessage: res.data.message,
-                            errorEmail: res.data.messageEmail,
-                            errorCompany: res.data.messageCompany,
-                            errorPw: res.data.messagePw,
-                            errorRole: res.data.messageRole
-                        })
-                        if (this.state.creationSuccess) {
-                            this.setState({
-                                email: '',
-                                company: '',
-                                role: '',
-                                password: ''
-                            })
-                        } else {
-                            this.setState({
-                                password: ''
-                            })
-                        }
-                    }, (error) => {
-                        this.setState({
-                            errorMessage: "Failed to create User."
-                        })
+                .then(res => {
+                    this.setState({
+                        creationSuccess: res.data.success,
+                        errorMessage: res.data.message,
+                        errorEmail: res.data.messageEmail,
+                        errorCompany: res.data.messageCompany,
+                        errorPw: res.data.messagePw,
+                        errorRole: res.data.messageRole
                     })
+                    if (this.state.creationSuccess) {
+                        this.setState({
+                            email: '',
+                            company: '',
+                            role: '',
+                            password: ''
+                        })
+                    } else {
+                        this.setState({
+                            password: ''
+                        })
+                    }
+                }, (error) => {
+                    this.setState({
+                        errorMessage: "Failed to create User."
+                    })
+                })
         }
         else {
             this.setState({
