@@ -36,14 +36,26 @@ class CreateAdminOrderForm extends Component {
       errorOriginPostalCode: '',
       errorDestAddress: '',
       errorDestCity: '',
-      errorDestPostalCode: ''
+      errorDestPostalCode: '',
+
     }
+  }
+
+  validateStringInput = (regexStr, strInput) => {
+    if (strInput < 1) {
+      return false;
+    }
+    else if (strInput.match(regexStr) == null) {
+      return false;
+    }
+    return true;
   }
 
   changeTruckClass = (event) => {
     this.setState({
       assigned_truckClass: event.target.value
     })
+
   }
 
   changeTruckPlate = (event) => {
@@ -62,34 +74,84 @@ class CreateAdminOrderForm extends Component {
     // prevents form from acting in default way, stops refreshing
     event.preventDefault()
 
-    const orderData = {
-      deliveryDate: this.state.deliveryDate,
-      origin_address: this.state.origin_address,
-      origin_city: this.state.origin_city,
-      origin_postalCode: this.state.origin_postalCode,
-      dest_address: this.state.dest_address,
-      dest_city: this.state.dest_city,
-      dest_postalCode: this.state.dest_postalCode,
-      cargo_type: this.state.cargo_type,
-      cargo_weight: this.state.cargo_weight,
-      assigned_truckClass: this.state.assigned_truckClass,
-      assigned_truckPlate: this.state.assigned_truckPlate,
-      assigned_truckDriver: this.state.assigned_truckDriver
-    }
-    axios.post('http://localhost:8081/admin/order-manager/schedule', orderData)
-      .then(res => {
-        this.setState({
-          updateSuccess: res.data.success,
-          errorTruckClass: res.data.messageTruckClass,
-          errorTruckPlate: res.data.messageTruckPlate,
-          errorTruckDriver: res.data.messageTruckDriver
-        })
-      }, (error) => {
-        this.setState({
-          errorMessage: "Update Failed."
-          // errorMessage: "Entry Failed."
-        })
+    let classValid = false
+    let plateValid = false
+    let driverValid = false
+
+    //Validation
+    //Check Truck Class
+    if (this.state.assigned_truckClass.length < 1) {
+      this.setState({
+        errorTruckClass: "Please Select a Truck Class."
       })
+    } else {
+      classValid = true
+      this.setState({
+        errorTruckClass: ''
+      })
+    }
+
+    //Check Truck License Plate
+    if (this.validateStringInput(/^[A-Za-z]{3,5}[ ]{0,1}[\d]{3,5}$/,
+      this.state.assigned_truckPlate) == false) {
+      this.setState({
+        errorEmail: "Invalid Email Address."
+      })
+    } else {
+      plateValid = true
+      this.setState({
+        errorEmail: ''
+      })
+    }
+
+    //Check Driver Email
+    if (this.validateStringInput(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/,
+      this.state.assigned_truckDriver) == false) {
+      this.setState({
+        errorTruckDriver: "Invalid Email Address."
+      })
+    } else {
+      driverValid = true
+      this.setState({
+        errorTruckDriver: ''
+      })
+    }
+
+    //POST DATA
+    if (classValid && plateValid && driverValid) {
+      const orderData = {
+        deliveryDate: this.state.deliveryDate,
+        origin_address: this.state.origin_address,
+        origin_city: this.state.origin_city,
+        origin_postalCode: this.state.origin_postalCode,
+        dest_address: this.state.dest_address,
+        dest_city: this.state.dest_city,
+        dest_postalCode: this.state.dest_postalCode,
+        cargo_type: this.state.cargo_type,
+        cargo_weight: this.state.cargo_weight,
+        assigned_truckClass: this.state.assigned_truckClass,
+        assigned_truckPlate: this.state.assigned_truckPlate,
+        assigned_truckDriver: this.state.assigned_truckDriver
+      }
+      axios.post('http://localhost:8081/admin/order-manager/schedule', orderData)
+        .then(res => {
+          this.setState({
+            updateSuccess: res.data.success,
+            errorTruckClass: res.data.messageTruckClass,
+            errorTruckPlate: res.data.messageTruckPlate,
+            errorTruckDriver: res.data.messageTruckDriver
+          })
+        }, (error) => {
+          this.setState({
+            errorMessage: "Update Failed."
+          })
+        })
+    }
+    else {
+      this.setState({
+        errorMessage: "Update Failed."
+      })
+    }
   }
 
   render() {

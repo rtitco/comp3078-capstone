@@ -28,8 +28,18 @@ class CreateTruckForm extends Component {
             errorClass: '',
             errorLicensePlate: '',
             errorStatus: '',
-            errorMessage: ''
+            errorMessage: '',
         }
+    }
+
+    validateStringInput = (regexStr, strInput) => {
+        if (strInput < 1) {
+            return false;
+        }
+        else if (strInput.match(regexStr) == null) {
+            return false;
+        }
+        return true;
     }
 
     changeBrand = (event) => {
@@ -71,43 +81,135 @@ class CreateTruckForm extends Component {
     onSubmit = (event) => {
         // prevents form from acting in default way, stops refreshing
         event.preventDefault()
-        const truckData = {
-            brand: this.state.brand,
-            model: this.state.model,
-            year: this.state.year,
-            truckClass: this.state.truckClass,
-            licensePlate: this.state.licensePlate,
-            status: this.state.status
-        }
-        // everything stored in registered will send to backend (url) then to mongo
-        axios.post('http://localhost:8081/fleet/add', truckData)
-            .then(res => {
-                this.setState({
-                    updateSuccess: res.data.success,
-                    errorMessage: res.data.message,
-                    errorBrand: res.data.messageBrand,
-                    errorModel: res.data.messageModel,
-                    errorYear: res.data.messageYear,
-                    errorClass: res.data.messageClass,
-                    errorLicensePlate: res.data.messageLicensePlate,
-                    errorStatus: res.data.messageStatus,
-                })
-            }, (error) => {
-                this.setState({
-                    errorMessage: "Update Failed. Please Fill All Fields."
-                })
-            })
 
-        // here you redirect to profile page or home page
-        // window.location = '/'
-        this.setState({
-            brand: '',
-            model: '',
-            year: '',
-            truckClass: '',
-            licensePlate: '',
-            status: ''
-        })
+        let brandValid = false
+        let modelValid = false
+        let yearValid = false
+        let classValid = false
+        let plateValid = false
+        let statusValid = false
+
+        //Check Brand
+        if (this.validateStringInput(/^[a-zA-Z]{3,}$/,
+            this.state.brand) == false) {
+            this.setState({
+                errorBrand: "Invalid Brand Name."
+            })
+        } else {
+            brandValid = true
+            this.setState({
+                errorBrand: ''
+            })
+        }
+
+        //Check Model
+        if (this.validateStringInput(/^[a-zA-Z\d]{3,}$/,
+            this.state.model) == false) {
+            this.setState({
+                errorModel: "Invalid Model Name."
+            })
+        } else {
+            modelValid = true
+            this.setState({
+                errorModel: ''
+            })
+        }
+
+        //Check Year
+        if (this.validateStringInput(/^[\d]{4}$/,
+            this.state.brand) == false || this.state.year <= 1990 || this.state.year > 2022) {
+            this.setState({
+                errorYear: "Invalid Year."
+            })
+        } else {
+            yearValid = true
+            this.setState({
+                errorYear: ''
+            })
+        }
+
+        //Check Class
+        if (this.state.brand.length < 1) {
+            this.setState({
+                errorClass: "Please select a truck Class."
+            })
+        } else {
+            classValid = true
+            this.setState({
+                errorClass: ''
+            })
+        }
+
+        //Check License Plate
+        if (this.validateStringInput(/^[A-Za-z]{3,5}[ ]{0,1}[\d]{3,5}$/,
+            this.state.brand) == false) {
+            this.setState({
+                errorLicensePlate: "Invalid License Plate."
+            })
+        } else {
+            plateValid = true
+            this.setState({
+                errorLicensePlate: ''
+            })
+        }
+
+        //Check Status
+        if (this.validateStringInput(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/,
+            this.state.status) == false) {
+            this.setState({
+                errorStatus: "Please select a status."
+            })
+        } else {
+            statusValid = true
+            this.setState({
+                errorStatus: ''
+            })
+        }
+
+        if (brandValid && modelValid && yearValid && classValid && plateValid && statusValid) {
+            const truckData = {
+                brand: this.state.brand,
+                model: this.state.model,
+                year: this.state.year,
+                truckClass: this.state.truckClass,
+                licensePlate: this.state.licensePlate,
+                status: this.state.status
+            }
+            // everything stored in registered will send to backend (url) then to mongo
+            axios.post('http://localhost:8081/fleet/add', truckData)
+                .then(res => {
+                    this.setState({
+                        updateSuccess: res.data.success,
+                        errorMessage: res.data.message,
+                        errorBrand: res.data.messageBrand,
+                        errorModel: res.data.messageModel,
+                        errorYear: res.data.messageYear,
+                        errorClass: res.data.messageClass,
+                        errorLicensePlate: res.data.messageLicensePlate,
+                        errorStatus: res.data.messageStatus,
+                    })
+                }, (error) => {
+                    this.setState({
+                        errorMessage: "Update Failed. Please Fill All Fields."
+                    })
+                })
+
+            // here you redirect to profile page or home page
+            // window.location = '/'
+            this.setState({
+                brand: '',
+                model: '',
+                year: '',
+                truckClass: '',
+                licensePlate: '',
+                status: ''
+            })
+        }
+        else {
+            this.setState({
+                errorMessage: "Update Failed. Please Fill All Fields."
+            })
+        }
     }
 
     render() {
@@ -117,7 +219,7 @@ class CreateTruckForm extends Component {
         else if (this.state.updateSuccess == true) {
             return <Redirect to='/dashboard' />
         }
-        
+
         return (
             <div>
                 <p className="text-center mt-5">
