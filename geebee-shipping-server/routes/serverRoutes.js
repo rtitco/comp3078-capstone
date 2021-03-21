@@ -322,8 +322,8 @@ app.post('/orders/add', async (req, order) => {
     let rgx_order_city = /^([A-Za-z]{1}[a-z]{1,}){1}([ ]{0,1}([A-Za-z]{1}[a-z]{1,}))*$/;
     let rgx_order_postalCode = /^([a-zA-z]{1}[\d]{1}[a-zA-z]{1}){1}[ ]{0,1}([\d]{1}[a-zA-z]{1}[\d]{1}){1}$/;
 
-    if (req.body.deliveryDate.length < 1 || req.body.origin_address.length < 1 || req.body.origin_city.length < 1 || 
-        req.body.origin_postalCode.length < 1 || req.body.dest_address.length < 1 || req.body.dest_city.length < 1 || 
+    if (req.body.deliveryDate.length < 1 || req.body.origin_address.length < 1 || req.body.origin_city.length < 1 ||
+        req.body.origin_postalCode.length < 1 || req.body.dest_address.length < 1 || req.body.dest_city.length < 1 ||
         req.body.dest_postalCode.length < 1 || req.body.cargo_type.length < 1 || req.body.cargo_weight.length < 1) {
         order.send({ message: "Fields cannot be empty." })
     }
@@ -366,7 +366,61 @@ app.post('/orders/add', async (req, order) => {
             order_status: "Processing",
             assigned_truck_class: req.body.assigned_truckClass,
             assigned_truck_plate: req.body.assigned_truckPlate,
-            assigned_truck_driverId: req.body.assigned_truckDriver
+            assigned_truck_driverEmail: req.body.assigned_truckDriver
+
+        });
+        newOrder.save((err, res) => {
+            if (err) {
+                //error handling
+                order.send({ message: "Error creating order." })
+            }
+            else {
+                order.send({ success: true });
+            }
+        });
+    }
+})
+
+function validateStringInput(regexStr, reqValue){
+    if (reqValue < 1) {
+        return false;
+    }
+    else if (reqValue.match(regexStr) == null) {
+        return false;
+    }
+    return true;
+}
+
+app.post('/admin/order-manager/schedule', async (req, order) => {
+    let rgx_truck_plate = /^[A-Za-z]{3,5}[ ]{0,1}[\d]{3,5}$/;
+    let rgx_driverEmail = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
+
+    if (req.body.assigned_truckClass.length < 1 || req.body.assigned_truckPlate.length < 1 ||
+        req.body.assigned_truckDriver.length < 1) {
+        order.send({ message: "Fields cannot be empty." })
+    }
+    else if (req.body.assigned_truckPlate.match(rgx_truck_plate) == null) {
+        order.send({ messageOriginAddress: "Invalid Address", message: "Order Failed." })
+    }
+    else if (req.body.assigned_truckDriver.match(rgx_driverEmail) == null) {
+        order.send({ messageOriginCity: "Invalid City", message: "Order Failed." })
+    }
+    else {
+        let newOrder = new orderModel({
+            order_date: req.body.order_date,
+            delivery_date: req.body.deliveryDate,
+            origin_address: req.body.origin_address,
+            origin_city: req.body.origin_city,
+            origin_postalCode: req.body.origin_postalCode,
+            destination_address: req.body.dest_address,
+            destination_city: req.body.dest_city,
+            destination_postalCode: req.body.dest_postalCode,
+            cargo_type: req.body.cargo_type,
+            cargo_weight: req.body.cargo_weight,
+            order_status: "Awaiting Delivery",
+            assigned_truck_class: req.body.assigned_truckClass,
+            assigned_truck_plate: req.body.assigned_truckPlate,
+            assigned_truck_driverEmail: req.body.assigned_truckDriver
 
         });
         newOrder.save((err, res) => {
@@ -382,5 +436,6 @@ app.post('/orders/add', async (req, order) => {
 
 
 })
+
 
 module.exports = app;

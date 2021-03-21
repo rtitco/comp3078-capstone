@@ -14,7 +14,7 @@ var OrderSchema = new mongoose.Schema({
     order_status: String,
     assigned_truck_class: String,
     assigned_truck_plate: String,
-    assigned_truck_driverId: String
+    assigned_truck_driverEmail: String
 })
 
 const Order = mongoose.model("Order", OrderSchema);
