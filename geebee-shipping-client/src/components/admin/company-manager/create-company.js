@@ -177,44 +177,33 @@ class CreateCompanyForm extends Component {
 
       axios.post('http://localhost:8081/admin/company-manager/add', newCompany)
         .then(res => {
-          if (res.data.success === true) {
+          this.setState({
+            sendSuccess: res.data.success,
+            errorMessage: res.data.message,
+            errorCompany: res.data.messageCompany,
+            errorAddress: res.data.messageAddress,
+            errorCity: res.data.messageCity,
+            errorProvince: res.data.messageProvince,
+            errorPostalCode: res.data.messagePostalCode,
+            errorPhone: res.data.messagePhone
+          })
+          if (this.state.sendSuccess) {
             this.setState({
-              sendSuccess: true,
-              errorMessage: res.data.message
+              company_id: '',
+              company_name: '',
+              address: '',
+              city: '',
+              province: '',
+              postal_code: '',
+              company_phone: ''
             })
           }
-          else {
-            this.setState({
-              errorMessage: res.data.message,
-              errorCompany: res.data.messageCompany,
-              errorAddress: res.data.messageAddress,
-              errorCity: res.data.messageCity,
-              errorProvince: res.data.messageProvince,
-              errorPostalCode: res.data.messagePostalCode,
-              errorPhone: res.data.messagePhone
-            })
-          }
+
         }, (error) => {
           this.setState({
             errorMessage: "Failed to Add Company."
           })
         })
-
-      this.setState({
-        company_id: '',
-        company_name: '',
-        //address line 1
-        address: '',
-        city: '',
-        province: '',
-        postal_code: '',
-        company_phone: ''
-      })
-    }
-    else {
-      this.setState({
-        errorMessage: "Failed to Add Company."
-      })
     }
   }
 

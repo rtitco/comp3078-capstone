@@ -64,45 +64,61 @@ app.get('/orders', async (req, res) => {
 //POST ==> Admin Creating New User
 
 app.post('/admin/users/add', async (req, newUser) => {
-    //check for existing email
-    await userModel.find({ email: req.body.email }, (err, exists) => {
+
+    //Check if email exists in DB
+    userModel.find({ email: req.body.email }, (err, exists) => {
         if (err) {
             newUser.send({
                 message: "Entry Failed. Please try again."
             })
         }
-        if (exists.length > 0) {
+        else if (exists.length > 0) {
             newUser.send({
                 messageEmail: "Email Address already exists."
             })
         }
-        //no existing accounts with email
         else {
-            // generating salt password to hash and encrypt input pw
-            let saltRounds = 10
-            let salt = bcrypt.genSaltSync(saltRounds)
-            let securePassword = bcrypt.hashSync(req.body.password, salt)
-
-            let registeredUser = new userModel({
-                firstName: req.body.firstName,
-                lastName: req.body.lastName,
-                phoneNumber: req.body.phoneNumber,
-                email: req.body.email,
-                company: req.body.company,
-                role: req.body.role,
-                password: securePassword,
-                firstLogin: true
-            })
-            //try to save entry
-            registeredUser.save((err, res) => {
+            //Check if company exists in DB
+            companyModel.find({ company_name: req.body.company.toUpperCase() }, (err, companySearch) => {
                 if (err) {
                     newUser.send({
-                        message: "Failed to create user. Please try again.",
+                        message: "Company Search Failed. Please try again."
+                    })
+                }
+                else if (companySearch.length < 1) {
+                    newUser.send({
+                        messageCompany: "Company Name Not Found."
                     })
                 }
                 else {
-                    newUser.send({ message: "New User Created." })
+                    // generating salt password to hash and encrypt input pw
+                    let saltRounds = 10
+                    let salt = bcrypt.genSaltSync(saltRounds)
+                    let securePassword = bcrypt.hashSync(req.body.password, salt)
+
+                    let registeredUser = new userModel({
+                        firstName: req.body.firstName,
+                        lastName: req.body.lastName,
+                        phoneNumber: req.body.phoneNumber,
+                        email: req.body.email,
+                        company: req.body.company.toUpperCase(),
+                        role: req.body.role,
+                        password: securePassword,
+                        firstLogin: true
+                    })
+                    //try to save entry
+                    registeredUser.save((err, res) => {
+                        if (err) {
+                            newUser.send({
+                                message: "Failed to create user. Please try again.",
+                            })
+                        }
+                        else {
+                            newUser.send({ success: true, message: "New User Created." })
+                        }
+                    })
                 }
+
             })
         }
     })
@@ -165,21 +181,11 @@ app.post('/profile', async (req, updateRes) => {
         else if (found != undefined) {
             //save data + dbPassword to variables
             currentUserData = found
-            console.log(currentUserData)
 
             // ASSIGN THE PASSWORD
             currPasswordDB = currentUserData.password
 
-            // console.log("Current Pass")
-            // console.log(req.body.currentPassword);
-
-            // console.log("Current Pass DB")
-            // console.log(currPasswordDB)
-
             bcrypt.compare(req.body.currentPassword, currPasswordDB, (err, pwMatch) => {
-
-                // console.log("PW result is: ")
-                // console.log(pwMatch)
 
                 if (err) {
                     updateRes.send({ updateSuccess: false, message: "Incorrect Password" })
@@ -203,7 +209,6 @@ app.post('/profile', async (req, updateRes) => {
                                 updateRes.send({ updateSuccess: true, message: "Update Successful." })
                             }
                             else {
-                                // console.log("In Else")
                                 updateRes.send({ user: null, updateSuccess: false, message: "Incorrect Data." })
                             }
                         })
@@ -226,7 +231,6 @@ app.post('/profile', async (req, updateRes) => {
                                 updateRes.send({ updateSuccess: true, message: "Update Successful." })
                             }
                             else {
-                                // console.log("In Else")
                                 updateRes.send({ user: null, updateSuccess: false, message: "Incorrect Data." })
                             }
                         })
@@ -241,89 +245,41 @@ app.post('/profile', async (req, updateRes) => {
             updateRes.send({ updateSuccess: false, message: "Update Failed." })
         }
     })
-
-    //Check if newPassword is empty
-
-    //if it's empty, update as before
-    // console.log("debug 0")
-    // console.log(passwordCorrect)
-    // if (passwordCorrect == true) {
-        // console.log("debug 1")
-        // console.log("debug 2")
-
-        // if (req.body.newPassword == '') {
-        //     userModel.findByIdAndUpdate(req.body.userID, {
-        //         firstName: req.body.firstName,
-        //         lastName: req.body.lastName,
-        //         phoneNumber: req.body.phoneNumber,
-        //         email: req.body.email,
-        //         firstLogin: false
-        //     }, { useFindAndModify: false }, (err, res) => {
-        //         console.log("debug 3")
-
-        //         console.log(err)
-        //         console.log(res)
-
-        //         if (err) {
-        //             updateRes.send({ user: null, updateSuccess: false, message: "Incorrect Data." })
-        //         }
-        //         if (res) {
-        //             updateRes.send({ updateSuccess: true, message: "Update Successful." })
-        //         }
-        //         else {
-        //             // console.log("In Else")
-        //             updateRes.send({ user: null, updateSuccess: false, message: "Incorrect Data." })
-        //         }
-        //     })
-        // }
-        // //else swap replace dbPassword with newPassword
-        // else {
-        //         console.log("debug 4")
-        //         securePassword = bcrypt.hashSync(req.body.newPassword, salt)
-        //     userModel.findByIdAndUpdate(req.body.userID, {
-        //         firstName: req.body.firstName,
-        //         lastName: req.body.lastName,
-        //         phoneNumber: req.body.phoneNumber,
-        //         email: req.body.email,
-        //         password: securePassword,
-        //         firstLogin: false
-        //     }, { useFindAndModify: false }, (err, res) => {
-        //         if (err) {
-        //             updateRes.send({ user: null, updateSuccess: false, message: "Incorrect Data." })
-        //         }
-        //         if (res) {
-        //             updateRes.send({ updateSuccess: true, message: "Update Successful." })
-        //         }
-        //         else {
-        //             // console.log("In Else")
-        //             updateRes.send({ user: null, updateSuccess: false, message: "Incorrect Data." })
-        //         }
-        //     })
-        // }
-    // }
-
 })
 
 //POST for Companies Table
 app.post('/admin/company-manager/add', async (req, company) => {
-    let newCompany = new companyModel({
-        company_name: req.body.company_name.toUpperCase(),
-        address: req.body.address.toUpperCase(),
-        city: req.body.city.toUpperCase(),
-        province: req.body.province.toUpperCase(),
-        postal_code: req.body.postal_code.toUpperCase(),
-        company_phone: req.body.company_phone,
-    });
-
-    await newCompany.save((err) => {
+    await companyModel.find({ company_name: req.body.company_name.toUpperCase(), address: req.body.address.toUpperCase()}, (err, companySearch) => {
         if (err) {
-            //error handling
-            company.send({ message: "Failed to add." })
+            company.send({
+                message: "Company Database Search Failed."
+            })
+        }
+        else if (companySearch.length > 0) {
+            company.send({
+                message: "Company Already Exists in the Database."
+            })
         }
         else {
-            company.send({ success: true, message: "Company successfully added." })
+            let newCompany = new companyModel({
+                company_name: req.body.company_name.toUpperCase(),
+                address: req.body.address.toUpperCase(),
+                city: req.body.city.toUpperCase(),
+                province: req.body.province.toUpperCase(),
+                postal_code: req.body.postal_code.toUpperCase(),
+                company_phone: req.body.company_phone,
+            });
+
+            newCompany.save((err, res) => {
+                if (err) {
+                    company.send({ message: "Failed to add Company." })
+                }
+                else {
+                    company.send({ success: true, message: "Company successfully added." })
+                }
+            });
         }
-    });
+    })
 })
 
 //POST for Adding New Truck to Database
