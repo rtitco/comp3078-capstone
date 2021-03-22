@@ -213,7 +213,7 @@ class CreateTruckForm extends Component {
     }
 
     render() {
-        if (this.state.currentUser.role != "Dispatcher" || this.state.currentUser == null) {
+        if (this.state.currentUser.role != "Fleet Manager" || this.state.currentUser == null) {
             return <Redirect to='/dashboard' />
         }
         else if (this.state.updateSuccess == true) {

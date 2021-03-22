@@ -82,12 +82,6 @@ class LoginForm extends Component {
                 .catch(err => {
                     console.log(err);
                 })
-            console.log("Post-Post")
-
-            this.setState({
-                email: '',
-                password: ''
-            })
         }
     }
 
@@ -110,7 +104,7 @@ class LoginForm extends Component {
                     return <Redirect to='/admin' />
                 }
             }
-            if (this.state.currentUser.role == "Dispatcher" || this.state.currentUser.role == "Distribution" || this.state.currentUser.role == "Retail") {
+            if (this.state.currentUser.role == "Fleet Manager" || this.state.currentUser.role == "Distribution" || this.state.currentUser.role == "Retail") {
                 if (this.state.currentUser.firstLogin === true) {
                     return <Redirect to='/profile' />
                 }
@@ -118,22 +112,6 @@ class LoginForm extends Component {
                     return <Redirect to='/dashboard' />
                 }
             }
-            // if(this.state.currentUser.role == "Distribution"){
-            //     if (this.state.currentUser.firstLogin === true){
-            //         return <Redirect to='/profile' />
-            //     }
-            //     else{
-            //         return <Redirect to='/dashboard' />
-            //     }
-            // }
-            // if(this.state.currentUser.role == "Retail"){
-            //     if (this.state.currentUser.firstLogin === true){
-            //         return <Redirect to='/profile' />
-            //     }
-            //     else{
-            //         return <Redirect to='/dashboard' />
-            //     }
-            // }
             else {
                 this.setState({ errorMessage: "Please log in." })
             }

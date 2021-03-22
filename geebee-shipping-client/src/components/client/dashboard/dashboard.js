@@ -34,10 +34,9 @@ class ClientDashboard extends Component {
         if (this.state.currentUser.role === "Retail" || this.state.currentUser.role === "Distribution" || this.state.currentUser.role === "Driver") {
             this.getOrderData()
         }
-        if (this.state.currentUser.role === "Dispatcher") {
+        if (this.state.currentUser.role === "Fleet Manager") {
             this.getFleetData()
         }
-        
     }
 
     render() {
@@ -157,7 +156,7 @@ class ClientDashboard extends Component {
         }
 
         //Load Dispatcher Dashboard
-        if (this.state.currentUser.role === "Dispatcher") {
+        if (this.state.currentUser.role === "Fleet Manager") {
             buttonLabel = "Add Truck"
             redirectTo = "/fleet/add"
             columns = [
