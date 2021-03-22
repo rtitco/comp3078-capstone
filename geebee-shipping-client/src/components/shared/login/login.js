@@ -22,11 +22,8 @@ class LoginForm extends Component {
             loggedIn: false,
             currentUser: null,
             errorMessage: "",
-            firstLogin: false
+            firstLogin: false,
         }
-        // this.changeEmail = this.changeEmail.bind(this)
-        // this.changePassword = this.changePassword.bind(this)
-        // this.onSubmit = this.onSubmit.bind(this)
     }
 
     changeEmail = (event) => {
@@ -43,40 +40,51 @@ class LoginForm extends Component {
 
     onSubmit = (event) => {
         event.preventDefault()
-        const loginUser = {
-            email: this.state.email,
-            password: this.state.password
+
+        let formValid = false
+        // let passwordValid = false
+
+
+        if (this.state.email.length < 1 || this.state.password.length < 1) {
+            this.setState({
+                errorMessage: "Fields cannot be empty."
+            })
+        }
+        else {
+            formValid = true
+            this.setState({
+                errorMessage: ''
+            })
         }
 
-        console.log("Pre-Post");
-        axios.post('http://localhost:8081/login', loginUser)
-            .then(res => {
-                console.log("Successful POST")
-                console.log(res.data.user)
-                if (res.data.success === true) {
-                    sessionStorage.setItem("currentUser", JSON.stringify(res.data.user))
-                    this.setState({
-                        loggedIn: true,
-                        currentUser: res.data.user,
-                        firstLogin: res.data.user.firstLogin
-                    })
-                }
-                else {
-                    this.setState({
-                        errorMessage: res.data.message
-                    })
-                }
-            })
-            .catch(err => {
-                console.log(err);
-            })
-        console.log("Post-Post")
+        if (formValid) {
+            const loginUser = {
+                email: this.state.email,
+                password: this.state.password
+            }
 
-        this.setState({
-            email: '',
-            password: ''
-        })
+            axios.post('http://localhost:8081/login', loginUser)
+                .then(res => {
+                    if (res.data.success === true) {
+                        sessionStorage.setItem("currentUser", JSON.stringify(res.data.user))
+                        this.setState({
+                            loggedIn: true,
+                            currentUser: res.data.user,
+                            firstLogin: res.data.user.firstLogin
+                        })
+                    }
+                    else {
+                        this.setState({
+                            errorMessage: res.data.message
+                        })
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
     }
+
 
     render() {
         if (this.state.loggedIn === true) {
@@ -96,7 +104,7 @@ class LoginForm extends Component {
                     return <Redirect to='/admin' />
                 }
             }
-            if (this.state.currentUser.role == "Dispatcher" || this.state.currentUser.role == "Distribution" || this.state.currentUser.role == "Retail") {
+            if (this.state.currentUser.role == "Fleet Manager" || this.state.currentUser.role == "Distribution" || this.state.currentUser.role == "Retail") {
                 if (this.state.currentUser.firstLogin === true) {
                     return <Redirect to='/profile' />
                 }
@@ -104,22 +112,6 @@ class LoginForm extends Component {
                     return <Redirect to='/dashboard' />
                 }
             }
-            // if(this.state.currentUser.role == "Distribution"){
-            //     if (this.state.currentUser.firstLogin === true){
-            //         return <Redirect to='/profile' />
-            //     }
-            //     else{
-            //         return <Redirect to='/dashboard' />
-            //     }
-            // }
-            // if(this.state.currentUser.role == "Retail"){
-            //     if (this.state.currentUser.firstLogin === true){
-            //         return <Redirect to='/profile' />
-            //     }
-            //     else{
-            //         return <Redirect to='/dashboard' />
-            //     }
-            // }
             else {
                 this.setState({ errorMessage: "Please log in." })
             }

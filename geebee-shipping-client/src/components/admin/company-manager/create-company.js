@@ -27,8 +27,18 @@ class CreateCompanyForm extends Component {
       errorCity: '',
       errorProvince: '',
       errorPostalCode: '',
-      errorPhone: ''
+      errorPhone: '',
     }
+  }
+
+  validateStringInput = (regexStr, strInput) => {
+    if (strInput < 1) {
+      return false;
+    }
+    else if (strInput.match(regexStr) == null) {
+      return false;
+    }
+    return true;
   }
 
   updateCompanyName = (event) => {
@@ -69,25 +79,106 @@ class CreateCompanyForm extends Component {
 
   onSubmit = (event) => {
     event.preventDefault()
-    const newCompany = {
-      company_name: this.state.company_name,
-      address: this.state.address,
-      city: this.state.city,
-      province: this.state.province,
-      postal_code: this.state.postal_code,
-      company_phone: this.state.company_phone
+
+    let nameValid = false
+    let addressValid = false
+    let cityValid = false
+    let provinceValid = false
+    let postalCodeValid = false
+    let phoneValid = false
+
+
+    //Validation
+    //Company Name
+    if (this.validateStringInput(/^[A-Za-z]{1,}([ \-]{0,1}([A-Za-z\-]{1,}))*[.]{0,1}$/, this.state.company_name) == false) {
+      this.setState({
+        errorCompany: "Invalid Company Name."
+      })
+    } else {
+      nameValid = true
+      this.setState({
+        errorCompany: ''
+      })
     }
 
-    axios.post('http://localhost:8081/admin/company-manager/add', newCompany)
-      .then(res => {
-        if (res.data.success === true) {
+    // Company Address
+    if (this.validateStringInput(/^([\d]{1,5}[a-mA-M]{0,1}){1}[ ]{0,1}([A-Za-z]{1}[a-z]{1,}[ ]{0,1}){1,}$/,
+      this.state.address) == false) {
+      this.setState({
+        errorAddress: "Invalid Address."
+      })
+    } else {
+      addressValid = true
+      this.setState({
+        errorAddress: ''
+      })
+    }
+
+    // Company City
+    if (this.validateStringInput(/^[A-Za-z]{1,}([ \-]{0,1}([A-Za-z]{1}[a-z]{1,}))*$/,
+      this.state.city) == false) {
+      this.setState({
+        errorCity: "Invalid City."
+      })
+    } else {
+      cityValid = true
+      this.setState({
+        errorCity: ''
+      })
+    }
+
+    // Company Province
+    if (this.state.province.length < 1) {
+      this.setState({
+        errorProvince: "Please select a Province or Territory."
+      })
+    } else {
+      provinceValid = true
+      this.setState({
+        errorProvince: ''
+      })
+    }
+
+    // Company Postal Code
+    if (this.validateStringInput(/^([a-zA-z]{1}[\d]{1}[a-zA-z]{1}){1}[ ]{0,1}([\d]{1}[a-zA-z]{1}[\d]{1}){1}$/,
+      this.state.postal_code) == false) {
+      this.setState({
+        errorPostalCode: "Invalid Postal Code."
+      })
+    } else {
+      postalCodeValid = true
+      this.setState({
+        errorPostalCode: ''
+      })
+    }
+
+    // Company Phone
+    if (this.validateStringInput(/^[+]{0,1}[\d]*[- ]{0,1}([\d]{3}[- ]{0,1}){2}[\d]{4}$/,
+      this.state.company_phone) == false) {
+      this.setState({
+        errorPhone: "Invalid Phone Number."
+      })
+    } else {
+      phoneValid = true
+      this.setState({
+        errorPhone: ''
+      })
+    }
+
+    if (nameValid && addressValid && cityValid && provinceValid && postalCodeValid && phoneValid) {
+      const newCompany = {
+        company_name: this.state.company_name,
+        address: this.state.address,
+        city: this.state.city,
+        province: this.state.province,
+        postal_code: this.state.postal_code,
+        company_phone: this.state.company_phone
+      }
+
+      axios.post('http://localhost:8081/admin/company-manager/add', newCompany)
+        .then(res => {
           this.setState({
-            sendSuccess: true,
-            errorMessage: res.data.message
-          })
-        }
-        else {
-          this.setState({
+            sendSuccess: res.data.success,
             errorMessage: res.data.message,
             errorCompany: res.data.messageCompany,
             errorAddress: res.data.messageAddress,
@@ -96,23 +187,26 @@ class CreateCompanyForm extends Component {
             errorPostalCode: res.data.messagePostalCode,
             errorPhone: res.data.messagePhone
           })
-        }
-      }, (error) => {
-        console.log(error);
-      })
+          if (this.state.sendSuccess) {
+            this.setState({
+              company_id: '',
+              company_name: '',
+              address: '',
+              city: '',
+              province: '',
+              postal_code: '',
+              company_phone: ''
+            })
+          }
 
-
-    this.setState({
-      company_id: '',
-      company_name: '',
-      //address line 1
-      address: '',
-      city: '',
-      province: '',
-      postal_code: '',
-      company_phone: ''
-    })
+        }, (error) => {
+          this.setState({
+            errorMessage: "Failed to Add Company."
+          })
+        })
+    }
   }
+
 
   render() {
     if (this.state.sendSuccess === true) {

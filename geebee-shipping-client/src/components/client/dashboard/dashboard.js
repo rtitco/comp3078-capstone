@@ -31,32 +31,68 @@ class ClientDashboard extends Component {
         this.setState({ loading: false, mongoData: fleetRes.data })
     }
     componentDidMount() {
-        if (this.state.currentUser.role === "Retail" || this.state.currentUser.role === "Distribution") {
+        if (this.state.currentUser.role === "Retail" || this.state.currentUser.role === "Distribution" || this.state.currentUser.role === "Driver") {
             this.getOrderData()
         }
-        if (this.state.currentUser.role === "Dispatcher") {
+        if (this.state.currentUser.role === "Fleet Manager") {
             this.getFleetData()
         }
     }
-
-    // buttonLink(){
-    //     if(this.state.currentUser.role=="Distribution"){
-    //         return <Redirect to='/orders/add' />
-    //     }
-    //     if(this.state.currentUser.role=="Dispatcher"){
-    //         return <Redirect to='/fleet/add' />
-    //     }
-    // }
 
     render() {
         let columns = [];
         let buttonLabel = '';
         let redirectTo = '';
 
-        if (this.state.currentUser == null){
+        //If no user, redirect to login
+        if (this.state.currentUser == null) {
             return <Redirect to='/login' />
         }
 
+        //send to Admin Dashboard
+        if (this.state.currentUser.role == "Admin") {
+            return <Redirect to='/admin' />
+        }
+
+        //Load Driver Dashboard
+        if (this.state.currentUser.role === "Driver") {
+            columns = [
+                // {
+                //     Header: 'Order ID',
+                //     accessor: '_id',
+                // },
+                {
+                    Header: 'Delivery Date',
+                    accessor: 'delivery_date',
+                },
+                {
+                    Header: 'Origin Address',
+                    accessor: data => data.origin_address + ', ' + data.origin_city + ', ' + data.origin_postalCode
+                },
+                {
+                    Header: 'Destination Address',
+                    accessor: data => data.destination_address + ', ' + data.destination_city + ', ' + data.destination_postalCode,
+                },
+                {
+                    Header: 'Cargo Type',
+                    accessor: 'cargo_type',
+                },
+                {
+                    Header: 'Assigned Truck - License Plate',
+                    accessor: 'assigned_truck_plate',
+                },
+                {
+                    Header: 'Assigned Driver',
+                    accessor: 'assigned_truck_driverEmail',
+                },
+                {
+                    Header: 'Status',
+                    accessor: 'order_status',
+                }
+            ]
+        }
+
+        //Load Retail Dashboard
         if (this.state.currentUser.role === "Retail") {
             columns = [
                 {
@@ -77,6 +113,8 @@ class ClientDashboard extends Component {
                 }
             ]
         }
+
+        //Load Distribution Dashboard
         if (this.state.currentUser.role === "Distribution") {
             buttonLabel = "Create Order";
             redirectTo = "/orders/add";
@@ -96,7 +134,6 @@ class ClientDashboard extends Component {
                 },
                 {
                     Header: 'Origin Address',
-                    // id: 'origin_address',
                     accessor: data => data.origin_address + ', ' + data.origin_city + ', ' + data.origin_postalCode
                 },
                 {
@@ -117,7 +154,9 @@ class ClientDashboard extends Component {
                 }
             ]
         }
-        if (this.state.currentUser.role === "Dispatcher") {
+
+        //Load Dispatcher Dashboard
+        if (this.state.currentUser.role === "Fleet Manager") {
             buttonLabel = "Add Truck"
             redirectTo = "/fleet/add"
             columns = [
@@ -153,11 +192,11 @@ class ClientDashboard extends Component {
                 <LoginNavBar />
                 <Container fluid>
                     <Row className="float-right mr-5 mb-2">
-                    {/* <label>{this.state.currentUser.role}</label> */}
-                    <br />
-                    <Link className="btn btn-primary" to={redirectTo}>
-                        {buttonLabel}
-                    </Link>
+                        {/* <label>{this.state.currentUser.role}</label> */}
+                        <br />
+                        <Link className="btn btn-primary" to={redirectTo}>
+                            {buttonLabel}
+                        </Link>
                     </Row>
                     <div className="mx-5">
                         {/* this is the data table */}
@@ -167,7 +206,7 @@ class ClientDashboard extends Component {
                         <Col md="6">
                         </Col>
                     </Row> */}
-                  
+
                 </Container>
             </div>
         );

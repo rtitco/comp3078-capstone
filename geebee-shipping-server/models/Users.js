@@ -12,19 +12,15 @@ var UserSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: [true, "Email cannot be empty"],
     },
     company: {
         type: String,
-        required: [true, "Company cannot be empty"],
     },
     role: {
         type: String,
-        required: [true, "Role must be selected"]
     },
     password: {
         type: String,
-        required: [true, "Password required"],
     },
     firstLogin: {
         type: Boolean,
