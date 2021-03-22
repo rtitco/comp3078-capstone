@@ -315,7 +315,7 @@ class CreateOrderForm extends Component {
                                     <Col md="6">
                                         <label>Origin City: <span className="text-center alert-danger">{this.state.errorOriginCity}</span></label>
                                         <input type='text'
-                                            placeholder='Toronto'
+                                            placeholder='City Name'
                                             onChange={this.changeOriginCity}
                                             value={this.state.origin_city}
                                             className='form-control form-group' />
@@ -342,7 +342,7 @@ class CreateOrderForm extends Component {
                                     <Col md="6">
                                         <label>Destination City: <span className="text-center alert-danger">{this.state.errorDestCity}</span></label>
                                         <input type='text'
-                                            placeholder='Toronto'
+                                            placeholder='City Name'
                                             onChange={this.changeDestCity}
                                             value={this.state.dest_city}
                                             className='form-control form-group' />

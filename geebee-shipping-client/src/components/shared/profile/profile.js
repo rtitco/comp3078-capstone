@@ -286,7 +286,7 @@ class ProfileForm extends Component {
                                         value={this.state.email}
                                         className='form-control form-group' />
 
-                                    <label><span className="text-center alert-danger">{this.state.errorCompany}</span></label>
+                                    <label>Company: </label>
                                     <input type='text'
                                         placeholder='Company'
                                         disabled={true}

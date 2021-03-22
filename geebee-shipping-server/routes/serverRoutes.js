@@ -249,7 +249,7 @@ app.post('/profile', async (req, updateRes) => {
 
 //POST for Companies Table
 app.post('/admin/company-manager/add', async (req, company) => {
-    await companyModel.find({ company_name: req.body.company_name.toUpperCase(), address: req.body.address.toUpperCase()}, (err, companySearch) => {
+    await companyModel.find({ company_name: req.body.company_name.toUpperCase()}, (err, companySearch) => {
         if (err) {
             company.send({
                 message: "Company Database Search Failed."
