@@ -1,91 +1,38 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import BTable from 'react-bootstrap/Table';
 import { useTable, useGlobalFilter } from 'react-table'
+import { Redirect } from "react-router-dom";
 
+import Popover from 'react-bootstrap/Popover';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Button from 'react-bootstrap/Button';
 
+import { FaTrash, FaPen } from 'react-icons/fa';
 
+import EditCompanyForm from '../../admin/company-manager/edit-company';
 
-const EditableCell = ({
-  value: initialValue,
-  row: { index },
-  column: { id },
-  updateData, // This is a custom function that we supplied to our table instance
-}) => {
-  // We need to keep and update the state of the cell normally
-  const [value, setValue] = useState(initialValue)
-  const [canEdit, setCanEdit] = useState(false);
+function Table({ columns, data, formType }) {
 
-  //This returns a different element for input
-  const onClick = e => {
-      setCanEdit(true);
-  }
-
-  const onChange = e => {
-    setValue(e.target.value)
-  }
-
-  // We'll only update the external data when the input is blurred
-  const onBlur = () => {
-    updateData(index, id, value)
-    setCanEdit(false);
-  }
-
-  // If the initialValue is changed external, sync it up with our state
-  useEffect(() => {
-    setValue(initialValue)
-  }, [initialValue])
-
-  if(!canEdit){
-    return <input value={value} className="form-control-plaintext" onClick={onClick}/>
-  } else {
-    return <input value={value} className="form-control" onChange={onChange} onClick={onClick} onBlur={onBlur} />
-  }
-}
-
-// Set our editable cell renderer as the default Cell renderer
-const defaultColumn = {
-  Cell: EditableCell,
-}
-
-
-
-function Table({ columns, data, updateDB }) {
-  // 
-
-
-  //------Selected Row  will be passed to the updateData function so it may update the Data
+  const [editCheck, setEditCheck] = useState(false);
+  //------Selected Row  will be passed to the edit data form
   const [selectedRow, setSelectedRow] = useState([]);
+
+  const editSelection = (rowData) => {
+    console.log("We got here");
+    setSelectedRow(rowData);
+    setTimeout(setEditCheck(true), 1000);
+  }
 
   //------Search Filter
   const [filterInput, setFilterInput] = useState("");
-  
+
+
+
   const handleFilterChange = e => {
     const value = e.target.value || undefined;
     setGlobalFilter(value)
     setFilterInput(value);
   };
-
-    //------Editable Column 
-    const [lines, setLines] = useState([data]);
-    const updateData = (rowIndex, columnID, value) => {
-      debugger
-      //We need the row information which has the old data, so we take the new value, figure out where it came from (fname, lName etc.)
-      //And update the new value accordingly
-      const x = selectedRow;
-      setLines(old =>
-        old.map((row, index) => {
-          console.log(row, index)
-          if (index === rowIndex) {
-            return {
-              ...old[rowIndex],
-              [columnID]: value
-            };
-          }
-          return row;
-        })
-      );
-    };
-
 
   const {
     getTableProps,
@@ -98,9 +45,41 @@ function Table({ columns, data, updateDB }) {
       {
         columns,
         data,
-        defaultColumn,
-        updateData,
       }, useGlobalFilter)
+
+  if (editCheck) {
+    //Will need pathname to be passed on creation of react-table
+    if(formType === "company"){
+      return <Redirect to={{
+        pathname: "./company-manager/edit",
+        state: { data: selectedRow }
+      }} />;
+    }
+    else{
+      alert("formType not found")
+      return <Redirect to={{
+        pathname: "./company-manager/"
+      }} />;
+    }
+  }
+
+
+  const editPopover = (
+    <Popover id="popover-basic">
+      <Popover.Content>
+        <button type='button' onClick={() => editSelection(selectedRow)} className="btn btn-sm btn-link">Edit Entry</button>
+        </Popover.Content>
+    </Popover>
+  );
+
+  //We will get to this later - needs a confirm delete
+  const deletePopover = (
+    <Popover id="popover-basic">
+      <Popover.Content>
+        <button type='button' className="btn btn-sm btn-link">Delete Entry</button>
+        </Popover.Content>
+    </Popover>
+  );
 
 
   // Render the UI for your table
@@ -137,6 +116,15 @@ function Table({ columns, data, updateDB }) {
                     </td>
                   )
                 })}
+                <td class="text-center m-0 p-0">
+                <OverlayTrigger rootClose="true" trigger="click" placement="top" overlay={editPopover}>
+                <Button variant="link"><FaPen/></Button>
+                </OverlayTrigger>
+                 
+                <OverlayTrigger rootClose="true" trigger="click" placement="top" overlay={deletePopover}>
+                <Button variant="link"><FaTrash /></Button>
+                </OverlayTrigger>
+                </td>
               </tr>
             )
           })}
