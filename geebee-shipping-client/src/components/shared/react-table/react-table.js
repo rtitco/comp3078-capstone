@@ -1,18 +1,33 @@
 import { useState } from 'react'
 import BTable from 'react-bootstrap/Table';
 import { useTable, useGlobalFilter } from 'react-table'
+import { Redirect } from "react-router-dom";
 
+import Popover from 'react-bootstrap/Popover';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Button from 'react-bootstrap/Button';
 
-function Table({ columns, data, updateDB }) {
-  // 
+import { FaTrash, FaPen } from 'react-icons/fa';
 
+import EditCompanyForm from '../../admin/company-manager/edit-company';
 
+function Table({ columns, data, formType }) {
+
+  const [editCheck, setEditCheck] = useState(false);
   //------Selected Row  will be passed to the edit data form
   const [selectedRow, setSelectedRow] = useState([]);
 
+  const editSelection = (rowData) => {
+    console.log("We got here");
+    setSelectedRow(rowData);
+    setTimeout(setEditCheck(true), 1000);
+  }
+
   //------Search Filter
   const [filterInput, setFilterInput] = useState("");
-  
+
+
+
   const handleFilterChange = e => {
     const value = e.target.value || undefined;
     setGlobalFilter(value)
@@ -31,6 +46,40 @@ function Table({ columns, data, updateDB }) {
         columns,
         data,
       }, useGlobalFilter)
+
+  if (editCheck) {
+    //Will need pathname to be passed on creation of react-table
+    if(formType === "company"){
+      return <Redirect to={{
+        pathname: "./company-manager/edit",
+        state: { data: selectedRow }
+      }} />;
+    }
+    else{
+      alert("formType not found")
+      return <Redirect to={{
+        pathname: "./company-manager/"
+      }} />;
+    }
+  }
+
+
+  const editPopover = (
+    <Popover id="popover-basic">
+      <Popover.Content>
+        <button type='button' onClick={() => editSelection(selectedRow)} className="btn btn-sm btn-link">Edit Entry</button>
+        </Popover.Content>
+    </Popover>
+  );
+
+  //We will get to this later - needs a confirm delete
+  const deletePopover = (
+    <Popover id="popover-basic">
+      <Popover.Content>
+        <button type='button' className="btn btn-sm btn-link">Delete Entry</button>
+        </Popover.Content>
+    </Popover>
+  );
 
 
   // Render the UI for your table
@@ -67,6 +116,15 @@ function Table({ columns, data, updateDB }) {
                     </td>
                   )
                 })}
+                <td class="text-center m-0 p-0">
+                <OverlayTrigger rootClose="true" trigger="click" placement="top" overlay={editPopover}>
+                <Button variant="link"><FaPen/></Button>
+                </OverlayTrigger>
+                 
+                <OverlayTrigger rootClose="true" trigger="click" placement="top" overlay={deletePopover}>
+                <Button variant="link"><FaTrash /></Button>
+                </OverlayTrigger>
+                </td>
               </tr>
             )
           })}

@@ -10,6 +10,8 @@ import AdminSideNav from '../admin-side-nav/admin-side-nav';
 //Company
 import CompanyManager from '../company-manager/company-manager';
 import CreateCompany from '../company-manager/create-company';
+import EditCompany from '../../admin/company-manager/edit-company';
+
 //user
 import UserManager from '../user-manager/user-manager';
 import CreateUser from '../user-manager/create-user';
@@ -60,6 +62,7 @@ class AdminDashboard extends Component {
 
                                 <Route exact path="/admin/company-manager" component={CompanyManager} />
                                 <Route exact path="/admin/company-manager/add" component={CreateCompany} />
+                                <Route exact path="/admin/company-manager/edit" component={EditCompany} />
 
                                 <Route exact path="/admin/order-manager" component={OrderManager} />
                                 <Route exact path="/admin/order-manager/add" component={CreateAdminOrder} />
