@@ -117,7 +117,7 @@ class ProfileForm extends Component {
         }
 
         //Phone Number
-        if (this.validateStringInput(/^[+]{0,1}[\d]*[\- ]{0,1}([\d]{3}[\- ]{0,1}){2}[\d]{4}$/,
+        if (this.validateStringInput(/^[\d]{10}$/,
             this.state.phoneNumber) == false) {
             this.setState({
                 errorPhone: "Invalid Phone Number."
@@ -181,6 +181,7 @@ class ProfileForm extends Component {
         }
 
         if ((firstNameValid && lastNameValid && phoneValid && emailValid) && ((pwChanged && newPasswordValid) || (pwChanged == false)) && this.state.currentPassword != '') {
+            
             let registered = {
                 firstName: this.state.firstName,
                 lastName: this.state.lastName,
@@ -326,11 +327,8 @@ class ProfileForm extends Component {
                         </div>
                     </Col>
                 </Row>
-
-
             </div>
         )
-
     }
 }
 

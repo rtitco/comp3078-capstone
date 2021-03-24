@@ -40,14 +40,14 @@ export default class CompanyManager extends Component {
       {
         Header: 'Province',
         accessor: 'province',
-      }, 
+      },
       {
         Header: 'Postal Code',
         accessor: 'postal_code',
       },
       {
         Header: 'Phone',
-        accessor: 'company_phone',
+        accessor: data => data.company_phone.substr(0, 3) + "-" + data.company_phone.substr(3, 3) + "-" + data.company_phone.substr(6, 4),
       }
     ]
     return (
