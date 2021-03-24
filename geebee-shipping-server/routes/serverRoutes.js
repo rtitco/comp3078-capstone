@@ -124,6 +124,68 @@ app.post('/admin/users/add', async (req, newUser) => {
     })
 })
 
+//-----------------Needs to be worked - Delete when done
+app.post('/admin/users/edit', async (req, editUser) => {
+
+    //Check if email exists in DB
+    userModel.find({ email: req.body.email }, (err, exists) => {
+        if (err) {
+            newUser.send({
+                message: "Entry Failed. Please try again."
+            })
+        }
+        else if (exists.length > 0) {
+            newUser.send({
+                messageEmail: "Email Address already exists."
+            })
+        }
+        else {
+            //Check if company exists in DB
+            companyModel.find({ company_name: req.body.company.toUpperCase() }, (err, companySearch) => {
+                if (err) {
+                    newUser.send({
+                        message: "Company Search Failed. Please try again."
+                    })
+                }
+                else if (companySearch.length < 1) {
+                    newUser.send({
+                        messageCompany: "Company Name Not Found."
+                    })
+                }
+                else {
+                    // generating salt password to hash and encrypt input pw
+                    let saltRounds = 10
+                    let salt = bcrypt.genSaltSync(saltRounds)
+                    let securePassword = bcrypt.hashSync(req.body.password, salt)
+
+                    let registeredUser = new userModel({
+                        firstName: req.body.firstName,
+                        lastName: req.body.lastName,
+                        phoneNumber: req.body.phoneNumber,
+                        email: req.body.email,
+                        company: req.body.company.toUpperCase(),
+                        role: req.body.role,
+                        password: securePassword,
+                        firstLogin: true
+                    })
+                    //try to save entry
+                    registeredUser.save((err, res) => {
+                        if (err) {
+                            newUser.send({
+                                message: "Failed to create user. Please try again.",
+                            })
+                        }
+                        else {
+                            newUser.send({ success: true, message: "New User Created." })
+                        }
+                    })
+                }
+
+            })
+        }
+    })
+})
+
 //POST for Login Form
 app.post('/login', async (req, loginRes) => {
     var foundBool = false;
@@ -278,6 +340,32 @@ app.post('/admin/company-manager/add', async (req, company) => {
                     company.send({ success: true, message: "Company successfully added." })
                 }
             });
+        }
+    })
+})
+
+//POST for Companies Table
+app.post('/admin/company-manager/edit', async (req, company) => {
+    await companyModel.findOne({ company_name: req.body.previousCompanyName.toUpperCase()}, (err, companySearch) => {
+        console.log(companySearch);
+        if (err) {
+            company.send({
+                message: "Company Database Search Failed."
+            })
+        }
+        else if (companySearch != null) {
+            companySearch.company_name = req.body.company_name.toUpperCase(),
+            companySearch.address = req.body.address.toUpperCase(),
+            companySearch.city = req.body.city.toUpperCase(),
+            companySearch.province = req.body.province.toUpperCase(),
+            companySearch.postal_code = req.body.postal_code.toUpperCase(),
+            companySearch.company_phone = req.body.company_phone,
+            companySearch.save();
+            company.send({ success: true, message: "Company successfully added." })
+        } else {
+            company.send({
+                message: "Company Update unsucessful."
+            }) 
         }
     })
 })
