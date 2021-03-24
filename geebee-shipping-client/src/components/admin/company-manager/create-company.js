@@ -102,8 +102,8 @@ class CreateCompanyForm extends Component {
     }
 
     // Company Address
-    if (this.validateStringInput(/^([\d]{1,5}[a-mA-M]{0,1}){1}[ ]{0,1}([A-Za-z]{1}[a-z]{1,}[ ]{0,1}){1,}$/,
-      this.state.address) == false) {
+    if (this.validateStringInput(/^([\d]{1,5}[a-mA-M]{0,1}){1}[ ]{1}([A-Za-z]{2,}[ ]{0,1}){1,}[.]{0,1}$/, 
+      this.state.address) == false) { 
       this.setState({
         errorAddress: "Invalid Address."
       })
@@ -151,9 +151,9 @@ class CreateCompanyForm extends Component {
         errorPostalCode: ''
       })
     }
-
+    
     // Company Phone
-    if (this.validateStringInput(/^[+]{0,1}[\d]*[- ]{0,1}([\d]{3}[- ]{0,1}){2}[\d]{4}$/,
+    if (this.validateStringInput(/^[\d]{10}$/,
       this.state.company_phone) == false) {
       this.setState({
         errorPhone: "Invalid Phone Number."
