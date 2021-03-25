@@ -222,7 +222,132 @@ app.post('/login', async (req, loginRes) => {
     }
 })
 
-//POST ==> Updating User Profile
+//POST for Companies Table
+app.post('/admin/company-manager/add', async (req, company) => {
+    await companyModel.find({ company_name: req.body.company_name.toUpperCase()}, (err, companySearch) => {
+        if (err) {
+            company.send({
+                message: "Company Database Search Failed."
+            })
+        }
+        else if (companySearch.length > 0) {
+            company.send({
+                message: "Company Already Exists in the Database."
+            })
+        }
+        else {
+            let newCompany = new companyModel({
+                company_name: req.body.company_name.toUpperCase(),
+                address: req.body.address.toUpperCase(),
+                city: req.body.city.toUpperCase(),
+                province: req.body.province.toUpperCase(),
+                postal_code: req.body.postal_code.toUpperCase(),
+                company_phone: req.body.company_phone,
+            });
+
+            newCompany.save((err, res) => {
+                if (err) {
+                    company.send({ message: "Failed to add Company." })
+                }
+                else {
+                    company.send({ success: true, message: "Company successfully added." })
+                }
+            });
+        }
+    })
+})
+
+
+
+//POST for Adding New Truck to Database
+app.post('/fleet/add', async (req, truck) => {
+
+    let newTruck = new vehicleModel({
+        vehicle_brand: req.body.brand.toUpperCase(),
+        vehicle_model: req.body.model.toUpperCase(),
+        vehicle_year: req.body.year,
+        truck_class: req.body.truckClass,
+        license_plate: req.body.licensePlate.toUpperCase(),
+        vehicle_status: req.body.status
+    });
+    await newTruck.save((err, res) => {
+        if (err) {
+            //error handling
+            truck.send({ message: "Failed to add new truck." })
+        }
+        else {
+            truck.send({ success: true, message: "New truck added to fleet." });
+        }
+    });
+
+})
+
+//POST for Orders Table
+app.post('/orders/add', async (req, order) => {
+
+    let newOrder = new orderModel({
+        order_date: new Date().toISOString().split('T')[0].toString(),
+        delivery_date: req.body.deliveryDate.toString(),
+        origin_address: req.body.origin_address.toUpperCase(),
+        origin_city: req.body.origin_city.toUpperCase(),
+        origin_postalCode: req.body.origin_postalCode.toUpperCase(),
+        destination_address: req.body.dest_address.toUpperCase(),
+        destination_city: req.body.dest_city.toUpperCase(),
+        destination_postalCode: req.body.dest_postalCode.toUpperCase(),
+        cargo_type: req.body.cargo_type.toUpperCase(),
+        cargo_weight: req.body.cargo_weight,
+        order_status: "Processing",
+        assigned_truck_class: req.body.assigned_truckClass,
+        assigned_truck_plate: req.body.assigned_truckPlate,
+        assigned_truck_driverEmail: req.body.assigned_truckDriver
+
+    });
+    newOrder.save((err, res) => {
+        if (err) {
+            //error handling
+            order.send({ message: "Error creating order." })
+        }
+        else {
+            order.send({ success: true });
+        }
+    });
+})
+
+app.post('/admin/order-manager/schedule', async (req, order) => {
+
+    let newOrder = new orderModel({
+        order_date: req.body.order_date,
+        delivery_date: req.body.deliveryDate,
+        origin_address: req.body.origin_address,
+        origin_city: req.body.origin_city,
+        origin_postalCode: req.body.origin_postalCode,
+        destination_address: req.body.dest_address,
+        destination_city: req.body.dest_city,
+        destination_postalCode: req.body.dest_postalCode,
+        cargo_type: req.body.cargo_type,
+        cargo_weight: req.body.cargo_weight,
+        order_status: "Awaiting Delivery",
+        assigned_truck_class: req.body.assigned_truckClass,
+        assigned_truck_plate: req.body.assigned_truckPlate,
+        assigned_truck_driverEmail: req.body.assigned_truckDriver //check if email in user db
+    });
+
+    newOrder.save((err, res) => {
+        if (err) {
+            //error handling
+            order.send({ message: "Error creating order." })
+        }
+        else {
+            order.send({ success: true });
+        }
+    });
+})
+
+
+
+//===========================================EDIT FUNCTIONS ===============================================
+
+//POST ==> Edit User Profile
 app.post('/profile', async (req, updateRes) => {
     //find the current data in the database and update
     let currPasswordDB = ''
@@ -309,42 +434,7 @@ app.post('/profile', async (req, updateRes) => {
     })
 })
 
-//POST for Companies Table
-app.post('/admin/company-manager/add', async (req, company) => {
-    await companyModel.find({ company_name: req.body.company_name.toUpperCase()}, (err, companySearch) => {
-        if (err) {
-            company.send({
-                message: "Company Database Search Failed."
-            })
-        }
-        else if (companySearch.length > 0) {
-            company.send({
-                message: "Company Already Exists in the Database."
-            })
-        }
-        else {
-            let newCompany = new companyModel({
-                company_name: req.body.company_name.toUpperCase(),
-                address: req.body.address.toUpperCase(),
-                city: req.body.city.toUpperCase(),
-                province: req.body.province.toUpperCase(),
-                postal_code: req.body.postal_code.toUpperCase(),
-                company_phone: req.body.company_phone,
-            });
-
-            newCompany.save((err, res) => {
-                if (err) {
-                    company.send({ message: "Failed to add Company." })
-                }
-                else {
-                    company.send({ success: true, message: "Company successfully added." })
-                }
-            });
-        }
-    })
-})
-
-//POST for Companies Table
+//POST for Edit Companies Table
 app.post('/admin/company-manager/edit', async (req, company) => {
     await companyModel.findOne({ company_name: req.body.previousCompanyName.toUpperCase()}, (err, companySearch) => {
         console.log(companySearch);
@@ -368,90 +458,6 @@ app.post('/admin/company-manager/edit', async (req, company) => {
             }) 
         }
     })
-})
-
-//POST for Adding New Truck to Database
-app.post('/fleet/add', async (req, truck) => {
-
-    let newTruck = new vehicleModel({
-        vehicle_brand: req.body.brand.toUpperCase(),
-        vehicle_model: req.body.model.toUpperCase(),
-        vehicle_year: req.body.year,
-        truck_class: req.body.truckClass,
-        license_plate: req.body.licensePlate.toUpperCase(),
-        vehicle_status: req.body.status
-    });
-    await newTruck.save((err, res) => {
-        if (err) {
-            //error handling
-            truck.send({ message: "Failed to add new truck." })
-        }
-        else {
-            truck.send({ success: true, message: "New truck added to fleet." });
-        }
-    });
-
-})
-
-//POST for Orders Table
-app.post('/orders/add', async (req, order) => {
-
-    let newOrder = new orderModel({
-        order_date: new Date().toISOString().split('T')[0].toString(),
-        delivery_date: req.body.deliveryDate.toString(),
-        origin_address: req.body.origin_address.toUpperCase(),
-        origin_city: req.body.origin_city.toUpperCase(),
-        origin_postalCode: req.body.origin_postalCode.toUpperCase(),
-        destination_address: req.body.dest_address.toUpperCase(),
-        destination_city: req.body.dest_city.toUpperCase(),
-        destination_postalCode: req.body.dest_postalCode.toUpperCase(),
-        cargo_type: req.body.cargo_type.toUpperCase(),
-        cargo_weight: req.body.cargo_weight,
-        order_status: "Processing",
-        assigned_truck_class: req.body.assigned_truckClass,
-        assigned_truck_plate: req.body.assigned_truckPlate,
-        assigned_truck_driverEmail: req.body.assigned_truckDriver
-
-    });
-    newOrder.save((err, res) => {
-        if (err) {
-            //error handling
-            order.send({ message: "Error creating order." })
-        }
-        else {
-            order.send({ success: true });
-        }
-    });
-})
-
-app.post('/admin/order-manager/schedule', async (req, order) => {
-
-    let newOrder = new orderModel({
-        order_date: req.body.order_date,
-        delivery_date: req.body.deliveryDate,
-        origin_address: req.body.origin_address,
-        origin_city: req.body.origin_city,
-        origin_postalCode: req.body.origin_postalCode,
-        destination_address: req.body.dest_address,
-        destination_city: req.body.dest_city,
-        destination_postalCode: req.body.dest_postalCode,
-        cargo_type: req.body.cargo_type,
-        cargo_weight: req.body.cargo_weight,
-        order_status: "Awaiting Delivery",
-        assigned_truck_class: req.body.assigned_truckClass,
-        assigned_truck_plate: req.body.assigned_truckPlate,
-        assigned_truck_driverEmail: req.body.assigned_truckDriver //check if email in user db
-    });
-
-    newOrder.save((err, res) => {
-        if (err) {
-            //error handling
-            order.send({ message: "Error creating order." })
-        }
-        else {
-            order.send({ success: true });
-        }
-    });
 })
 
 module.exports = app;
