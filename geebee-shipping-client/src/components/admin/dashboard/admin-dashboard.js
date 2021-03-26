@@ -6,18 +6,18 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-d
 
 //Switch to logged in header (keeping for formatting), which will have the logo at the top and the logout / profile access
 import LoginNavBar from '../../shared/navbar/login-navbar';
-import AdminSideNav from '../admin-side-nav/admin-side-nav';
+import AdminSideNav from './admin-side-nav/admin-side-nav';
 //Company
-import CompanyManager from '../company-manager/company-manager';
-import CreateCompany from '../company-manager/create-company';
-import EditCompany from '../../admin/company-manager/edit-company';
+import CompanyManager from './company-manager';
+import CreateCompany from '../forms/create/create-company';
+import EditCompany from '../forms/edit/edit-company';
 
 //user
-import UserManager from '../user-manager/user-manager';
-import CreateUser from '../user-manager/create-user';
+import UserManager from './user-manager';
+import CreateUser from '../forms/create/create-user';
 //orders
-import OrderManager from '../order-manager/order-manager';
-import CreateAdminOrder from '../order-manager/create-admin-order';
+import OrderManager from './order-manager';
+import CreateAdminOrder from '../forms/create/create-admin-order';
 import { Component } from 'react';
 
 class AdminDashboard extends Component {

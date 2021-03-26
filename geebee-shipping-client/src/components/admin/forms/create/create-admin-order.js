@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import axios from 'axios';
 import { Redirect, Link } from "react-router-dom";
-import logo from '../../shared/profile/gb.png'
+import logo from '../../../shared/profile/gb.png'
 
 
 class CreateAdminOrderForm extends Component {

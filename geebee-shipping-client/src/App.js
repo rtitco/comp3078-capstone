@@ -2,9 +2,9 @@ import './App.css';
 import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
 import LoginForm from './components/shared/login/login';
 import ProfileForm from './components/shared/profile/profile';
-import AdminDashboard from './components/admin/admin-dashboard/admin-dashboard';
+import AdminDashboard from './components/admin/dashboard/admin-dashboard';
 import ClientDashboard from './components/client/dashboard/dashboard';
-import CreateUserForm from './components/admin/user-manager/create-user';
+import CreateUserForm from './components/admin/forms/create/create-user';
 import CreateTruckForm from './components/client/forms/create-truck';
 import CreateOrderForm from './components/client/forms/create-order';
 

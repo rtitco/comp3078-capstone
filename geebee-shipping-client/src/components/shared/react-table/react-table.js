@@ -9,7 +9,7 @@ import Button from 'react-bootstrap/Button';
 
 import { FaTrash, FaPen } from 'react-icons/fa';
 
-import EditCompanyForm from '../../admin/company-manager/edit-company';
+// import EditCompanyForm from '../../admin/forms/edit/edit-company';
 
 function Table({ columns, data, formType }) {
 

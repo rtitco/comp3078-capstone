@@ -1,7 +1,7 @@
 import { Redirect, Link } from "react-router-dom";
 import React, { Component } from 'react';
 import axios from 'axios'
-import logo from '../../shared/profile/gb.png'
+import logo from '../../../shared/profile/gb.png'
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
