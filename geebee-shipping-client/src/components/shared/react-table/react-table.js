@@ -11,16 +11,15 @@ import { FaTrash, FaPen } from 'react-icons/fa';
 
 // import EditCompanyForm from '../../admin/forms/edit/edit-company';
 
-function Table({ columns, data, formType, role }) {
-
+function Table({ columns, data, formType, tRole, editPath }) {
+  const [tableRole, setTableRole] = useState(tRole);
   const [editCheck, setEditCheck] = useState(false);
   //------Selected Row  will be passed to the edit data form
   const [selectedRow, setSelectedRow] = useState([]);
 
   const editSelection = (rowData) => {
-    console.log("We got here");
     setSelectedRow(rowData);
-    setTimeout(setEditCheck(true), 1000);
+    setTimeout(setEditCheck(true), 400);
   }
 
   //------Search Filter
@@ -81,6 +80,24 @@ function Table({ columns, data, formType, role }) {
     </Popover>
   );
 
+  const editDeleteColumn = (
+    <td class="text-center m-0 p-0">
+    <OverlayTrigger rootClose="true" trigger="click" placement="top" overlay={editPopover}>
+    <Button variant="link"><FaPen/></Button>
+    </OverlayTrigger>
+     
+    <OverlayTrigger rootClose="true" trigger="click" placement="top" overlay={deletePopover}>
+    <Button variant="link"><FaTrash /></Button>
+    </OverlayTrigger>
+    </td>
+  );
+
+  const editDeleteShow = (role) => {
+    if(role === "admin" || role === "distribution" || role === "fleet"){
+      return editDeleteColumn;
+    }
+  }
+
 
   // Render the UI for your table
   return (
@@ -116,16 +133,11 @@ function Table({ columns, data, formType, role }) {
                     </td>
                   )
                 })}
-                <td class="text-center m-0 p-0">
-                <OverlayTrigger rootClose="true" trigger="click" placement="top" overlay={editPopover}>
-                <Button variant="link"><FaPen/></Button>
-                </OverlayTrigger>
-                 
-                <OverlayTrigger rootClose="true" trigger="click" placement="top" overlay={deletePopover}>
-                <Button variant="link"><FaTrash /></Button>
-                </OverlayTrigger>
-                </td>
+                  {
+                    editDeleteShow(tableRole)
+                  }
               </tr>
+            
             )
           })}
         </tbody>
