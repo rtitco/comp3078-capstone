@@ -11,7 +11,7 @@ import { FaTrash, FaPen } from 'react-icons/fa';
 
 // import EditCompanyForm from '../../admin/forms/edit/edit-company';
 
-function Table({ columns, data, formType }) {
+function Table({ columns, data, formType, role }) {
 
   const [editCheck, setEditCheck] = useState(false);
   //------Selected Row  will be passed to the edit data form
