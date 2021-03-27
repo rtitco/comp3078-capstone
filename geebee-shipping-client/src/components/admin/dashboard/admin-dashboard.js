@@ -14,7 +14,7 @@ import EditCompany from '../forms/edit/edit-company';
 
 //user
 import UserManager from './user-manager';
-import CreateUser from '../forms/create/create-user';
+import CreateUserForm from '../forms/create/create-user';
 //orders
 import OrderManager from './order-manager';
 import CreateAdminOrder from '../forms/create/create-admin-order';
@@ -58,7 +58,7 @@ class AdminDashboard extends Component {
                                     <Redirect to="/admin/user-manager" />
                                 </Route>
                                 <Route exact path="/admin/user-manager" component={UserManager} />
-                                <Route exact path="/admin/users/add" component={CreateUser} />
+                                <Route exact path="/admin/users/add" component={CreateUserForm} />
 
                                 <Route exact path="/admin/company-manager" component={CompanyManager} />
                                 <Route exact path="/admin/company-manager/add" component={CreateCompany} />

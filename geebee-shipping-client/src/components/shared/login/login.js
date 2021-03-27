@@ -109,7 +109,7 @@ class LoginForm extends Component {
                     return <Redirect to='/profile' />
                 }
                 else {
-                    return <Redirect to='/dashboard' />
+                    return <Redirect to='/client' />
                 }
             }
             else {

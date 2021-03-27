@@ -6,20 +6,19 @@ import logo from '../../shared/profile/gb.png'
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-class CreateTruckForm extends Component {
+class EditTruckForm extends Component {
 
     constructor(props) {
         super(props)
         let sessionUser = JSON.parse(window.sessionStorage.getItem("currentUser"))
-
         this.state = {
             currentUser: sessionUser,
-            brand: '',
-            model: '',
-            year: '',
-            truckClass: '',
-            licensePlate: '',
-            status: '',
+            brand: props.location.state.data.vehicle_brand,
+            model: props.location.state.data.vehicle_model,
+            year: props.location.state.data.vehicle_year,
+            truckClass: props.location.state.data.truck_class,
+            licensePlate: props.location.state.data.license_plate,
+            status: props.location.state.data.vehicle_status,
 
             updateSuccess: false,
             errorBrand: '',
@@ -176,7 +175,7 @@ class CreateTruckForm extends Component {
                 status: this.state.status
             }
             // everything stored in registered will send to backend (url) then to mongo
-            axios.post('http://localhost:8081/fleet/add', truckData)
+            axios.post('http://localhost:8081/fleet/edit', truckData)
                 .then(res => {
                     this.setState({
                         updateSuccess: res.data.success,
@@ -214,10 +213,10 @@ class CreateTruckForm extends Component {
 
     render() {
         if (this.state.currentUser.role != "Fleet Manager" || this.state.currentUser == null) {
-            return <Redirect to='/client' />
+            return <Redirect to='/client/fleet' />
         }
         else if (this.state.updateSuccess == true) {
-            return <Redirect to='/client' />
+            return <Redirect to='/client/fleet' />
         }
 
         return (
@@ -225,7 +224,7 @@ class CreateTruckForm extends Component {
                 <p className="text-center mt-5">
                     <img src={logo} alt='logo' />
                 </p>
-                <h1 className='h3 text-center'>Add Truck to Fleet</h1>
+                <h1 className='h3 text-center'>Edit Truck</h1>
                 <div>
                     <Row className="justify-content-center">
                         <Col md="6">
@@ -290,4 +289,4 @@ class CreateTruckForm extends Component {
     }
 }
 
-export default CreateTruckForm;
+export default EditTruckForm;
