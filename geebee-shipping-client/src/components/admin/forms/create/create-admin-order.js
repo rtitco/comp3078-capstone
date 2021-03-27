@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import OrderSchedule from '../schedule-table'
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import axios from 'axios';
@@ -180,10 +178,6 @@ class CreateAdminOrderForm extends Component {
 
     const columns = [
       {
-        Header: 'Delivery Date',
-        accessor: 'delivery_date',
-      },
-      {
         Header: 'Origin Address',
         accessor: data => data.origin_address + ', ' + data.origin_city + ', ' + data.origin_postalCode
       },
@@ -191,10 +185,10 @@ class CreateAdminOrderForm extends Component {
         Header: 'Destination Address',
         accessor: data => data.destination_address + ', ' + data.destination_city + ', ' + data.destination_postalCode,
       },
-      // {
-      //     Header: 'Driver',
-      //     accessor: 'assigned_truck_driverEmail',
-      // },
+      {
+          Header: 'Driver',
+          accessor: 'assigned_truck_driverEmail',
+      },
       {
         Header: 'Assigned Truck',
         accessor: 'assigned_truck_plate',
@@ -206,10 +200,11 @@ class CreateAdminOrderForm extends Component {
         <p className="text-center">
           <img src={logo} alt='logo' />
         </p>
-        <h1 className='text-center'>Schedule Delivery Order</h1>
         <Row>
           {/* Form Left Side */}
           <Col md="6">
+            <h4 className='text-center'>Schedule Delivery Order</h4>
+
             <div>
               <div>
                 <Row className="justify-content-center">
@@ -291,8 +286,6 @@ class CreateAdminOrderForm extends Component {
                         </Col>
                       </Row>
 
-
-
                       <label>Truck Class: <span className="text-center alert-danger">{this.state.errorTruckClass}</span></label>
                       <select className='form-control form-group' value={this.state.assigned_truckClass} name="class" onChange={this.changeTruckClass}>
                         <option disabled selected hidden value="">Select a truck class.</option>
@@ -331,6 +324,7 @@ class CreateAdminOrderForm extends Component {
 
           {/* Schedule Table Right Side */}
           <Col md="6">
+            <label><h4>Current Deliveries on: {this.state.testDate}</h4></label>
             <OrderSchedule columns={columns} data={this.state.data} />
           </Col>
         </Row>
