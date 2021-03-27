@@ -196,7 +196,7 @@ class CreateOrderForm extends Component {
 
         //Check Destination Postal Code
         if (this.validateStringInput(/^([a-zA-z]{1}[\d]{1}[a-zA-z]{1}){1}[ ]{0,1}([\d]{1}[a-zA-z]{1}[\d]{1}){1}$/,
-            this.state.dest_postalCode) == false) {
+        this.state.dest_postalCode) == false) {
             this.setState({
                 errorDestPostalCode: "Invalid Postal Code."
             })
