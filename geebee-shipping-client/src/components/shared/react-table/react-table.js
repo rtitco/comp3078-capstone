@@ -1,3 +1,5 @@
+import './react-table.css';
+
 import { useState } from 'react'
 import BTable from 'react-bootstrap/Table';
 import { useTable, useGlobalFilter } from 'react-table'
@@ -9,18 +11,17 @@ import Button from 'react-bootstrap/Button';
 
 import { FaTrash, FaPen } from 'react-icons/fa';
 
-// import EditCompanyForm from '../../admin/forms/edit/edit-company';
 
-function Table({ columns, data, formType }) {
-
+//data will be the axios request--- formType will be the edit form linked--- tRole will decide if the passed role has edit/delete permissions
+function Table({ columns, data, formType, tRole }) {
+  const [tableRole, setTableRole] = useState(tRole);
   const [editCheck, setEditCheck] = useState(false);
   //------Selected Row  will be passed to the edit data form
   const [selectedRow, setSelectedRow] = useState([]);
 
   const editSelection = (rowData) => {
-    console.log("We got here");
     setSelectedRow(rowData);
-    setTimeout(setEditCheck(true), 1000);
+    setTimeout(setEditCheck(true), 400);
   }
 
   //------Search Filter
@@ -47,18 +48,23 @@ function Table({ columns, data, formType }) {
         data,
       }, useGlobalFilter)
 
+
   if (editCheck) {
-    //Will need pathname to be passed on creation of react-table
     if(formType === "company"){
       return <Redirect to={{
         pathname: "./company-manager/edit",
         state: { data: selectedRow }
       }} />;
-    }
-    else{
+    } else if(formType === "Fleet Manager"){
+      console.log(selectedRow)
+      return <Redirect to={{
+        pathname: "./fleet/edit",
+        state: { data: selectedRow }
+      }} />;
+    } else {
       alert("formType not found")
       return <Redirect to={{
-        pathname: "./company-manager/"
+        pathname: "./"
       }} />;
     }
   }
@@ -67,7 +73,7 @@ function Table({ columns, data, formType }) {
   const editPopover = (
     <Popover id="popover-basic">
       <Popover.Content>
-        <button type='button' onClick={() => editSelection(selectedRow)} className="btn btn-sm btn-link">Edit Entry</button>
+        <button type='button' onClick={() => editSelection(selectedRow)} className="btn btn-sm btn-success">Edit Entry</button>
         </Popover.Content>
     </Popover>
   );
@@ -76,10 +82,27 @@ function Table({ columns, data, formType }) {
   const deletePopover = (
     <Popover id="popover-basic">
       <Popover.Content>
-        <button type='button' className="btn btn-sm btn-link">Delete Entry</button>
+        <button type='button' className="btn btn-sm btn-danger p-1">Delete Entry</button>
         </Popover.Content>
     </Popover>
   );
+
+  const editDeleteColumn = (
+    <td  className="text-center m-0 p-0 w-sml-col">
+    <OverlayTrigger rootClose={true} trigger="click" placement="top" overlay={editPopover}>
+    <Button className="text-success" variant="link"><FaPen/></Button>
+    </OverlayTrigger>
+     
+    <OverlayTrigger rootClose={true} trigger="click" placement="top" overlay={deletePopover}>
+    <Button className="text-danger"  variant="link"><FaTrash /></Button>
+    </OverlayTrigger>
+    </td>
+  );
+  const editDeleteShow = (tRole) => {
+    if(tRole === "admin" || tRole === "distribution" || tRole === "Fleet Manager"){
+      return editDeleteColumn;
+    }
+  }
 
 
   // Render the UI for your table
@@ -116,16 +139,11 @@ function Table({ columns, data, formType }) {
                     </td>
                   )
                 })}
-                <td class="text-center m-0 p-0">
-                <OverlayTrigger rootClose="true" trigger="click" placement="top" overlay={editPopover}>
-                <Button variant="link"><FaPen/></Button>
-                </OverlayTrigger>
-                 
-                <OverlayTrigger rootClose="true" trigger="click" placement="top" overlay={deletePopover}>
-                <Button variant="link"><FaTrash /></Button>
-                </OverlayTrigger>
-                </td>
+                  {
+                    editDeleteShow(tableRole)
+                  }
               </tr>
+            
             )
           })}
         </tbody>
