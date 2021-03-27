@@ -279,10 +279,10 @@ class CreateOrderForm extends Component {
 
     render() {
         if (this.state.currentUser.role != "Distribution" || this.state.currentUser == null) {
-            return <Redirect to='/dashboard' />
+            return <Redirect to='/client' />
         }
         else if (this.state.updateSuccess == true) {
-            return <Redirect to='/dashboard' />
+            return <Redirect to='/client' />
         }
 
         return (
@@ -384,7 +384,7 @@ class CreateOrderForm extends Component {
 
                                 <input type='submit' className='btn btn-primary btn-block'
                                     value='Submit' />
-                                <Link className="mt-3 btn btn-warning btn-block" to='/dashboard'>Go back</Link>
+                                <Link className="mt-3 btn btn-warning btn-block" to='/client'>Go back</Link>
                             </form>
                         </Col>
                     </Row>

@@ -224,7 +224,7 @@ app.post('/login', async (req, loginRes) => {
 
 //POST for Companies Table
 app.post('/admin/company-manager/add', async (req, company) => {
-    await companyModel.find({ company_name: req.body.company_name.toUpperCase()}, (err, companySearch) => {
+    await companyModel.find({ company_name: req.body.company_name.toUpperCase() }, (err, companySearch) => {
         if (err) {
             company.send({
                 message: "Company Database Search Failed."
@@ -436,7 +436,7 @@ app.post('/profile', async (req, updateRes) => {
 
 //POST for Edit Companies Table
 app.post('/admin/company-manager/edit', async (req, company) => {
-    await companyModel.findOne({ company_name: req.body.previousCompanyName.toUpperCase()}, (err, companySearch) => {
+    await companyModel.findOne({ company_name: req.body.previousCompanyName.toUpperCase() }, (err, companySearch) => {
         console.log(companySearch);
         if (err) {
             company.send({
@@ -445,19 +445,65 @@ app.post('/admin/company-manager/edit', async (req, company) => {
         }
         else if (companySearch != null) {
             companySearch.company_name = req.body.company_name.toUpperCase(),
-            companySearch.address = req.body.address.toUpperCase(),
-            companySearch.city = req.body.city.toUpperCase(),
-            companySearch.province = req.body.province.toUpperCase(),
-            companySearch.postal_code = req.body.postal_code.toUpperCase(),
-            companySearch.company_phone = req.body.company_phone,
-            companySearch.save();
+                companySearch.address = req.body.address.toUpperCase(),
+                companySearch.city = req.body.city.toUpperCase(),
+                companySearch.province = req.body.province.toUpperCase(),
+                companySearch.postal_code = req.body.postal_code.toUpperCase(),
+                companySearch.company_phone = req.body.company_phone,
+                companySearch.save();
             company.send({ success: true, message: "Company successfully added." })
         } else {
             company.send({
                 message: "Company Update unsucessful."
-            }) 
+            })
         }
     })
 })
+
+//===========================================DELETE FUNCTIONS ===============================================
+app.post('/admin/company-manager/delete', async (req, company) => {
+    await companyModel.findOneAndDelete({ company_name: req.body.company_name.toUpperCase() }, (err, companySearch) => {
+        console.log(companySearch);
+        if (err) {
+            company.send({
+                message: "Company delete failed."
+            })
+        }
+        else if (companySearch != null) {
+            companySearch.save();
+            company.send({ success: true, message: "Company successfully deleted." })
+        } else {
+            company.send({
+                message: "Company delete unsucessful."
+            })
+        }
+    })
+});
+
+//POST for Editing a Truck in the Database
+app.post('/fleet/edit', async (req, truck) => {
+    await vehicleModel.findOne({ license_plate:  req.body.licensePlate.toUpperCase() }, (err, truckSearch) => {
+        if (err) {
+            truck.send({
+                message: "Truck edit failed."
+            })
+        }
+        else if (truckSearch != null) {
+            truckSearch.vehicle_brand = req.body.brand.toUpperCase(),
+            truckSearch.vehicle_model= req.body.model.toUpperCase(),
+            truckSearch.vehicle_year= req.body.year,
+            truckSearch.truck_class= req.body.truckClass,
+            truckSearch.license_plate= req.body.licensePlate.toUpperCase(),
+            truckSearch.vehicle_status= req.body.status
+            truckSearch.save();
+            truck.send({ success: true, message: "Truck successfully edited." })
+        } else {
+            truck.send({
+                message: "Truck edit unsucessful."
+            })
+        }
+    });
+})
+
 
 module.exports = app;
