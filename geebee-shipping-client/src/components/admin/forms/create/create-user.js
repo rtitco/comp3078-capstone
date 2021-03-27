@@ -38,14 +38,11 @@ class CreateUserForm extends Component {
 
     getCompanyData = async () => {
         const companyRes = await axios.get('http://localhost:8081/companies')
-        console.log(companyRes.data);
         let myCompanies = [];
         let currentID = 0;
 
         companyRes.data.forEach(element => {
             let name = element.company_name.toLowerCase().replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
-            // let address = element.address.toLowerCase().replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
-            // myCompanies.push({id: currentID, label: `${name} - ${address}`})
             myCompanies.push({ id: currentID, label: name })
             currentID++;
         });
@@ -249,7 +246,6 @@ class CreateUserForm extends Component {
                                         options={this.state.mongoData}
                                         placeholder="Company"
                                         selected={this.singleSelections}
-                                        autoComplete="new-password"
                                     />
                                     <br />
 

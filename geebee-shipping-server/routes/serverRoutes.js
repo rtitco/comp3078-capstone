@@ -68,6 +68,38 @@ app.get('/orders/:date', async (req, res) => {
     }
 })
 
+//GET Orders for Specific Driver
+app.get('/orders/:email', async (req, res) => {
+    let Routes = await orderModel.find({assigned_truck_driverEmail: req.params.email});
+    try {
+        res.send(Routes);
+    }
+    catch (err) {
+        res.status(500).send(err);
+    }
+})
+
+//GET for Drivers
+app.get('/users/:role', async (req, res) => {
+    const Drivers = await userModel.find({role: req.params.role}); //Async function. Wait for results before posting
+    try {
+        res.send(Drivers);
+    }
+    catch (err) {
+        res.status(500).send(err);
+    }
+});
+
+app.get('/fleet/:class', async (req, res) => {
+    const Trucks = await vehicleModel.find({truck_class: req.params.class, vehicle_status: "In Service"});
+    try {
+        res.send(Trucks);
+    }
+    catch (err) {
+        res.status(500).send(err);
+    }
+})
+
 //==============================================POST FUNCTIONS==================================================//
 
 //POST ==> Admin Creating New User
