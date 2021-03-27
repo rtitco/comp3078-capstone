@@ -141,7 +141,7 @@ class EditTruckForm extends Component {
 
         //Check License Plate
         if (this.validateStringInput(/^[A-Za-z]{3,5}[ ]{0,1}[\d]{3,5}$/,
-            this.state.brand) == false) {
+            this.state.licensePlate) == false) {
             this.setState({
                 errorLicensePlate: "Invalid License Plate."
             })
