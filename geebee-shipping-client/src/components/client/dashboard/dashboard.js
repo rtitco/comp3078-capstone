@@ -23,13 +23,13 @@ class ClientDashboard extends Component {
         let sessionUser = JSON.parse(window.sessionStorage.getItem("currentUser"))
         this.state = {
             currentUser: sessionUser,
-            readyToRedirect:false,
+            readyToRedirect: false,
         }
 
     }
 
     render() {
-        
+
         //If no user, redirect to login
         if (this.state.currentUser == null) {
             return <Redirect to='/login' />
@@ -39,31 +39,31 @@ class ClientDashboard extends Component {
         if (this.state.currentUser.role === "Admin") {
             return <Redirect to='/admin' />
         }
-        function redirectTo(role){
+        function redirectTo(role) {
             if (role === "Driver") {
                 return <Redirect to='/client/driver' />
-             } 
-             //Load Retail Dashboard
+            }
+            //Load Retail Dashboard
             else if (role === "Retail") {
-                 return <Redirect to='/client/retail' />
-             }
-             //Load Distribution Dashboard
-             else if (role === "Distribution") {
-                 return <Redirect to='/client/orders' />
-             }
-             //Load Dispatcher Dashboard
-             else if (role === "Fleet Manager") {
-                 return <Redirect to='/client/fleet' />
-             }
+                return <Redirect to='/client/retail' />
+            }
+            //Load Distribution Dashboard
+            else if (role === "Distribution") {
+                return <Redirect to='/client/orders' />
+            }
+            //Load Dispatcher Dashboard
+            else if (role === "Fleet Manager") {
+                return <Redirect to='/client/fleet' />
+            }
         }
         return (
             <div>
                 <LoginNavBar />
                 <Container fluid>
                     <Switch>
-                                <Route exact path="/client">
-                                    {redirectTo(this.state.currentUser.role)}
-                                </Route>
+                        <Route exact path="/client">
+                            {redirectTo(this.state.currentUser.role)}
+                        </Route>
                         <Route exact path="/client/retail" component={RetailTable} />
                         <Route exact path="/client/driver" component={DriverTable} />
 
