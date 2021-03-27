@@ -10,25 +10,28 @@ import CreateTruckForm from './components/client/forms/create-truck';
 import EditTruckForm from './components/client/forms/edit-truck';
 
 import CreateOrderForm from './components/client/forms/create-order';
+import ViewRouteDetails from './components/client/views/route-details';
 
 
 
 function App() {
   return (
-      <Router>
-        <Switch>
-           <Route exact path="/">
-            <Redirect to="/login" />
-          </Route>
-          <Route path="/login" component={LoginForm} />
-          <Route path="/profile" component={ProfileForm} />
-          <Route path="/admin" component={AdminDashboard} />
-          <Route path="/client" component={ClientDashboard} />
-          <Route path="*">
-            <Redirect to="/login" />
-          </Route>
-        </Switch>
-      </Router>
+    <Router>
+      <Switch>
+        <Route exact path="/">
+          <Redirect to="/login" />
+        </Route>
+        <Route path="/login" component={LoginForm} />
+        <Route path="/profile" component={ProfileForm} />
+        <Route path="/admin" component={AdminDashboard} />
+        <Route path="/client" component={ClientDashboard} />
+        <Route path="/route" component={ViewRouteDetails} />
+
+        <Route path="*">
+          <Redirect to="/login" />
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 
