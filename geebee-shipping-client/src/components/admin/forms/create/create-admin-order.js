@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import OrderSchedule from '../schedule-table'
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import axios from 'axios';
 import { Redirect, Link } from "react-router-dom";
-import logo from '../../../shared/profile/gb.png'
-
+import logo from '../../../shared/profile/gb.png';
 
 class CreateAdminOrderForm extends Component {
 
@@ -38,7 +38,20 @@ class CreateAdminOrderForm extends Component {
       errorDestCity: '',
       errorDestPostalCode: '',
 
+      testDate: '2021-04-10',
+
+      data: [],
+      loading: true
     }
+  }
+
+  async getOrderData() {
+    const orderRes = await axios.get(`http://localhost:8081/orders/${this.state.testDate}`)
+    this.setState({ loading: false, data: orderRes.data })
+  }
+
+  componentDidMount() {
+    this.getOrderData()
   }
 
   validateStringInput = (regexStr, strInput) => {
@@ -165,125 +178,164 @@ class CreateAdminOrderForm extends Component {
       return <Redirect to='/dashboard' />
     }
 
+    const columns = [
+      {
+        Header: 'Delivery Date',
+        accessor: 'delivery_date',
+      },
+      {
+        Header: 'Origin Address',
+        accessor: data => data.origin_address + ', ' + data.origin_city + ', ' + data.origin_postalCode
+      },
+      {
+        Header: 'Destination Address',
+        accessor: data => data.destination_address + ', ' + data.destination_city + ', ' + data.destination_postalCode,
+      },
+      // {
+      //     Header: 'Driver',
+      //     accessor: 'assigned_truck_driverEmail',
+      // },
+      {
+        Header: 'Assigned Truck',
+        accessor: 'assigned_truck_plate',
+      }
+    ]
+
     return (
       <div>
         <p className="text-center">
           <img src={logo} alt='logo' />
         </p>
         <h1 className='text-center'>Schedule Delivery Order</h1>
-
-        <div>
-          <Row className="justify-content-center">
-            <Col md="6">
-              <form onSubmit={this.onSubmit}>
-
-                <label>Delivery Date: </label>
-                <input type='date'
-                  disabled
-                  value={this.state.deliveryDate}
-                  className='form-control form-group' />
-
-                {/* Origin */}
-                <label>Origin Address: </label>
-                <input type='text'
-                  disabled
-                  value={this.state.origin_address}
-                  className='form-control form-group' />
-
-                <Row>
+        <Row>
+          {/* Form Left Side */}
+          <Col md="6">
+            <div>
+              <div>
+                <Row className="justify-content-center">
                   <Col md="6">
-                    <label>Origin City: </label>
-                    <input type='text'
-                      disabled
-                      value={this.state.origin_city}
-                      className='form-control form-group' />
-                  </Col>
-                  <Col md="6">
-                    <label>Origin Postal Code: </label>
-                    <input type='text'
-                      disabled
-                      value={this.state.origin_postalCode}
-                      className='form-control form-group' />
+                    <form onSubmit={this.onSubmit}>
+
+                      <label>Delivery Date: </label>
+                      <input type='date'
+                        disabled
+                        value={this.state.deliveryDate}
+                        className='form-control form-group' />
+
+                      <Row>
+                        <Col md="6">
+                          <label>Cargo Type: </label>
+                          <input type='text'
+                            disabled
+                            value={this.state.CargoType}
+                            className='form-control form-group' />
+                        </Col>
+                        <Col md="6">
+                          <label>Cargo Weight (kg):</label>
+                          <input type='text'
+                            disabled
+                            value={this.state.cargo_weight}
+                            className='form-control form-group' />
+                        </Col>
+
+                      </Row>
+
+                      {/* Origin */}
+                      <h6>Origin:</h6>
+                      <label>Address: </label>
+                      <input type='text'
+                        disabled
+                        value={this.state.origin_address}
+                        className='form-control form-group' />
+
+                      <Row>
+                        <Col md="6">
+                          <label>City: </label>
+                          <input type='text'
+                            disabled
+                            value={this.state.origin_city}
+                            className='form-control form-group' />
+                        </Col>
+                        <Col md="6">
+                          <label>Postal Code: </label>
+                          <input type='text'
+                            disabled
+                            value={this.state.origin_postalCode}
+                            className='form-control form-group' />
+                        </Col>
+                      </Row>
+
+                      {/* Destination */}
+                      <h6>Destination:</h6>
+
+                      <label>Address: </label>
+                      <input type='text'
+                        disabled
+                        value={this.state.dest_address}
+                        className='form-control form-group' />
+
+                      <Row>
+                        <Col md="6">
+                          <label>City: </label>
+                          <input type='text'
+                            disabled
+                            value={this.state.dest_city}
+                            className='form-control form-group' />
+                        </Col>
+                        <Col md="6">
+                          <label>Postal Code: </label>
+                          <input type='text'
+                            disabled
+                            value={this.state.dest_postalCode}
+                            className='form-control form-group' />
+                        </Col>
+                      </Row>
+
+
+
+                      <label>Truck Class: <span className="text-center alert-danger">{this.state.errorTruckClass}</span></label>
+                      <select className='form-control form-group' value={this.state.assigned_truckClass} name="class" onChange={this.changeTruckClass}>
+                        <option disabled selected hidden value="">Select a truck class.</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                      </select>
+
+                      <label>License Plate: <span className="text-center alert-danger">{this.state.errorTruckPlate}</span></label>
+                      <input type='text'
+                        placeholder='PLATE###'
+                        onChange={this.changeTruckPlate}
+                        value={this.state.assigned_truckPlate}
+                        className='form-control form-group' />
+
+                      <label>Driver Email: <span className="text-center alert-danger">{this.state.errorTruckDriver}</span></label>
+                      <input type='email'
+                        placeholder='john.doe@email.com'
+                        onChange={this.changeTruckDriver}
+                        value={this.state.assigned_truckDriver}
+                        className='form-control form-group' />
+
+                      <span className="text-center alert-danger">{this.state.errorMessage}</span>
+
+                      <input type='submit' className='btn btn-primary btn-block'
+                        value='Submit' />
+                      <Link className="mt-3 btn btn-warning btn-block" to='/admin/order-manager'>Back</Link>
+                    </form>
                   </Col>
                 </Row>
+              </div>
+            </div>
+          </Col>
 
-                {/* Destination */}
-                <label>Destination Address: </label>
-                <input type='text'
-                  disabled
-                  value={this.state.dest_address}
-                  className='form-control form-group' />
+          {/* Schedule Table Right Side */}
+          <Col md="6">
+            <OrderSchedule columns={columns} data={this.state.data} />
+          </Col>
+        </Row>
 
-                <Row>
-                  <Col md="6">
-                    <label>Destination City: </label>
-                    <input type='text'
-                      disabled
-                      value={this.state.dest_city}
-                      className='form-control form-group' />
-                  </Col>
-                  <Col md="6">
-                    <label>Destination Postal Code: </label>
-                    <input type='text'
-                      disabled
-                      value={this.state.dest_postalCode}
-                      className='form-control form-group' />
-                  </Col>
-                </Row>
-
-                <Row>
-                  <Col md="6">
-                    <label>Cargo Type: </label>
-                    <input type='text'
-                      disabled
-                      value={this.state.CargoType}
-                      className='form-control form-group' />
-                  </Col>
-                  <Col md="3">
-                    <label>Cargo Weight (in kg): </label>
-                    <input type='text'
-                      disabled
-                      value={this.state.cargo_weight}
-                      className='form-control form-group' />
-                  </Col>
-
-                </Row>
-
-                <label>Truck Class: <span className="text-center alert-danger">{this.state.errorTruckClass}</span></label>
-                <select className='form-control form-group' value={this.state.assigned_truckClass} name="class" onChange={this.changeTruckClass}>
-                  <option disabled selected hidden value="">Select a truck class.</option>
-                  <option value="5">5</option>
-                  <option value="6">6</option>
-                  <option value="7">7</option>
-                  <option value="8">8</option>
-                  <option value="9">9</option>
-                </select>
-
-                <label>License Plate: <span className="text-center alert-danger">{this.state.errorTruckPlate}</span></label>
-                <input type='text'
-                  placeholder='PLATE###'
-                  onChange={this.changeTruckPlate}
-                  value={this.state.assigned_truckPlate}
-                  className='form-control form-group' />
-
-                <label>Driver Email: <span className="text-center alert-danger">{this.state.errorTruckDriver}</span></label>
-                <input type='email'
-                  placeholder='john.doe@email.com'
-                  onChange={this.changeTruckDriver}
-                  value={this.state.assigned_truckDriver}
-                  className='form-control form-group' />
-
-                <span className="text-center alert-danger">{this.state.errorMessage}</span>
-
-                <input type='submit' className='btn btn-primary btn-block'
-                  value='Submit' />
-                <Link className="mt-3 btn btn-warning btn-block" to='/admin/order-manager'>Back</Link>
-              </form>
-            </Col>
-          </Row>
-        </div>
       </div>
-
     );
   }
 }

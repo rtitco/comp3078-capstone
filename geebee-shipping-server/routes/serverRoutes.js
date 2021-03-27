@@ -4,11 +4,9 @@ const vehicleModel = require('../models/Vehicle.js')
 const orderModel = require('../models/Orders.js')
 const companyModel = require('../models/Companies.js')
 const bcrypt = require('bcrypt')
-// const store = require('store2');
 const { json } = require('express');
 const e = require('express');
 const app = express();
-// const router = express.Router();
 
 //CRUD Operations + routes
 
@@ -58,6 +56,17 @@ app.get('/orders', async (req, res) => {
         res.status(500).send(err);
     }
 });
+
+//GET for Order Schedule
+app.get('/orders/:date', async (req, res) => {
+    let OrderSchedule = await orderModel.find({delivery_date: req.params.date});
+    try {
+        res.send(OrderSchedule);
+    }
+    catch (err) {
+        res.status(500).send(err);
+    }
+})
 
 //==============================================POST FUNCTIONS==================================================//
 
