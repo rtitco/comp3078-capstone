@@ -117,7 +117,7 @@ class CreateTruckForm extends Component {
 
         //Check Year
         if (this.validateStringInput(/^[\d]{4}$/,
-            this.state.brand) == false || this.state.year <= 1990 || this.state.year > 2022) {
+            this.state.year) == false || this.state.year <= "1990" || this.state.year > "2022") {
             this.setState({
                 errorYear: "Invalid Year."
             })
@@ -142,7 +142,7 @@ class CreateTruckForm extends Component {
 
         //Check License Plate
         if (this.validateStringInput(/^[A-Za-z]{3,5}[ ]{0,1}[\d]{3,5}$/,
-            this.state.brand) == false) {
+            this.state.licensePlate) == false) {
             this.setState({
                 errorLicensePlate: "Invalid License Plate."
             })
@@ -154,8 +154,7 @@ class CreateTruckForm extends Component {
         }
 
         //Check Status
-        if (this.validateStringInput(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/,
-            this.state.status) == false) {
+        if (this.state.status.length < 1) {
             this.setState({
                 errorStatus: "Please select a status."
             })

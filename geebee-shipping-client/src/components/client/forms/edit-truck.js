@@ -32,7 +32,7 @@ class EditTruckForm extends Component {
     }
 
     validateStringInput = (regexStr, strInput) => {
-        if (strInput < 1) {
+        if (strInput.length < 1) {
             return false;
         }
         else if (strInput.match(regexStr) == null) {
@@ -116,7 +116,7 @@ class EditTruckForm extends Component {
 
         //Check Year
         if (this.validateStringInput(/^[\d]{4}$/,
-            this.state.brand) == false || this.state.year <= 1990 || this.state.year > 2022) {
+            this.state.year) == false || this.state.year <= "1990" || this.state.year > "2022") {
             this.setState({
                 errorYear: "Invalid Year."
             })
@@ -153,8 +153,7 @@ class EditTruckForm extends Component {
         }
 
         //Check Status
-        if (this.validateStringInput(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/,
-            this.state.status) == false) {
+        if (this.state.status.length < 1) {
             this.setState({
                 errorStatus: "Please select a status."
             })
