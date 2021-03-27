@@ -96,15 +96,7 @@ class LoginForm extends Component {
                     return <Redirect to='/admin' />
                 }
             }
-            if (this.state.currentUser.role == "Driver") {
-                if (this.state.currentUser.firstLogin === true) {
-                    return <Redirect to='/profile' />
-                }
-                else {
-                    return <Redirect to='/admin' />
-                }
-            }
-            if (this.state.currentUser.role == "Fleet Manager" || this.state.currentUser.role == "Distribution" || this.state.currentUser.role == "Retail") {
+            if (this.state.currentUser.role == "Fleet Manager" || this.state.currentUser.role == "Distribution" || this.state.currentUser.role == "Retail" || this.state.currentUser.role == "Driver") {
                 if (this.state.currentUser.firstLogin === true) {
                     return <Redirect to='/profile' />
                 }
