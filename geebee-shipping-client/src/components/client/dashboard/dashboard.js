@@ -15,21 +15,21 @@ class ClientDashboard extends Component {
         let sessionUser = JSON.parse(window.sessionStorage.getItem("currentUser"))
         this.state = {
             currentUser: sessionUser,
-            // currentUserRole: sessionUser.role,
             loading: true,
             mongoData: [],
         }
     }
 
-    //gets the user data from db
     async getOrderData() {
         const orderRes = await axios.get('http://localhost:8081/orders')
         this.setState({ loading: false, mongoData: orderRes.data })
     }
+
     async getFleetData() {
         const fleetRes = await axios.get('http://localhost:8081/fleet')
         this.setState({ loading: false, mongoData: fleetRes.data })
     }
+
     componentDidMount() {
         if (this.state.currentUser.role === "Retail" || this.state.currentUser.role === "Distribution" || this.state.currentUser.role === "Driver") {
             this.getOrderData()
@@ -57,10 +57,6 @@ class ClientDashboard extends Component {
         //Load Driver Dashboard
         if (this.state.currentUser.role === "Driver") {
             columns = [
-                // {
-                //     Header: 'Order ID',
-                //     accessor: '_id',
-                // },
                 {
                     Header: 'Delivery Date',
                     accessor: 'delivery_date',

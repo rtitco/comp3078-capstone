@@ -7,24 +7,26 @@ import ClientDashboard from './components/client/dashboard/dashboard';
 import CreateUserForm from './components/admin/forms/create/create-user';
 import CreateTruckForm from './components/client/forms/create-truck';
 import CreateOrderForm from './components/client/forms/create-order';
+import ViewRouteDetails from './components/client/views/route-details';
 
 
 function App() {
   return (
-      <Router>
-        <Switch>
-           <Route exact path="/">
-            <Redirect to="/login" />
-          </Route>
-          <Route path="/login" component={LoginForm} />
-          <Route path="/profile" component={ProfileForm} />
-          <Route path="/admin" component={AdminDashboard} />
-          <Route path="/dashboard" component={ClientDashboard} />
-          <Route path="/admin/users/add" component={CreateUserForm} />
-          <Route path="/fleet/add" component={CreateTruckForm} />
-          <Route path="/orders/add" component={CreateOrderForm} />
-        </Switch>
-      </Router>
+    <Router>
+      <Switch>
+        <Route exact path="/">
+          <Redirect to="/login" />
+        </Route>
+        <Route path="/login" component={LoginForm} />
+        <Route path="/profile" component={ProfileForm} />
+        <Route path="/admin" component={AdminDashboard} />
+        <Route path="/dashboard" component={ClientDashboard} />
+        <Route path="/admin/users/add" component={CreateUserForm} />
+        <Route path="/fleet/add" component={CreateTruckForm} />
+        <Route path="/orders/add" component={CreateOrderForm} />
+        <Route path="/route" component={ViewRouteDetails} />
+      </Switch>
+    </Router>
   );
 }
 
