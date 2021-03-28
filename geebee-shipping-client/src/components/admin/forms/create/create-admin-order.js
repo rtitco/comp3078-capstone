@@ -7,6 +7,7 @@ import { Redirect, Link } from "react-router-dom";
 import logo from '../../../shared/profile/gb.png';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
+import Form from 'react-bootstrap/Form';
 
 class CreateAdminOrderForm extends Component {
 
@@ -252,9 +253,6 @@ class CreateAdminOrderForm extends Component {
 
     return (
       <div>
-        {/* <p className="text-center">
-          <img src={logo} alt='logo' />
-        </p> */}
         <Row>
           {/* Form Left Side */}
           <Col md="6">
@@ -262,135 +260,158 @@ class CreateAdminOrderForm extends Component {
 
             <Row className="justify-content-center">
               <Col md="6">
-                <form onSubmit={this.onSubmit}>
+                <Form onSubmit={this.onSubmit}>
 
-                  <label>Delivery Date: </label>
-                  <input type='date'
-                    disabled
-                    value={this.state.deliveryDate}
-                    className='form-control form-group' />
+                  <Form.Group>
+                    <Form.Label>Delivery Date: </Form.Label>
+                    <Form.Control type='date'
+                      disabled
+                      value={this.state.deliveryDate}
+                      className='form-control form-group' />
+                  </Form.Group>
 
                   <Row>
                     <Col md="6">
-                      <label>Cargo Type: </label>
-                      <input type='text'
-                        disabled
-                        value={this.state.CargoType}
-                        className='form-control form-group' />
-                    </Col>
-                    <Col md="6">
-                      <label>Cargo Weight (kg):</label>
-                      <input type='text'
-                        disabled
-                        value={this.state.cargo_weight}
-                        className='form-control form-group' />
+                      <Form.Group>
+                        <Form.Label>Cargo Type: </Form.Label>
+                        <Form.Control type='text'
+                          disabled
+                          value={this.state.CargoType}
+                          className='form-control form-group' />
+                      </Form.Group>
                     </Col>
 
+                    <Col md="6">
+                      <Form.Group>
+                        <Form.Label>Cargo Weight (kg):</Form.Label>
+                        <Form.Control type='text'
+                          disabled
+                          value={this.state.cargo_weight}
+                          className='form-control form-group' />
+                      </Form.Group>
+                    </Col>
                   </Row>
 
                   {/* Origin */}
                   <h6>Origin:</h6>
-                  <label>Address: </label>
-                  <input type='text'
-                    disabled
-                    value={this.state.origin_address}
-                    className='form-control form-group' />
+                  <Form.Group>
+                    <Form.Label>Address: </Form.Label>
+                    <Form.Control type='text'
+                      disabled
+                      value={this.state.origin_address}
+                      className='form-control form-group' />
+                  </Form.Group>
 
                   <Row>
                     <Col md="6">
-                      <label>City: </label>
-                      <input type='text'
-                        disabled
-                        value={this.state.origin_city}
-                        className='form-control form-group' />
+                      <Form.Group>
+                        <Form.Label>City: </Form.Label>
+                        <Form.Control type='text'
+                          disabled
+                          value={this.state.origin_city}
+                          className='form-control form-group' />
+                      </Form.Group>
                     </Col>
+
                     <Col md="6">
-                      <label>Postal Code: </label>
-                      <input type='text'
-                        disabled
-                        value={this.state.origin_postalCode}
-                        className='form-control form-group' />
+                      <Form.Group>
+                        <Form.Label>Postal Code: </Form.Label>
+                        <Form.Control type='text'
+                          disabled
+                          value={this.state.origin_postalCode}
+                          className='form-control form-group' />
+                      </Form.Group>
                     </Col>
                   </Row>
 
                   {/* Destination */}
                   <h6>Destination:</h6>
-
-                  <label>Address: </label>
-                  <input type='text'
-                    disabled
-                    value={this.state.dest_address}
-                    className='form-control form-group' />
+                  <Form.Group>
+                    <Form.Label>Address: </Form.Label>
+                    <Form.Control type='text'
+                      disabled
+                      value={this.state.dest_address}
+                      className='form-control form-group' />
+                  </Form.Group >
 
                   <Row>
                     <Col md="6">
-                      <label>City: </label>
-                      <input type='text'
-                        disabled
-                        value={this.state.dest_city}
-                        className='form-control form-group' />
+                      <Form.Group>
+                        <Form.Label>City: </Form.Label>
+                        <Form.Control type='text'
+                          disabled
+                          value={this.state.dest_city}
+                          className='form-control form-group' />
+                      </Form.Group>
                     </Col>
+                    
                     <Col md="6">
-                      <label>Postal Code: </label>
-                      <input type='text'
-                        disabled
-                        value={this.state.dest_postalCode}
-                        className='form-control form-group' />
-                    </Col>
-                  </Row>
+                      <Form.Group>
+                        <Form.Label>Postal Code: </Form.Label>
+                        <Form.Control type='text'
+                          disabled
+                          value={this.state.dest_postalCode}
+                          className='form-control form-group' />
+                      </Form.Group>
+                    </Col >
+                  </Row >
 
-                  <label>Truck Class: <span className="text-center alert-danger">{this.state.errorTruckClass}</span></label>
-                  <select className='form-control form-group'
-                    value={this.state.assigned_truckClass}
-                    name="class"
-                    onChange={this.changeTruckClass}
-                  >
-                    <option disabled selected hidden value="">Select a truck class.</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                  </select>
+                  <Form.Group>
+                    <Form.Label>Truck Class: <span className="text-center alert-danger">{this.state.errorTruckClass}</span></Form.Label>
+                    <select className='form-control form-group'
+                      value={this.state.assigned_truckClass}
+                      name="class"
+                      onChange={this.changeTruckClass}
+                    >
+                      <option disabled selected hidden value="">Select a truck class.</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                      <option value="7">7</option>
+                      <option value="8">8</option>
+                      <option value="9">9</option>
+                    </select>
+                  </Form.Group >
 
-                  <label>License Plate: <span className="text-center alert-danger">{this.state.errorTruckPlate}</span></label>
-                  <Typeahead
-                    id="basic-typeahead-single"
-                    onChange={this.setTruckSelections}
-                    options={this.state.truckData}
-                    placeholder="PLATE###"
-                    selected={this.truckSelections}
-                  />
-                  <br></br>
+                  <Form.Group>
+                    <Form.Label>License Plate: <span className="text-center alert-danger">{this.state.errorTruckPlate}</span></Form.Label>
+                    <Typeahead
+                      id="basic-typeahead-single"
+                      onChange={this.setTruckSelections}
+                      options={this.state.truckData}
+                      placeholder="PLATE###"
+                      selected={this.truckSelections}
+                    />
+                  </Form.Group >
 
-                  <label>Driver Email: <span className="text-center alert-danger">{this.state.errorTruckDriver}</span></label>
-                  <Typeahead
-                    id="basic-typeahead-single"
-                    onChange={this.setDriverSelections}
-                    options={this.state.driverData}
-                    placeholder="Driver"
-                    selected={this.driverSelections}
-                  />
-                  <br></br>
+                  <Form.Group>
+                    <Form.Label>Driver Email: <span className="text-center alert-danger">{this.state.errorTruckDriver}</span></Form.Label>
+                    <Typeahead
+                      id="basic-typeahead-single"
+                      onChange={this.setDriverSelections}
+                      options={this.state.driverData}
+                      placeholder="Driver"
+                      selected={this.driverSelections}
+                    />
+                  </Form.Group>
 
                   <span className="text-center alert-danger">{this.state.errorMessage}</span>
 
                   <input type='submit' className='btn btn-primary btn-block'
                     value='Submit' />
                   <Link className="mt-3 btn btn-warning btn-block" to='/admin/order-manager'>Back</Link>
-                </form>
-              </Col>
-            </Row>
-          </Col>
+                </Form >
+              </Col >
+            </Row >
+          </Col >
 
           {/* Schedule Table Right Side */}
-          <Col md="6">
+          < Col md="6" >
             <label><h4>Current Deliveries on: {this.state.testDate}</h4></label>
             <OrderSchedule columns={columns} data={this.state.data} />
-          </Col>
-        </Row>
+          </Col >
+        </Row >
 
-      </div>
+      </div >
     );
   }
 }

@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import axios from 'axios';
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 
 class CreateCompanyForm extends Component {
 
@@ -102,8 +102,8 @@ class CreateCompanyForm extends Component {
     }
 
     // Company Address
-    if (this.validateStringInput(/^([\d]{1,5}[a-mA-M]{0,1}){1}[ ]{1}([A-Za-z]{2,}[ ]{0,1}){1,}[.]{0,1}$/, 
-      this.state.address) == false) { 
+    if (this.validateStringInput(/^([\d]{1,5}[a-mA-M]{0,1}){1}[ ]{1}([A-Za-z]{2,}[ ]{0,1}){1,}[.]{0,1}$/,
+      this.state.address) == false) {
       this.setState({
         errorAddress: "Invalid Address."
       })
@@ -151,7 +151,7 @@ class CreateCompanyForm extends Component {
         errorPostalCode: ''
       })
     }
-    
+
     // Company Phone
     if (this.validateStringInput(/^[\d]{10}$/,
       this.state.company_phone) == false) {
@@ -253,12 +253,6 @@ class CreateCompanyForm extends Component {
 
               <Form.Group controlId="province">
                 <Form.Label>Province<span className="text-center alert-danger">{this.state.errorProvince}</span></Form.Label>
-                {/* <Form.Control
-                  type="text"
-                  placeholder="Ontario"
-                  onChange={this.updateProvince}
-                  value={this.state.province}
-                /> */}
                 <select className='form-control form-group' value={this.state.province} onChange={this.updateProvince}>
                   <option disabled selected hidden value="">Select a Province.</option>
                   <option value="Alberta">Alberta</option>
@@ -298,11 +292,10 @@ class CreateCompanyForm extends Component {
               </Form.Group>
 
               <span className="text-center alert-danger">{this.state.errorMessage}</span>
-              <div className="float-right">
-                <Button variant="primary" type="submit">
-                  Submit
-                    </Button>
-              </div>
+              <Button variant="primary" type="submit" className="btn btn-primary btn-block">
+                Submit
+              </Button>
+              <Link className="mt-3 btn btn-warning btn-block" to='/admin/company-manager'>Back</Link>
             </Form>
           </Col>
         </Row>
