@@ -220,11 +220,9 @@ class CreateUserForm extends Component {
 
         return (
             <div>
-
-
-                <p className="text-center mt-5">
+                {/* <p className="text-center mt-5">
                     <img src={logo} alt='logo' />
-                </p>
+                </p> */}
                 <h1 className='text-center h2'>Register A New User</h1>
                 <Row className="justify-content-center">
                     <Col md="6">
