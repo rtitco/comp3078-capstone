@@ -7,6 +7,7 @@ import { Redirect, Link } from "react-router-dom";
 import logo from '../../../shared/profile/gb.png';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
+import Form from 'react-bootstrap/Form';
 
 class CreateAdminOrderForm extends Component {
 
@@ -49,8 +50,7 @@ class CreateAdminOrderForm extends Component {
     }
   }
 
-  //Get data from DB
-
+  //===================================GET DB DATA===================================//
   getOrderData = async () => {
     const orderRes = await axios.get(`http://localhost:8081/orders/${this.state.testDate}`)
     this.setState({ data: orderRes.data })
@@ -70,280 +70,294 @@ class CreateAdminOrderForm extends Component {
   }
 
   async getLicensePlates(classNum) {
-  const truckRes = await axios.get(`http://localhost:8081/fleet/${classNum}`)
-  let myTrucks = [];
-  let currentID = 0;
+    const truckRes = await axios.get(`http://localhost:8081/fleet/${classNum}`)
+    let myTrucks = [];
+    let currentID = 0;
 
-  truckRes.data.forEach(element => {
-    let truck = element.license_plate
-    myTrucks.push({ id: currentID, label: truck })
-    currentID++;
-  });
-  this.setState({ truckData: myTrucks })
-}
-
-componentDidMount() {
-  this.getOrderData()
-  this.getDrivers()
-}
-
-//Set selection functions
-
-setDriverSelections = (mySelection) => {
-  if (mySelection != undefined && mySelection[0] != undefined) {
-    this.setState({
-      driverSelections: [mySelection],
-      assigned_truckDriver: mySelection[0].label
-    })
-  }
-}
-
-setTruckSelections = (mySelection) => {
-  if (mySelection != undefined && mySelection[0] != undefined) {
-    this.setState({
-      truckSelections: [mySelection],
-      assigned_truckPlate: mySelection[0].label
-    })
-  }
-}
-
-//VALIDATION FUNCTIONS
-
-validateStringInput = (regexStr, strInput) => {
-  if (strInput < 1) {
-    return false;
-  }
-  else if (strInput.match(regexStr) == null) {
-    return false;
-  }
-  return true;
-}
-
-changeTruckClass = (event) => {
-  this.getLicensePlates(event.target.value)
-  this.setState({
-    assigned_truckClass: event.target.value
-  })
-}
-
-changeTruckPlate = (event) => {
-  this.setState({
-    assigned_truckPlate: event.target.value
-  })
-}
-
-changeTruckDriver = (event) => {
-  this.setState({
-    assigned_truckDriver: event.target.value
-  })
-}
-
-onSubmit = (event) => {
-  // prevents form from acting in default way, stops refreshing
-  event.preventDefault()
-
-  let classValid = false
-  let plateValid = false
-  let driverValid = false
-
-  //Validation
-  //Check Truck Class
-  if (this.state.assigned_truckClass.length < 1) {
-    this.setState({
-      errorTruckClass: "Please Select a Truck Class."
-    })
-  } else {
-    classValid = true
-    this.setState({
-      errorTruckClass: ''
-    })
+    truckRes.data.forEach(element => {
+      let truck = element.license_plate
+      myTrucks.push({ id: currentID, label: truck })
+      currentID++;
+    });
+    this.setState({ truckData: myTrucks })
   }
 
-  //Check Truck License Plate
-  if (this.validateStringInput(/^[A-Za-z]{3,5}[ ]{0,1}[\d]{3,5}$/,
-    this.state.assigned_truckPlate) == false) {
-    this.setState({
-      errorEmail: "Invalid Email Address."
-    })
-  } else {
-    plateValid = true
-    this.setState({
-      errorEmail: ''
-    })
+  componentDidMount() {
+    this.getOrderData()
+    this.getDrivers()
   }
 
-  //Check Driver Email
-  if (this.validateStringInput(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/,
-    this.state.assigned_truckDriver) == false) {
-    this.setState({
-      errorTruckDriver: "Invalid Email Address."
-    })
-  } else {
-    driverValid = true
-    this.setState({
-      errorTruckDriver: ''
-    })
-  }
+  //===================================SET AUTOCOMPLETE SELECTIONS===================================//
 
-  //POST DATA
-  if (classValid && plateValid && driverValid) {
-    const orderData = {
-      deliveryDate: this.state.deliveryDate,
-      origin_address: this.state.origin_address,
-      origin_city: this.state.origin_city,
-      origin_postalCode: this.state.origin_postalCode,
-      dest_address: this.state.dest_address,
-      dest_city: this.state.dest_city,
-      dest_postalCode: this.state.dest_postalCode,
-      cargo_type: this.state.cargo_type,
-      cargo_weight: this.state.cargo_weight,
-      assigned_truckClass: this.state.assigned_truckClass,
-      assigned_truckPlate: this.state.assigned_truckPlate,
-      assigned_truckDriver: this.state.assigned_truckDriver
-    }
-    axios.post('http://localhost:8081/admin/order-manager/schedule', orderData)
-      .then(res => {
-        this.setState({
-          updateSuccess: res.data.success,
-          errorTruckClass: res.data.messageTruckClass,
-          errorTruckPlate: res.data.messageTruckPlate,
-          errorTruckDriver: res.data.messageTruckDriver
-        })
-      }, (error) => {
-        this.setState({
-          errorMessage: "Update Failed."
-        })
+  setDriverSelections = (mySelection) => {
+    if (mySelection != undefined && mySelection[0] != undefined) {
+      this.setState({
+        driverSelections: [mySelection],
+        assigned_truckDriver: mySelection[0].label
       })
+    }
   }
-  else {
+
+  setTruckSelections = (mySelection) => {
+    if (mySelection != undefined && mySelection[0] != undefined) {
+      this.setState({
+        truckSelections: [mySelection],
+        assigned_truckPlate: mySelection[0].label
+      })
+    }
+  }
+
+  //===================================VALIDATE INPUT FUNCTIONS===================================//
+  validateStringInput = (regexStr, strInput) => {
+    if (strInput < 1) {
+      return false;
+    }
+    else if (strInput.match(regexStr) == null) {
+      return false;
+    }
+    return true;
+  }
+
+  changeTruckClass = (event) => {
+    this.getLicensePlates(event.target.value)
     this.setState({
-      errorMessage: "Update Failed."
+      assigned_truckClass: event.target.value
     })
   }
-}
 
-render() {
-  if (this.state.currentUser == null) {
-    return <Redirect to='/login' />
-  }
-  else if (this.state.currentUser.role != "Admin") {
-    return <Redirect to='/dashboard' />
-  }
-  else if (this.state.updateSuccess == true) {
-    return <Redirect to='/dashboard' />
+  changeTruckPlate = (event) => {
+    this.setState({
+      assigned_truckPlate: event.target.value
+    })
   }
 
-  const columns = [
-    {
-      Header: 'Origin Address',
-      accessor: data => data.origin_address + ', ' + data.origin_city + ', ' + data.origin_postalCode
-    },
-    {
-      Header: 'Destination Address',
-      accessor: data => data.destination_address + ', ' + data.destination_city + ', ' + data.destination_postalCode,
-    },
-    {
-      Header: 'Driver',
-      accessor: 'assigned_truck_driverEmail',
-    },
-    {
-      Header: 'Assigned Truck',
-      accessor: 'assigned_truck_plate',
+  changeTruckDriver = (event) => {
+    this.setState({
+      assigned_truckDriver: event.target.value
+    })
+  }
+
+  //===================================onSubmit()===================================//
+
+  onSubmit = (event) => {
+    // prevents form from acting in default way, stops refreshing
+    event.preventDefault()
+
+    let classValid = false
+    let plateValid = false
+    let driverValid = false
+
+    //===================================VALIDATION===================================//
+    //Check Truck Class
+    if (this.state.assigned_truckClass.length < 1) {
+      this.setState({
+        errorTruckClass: "Please Select a Truck Class."
+      })
+    } else {
+      classValid = true
+      this.setState({
+        errorTruckClass: ''
+      })
     }
-  ]
+    //Check Truck License Plate
+    if (this.validateStringInput(/^[A-Za-z]{3,5}[ ]{0,1}[\d]{3,5}$/,
+      this.state.assigned_truckPlate) == false) {
+      this.setState({
+        errorEmail: "Invalid Email Address."
+      })
+    } else {
+      plateValid = true
+      this.setState({
+        errorEmail: ''
+      })
+    }
+    //Check Driver Email
+    if (this.validateStringInput(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/,
+      this.state.assigned_truckDriver) == false) {
+      this.setState({
+        errorTruckDriver: "Invalid Email Address."
+      })
+    } else {
+      driverValid = true
+      this.setState({
+        errorTruckDriver: ''
+      })
+    }
 
-  return (
-    <div>
-      {/* <p className="text-center">
-          <img src={logo} alt='logo' />
-        </p> */}
-      <Row>
-        {/* Form Left Side */}
-        <Col md="6">
-          <h4 className='text-center'>Schedule Delivery Order</h4>
+    //===================================POST DATA===================================//
+    if (classValid && plateValid && driverValid) {
+      const orderData = {
+        deliveryDate: this.state.deliveryDate,
+        origin_address: this.state.origin_address,
+        origin_city: this.state.origin_city,
+        origin_postalCode: this.state.origin_postalCode,
+        dest_address: this.state.dest_address,
+        dest_city: this.state.dest_city,
+        dest_postalCode: this.state.dest_postalCode,
+        cargo_type: this.state.cargo_type,
+        cargo_weight: this.state.cargo_weight,
+        assigned_truckClass: this.state.assigned_truckClass,
+        assigned_truckPlate: this.state.assigned_truckPlate,
+        assigned_truckDriver: this.state.assigned_truckDriver
+      }
+      axios.post('http://localhost:8081/admin/order-manager/schedule', orderData)
+        .then(res => {
+          this.setState({
+            updateSuccess: res.data.success,
+            errorTruckClass: res.data.messageTruckClass,
+            errorTruckPlate: res.data.messageTruckPlate,
+            errorTruckDriver: res.data.messageTruckDriver
+          })
+        }, (error) => {
+          this.setState({
+            errorMessage: "Update Failed."
+          })
+        })
+    }
+    else {
+      this.setState({
+        errorMessage: "Update Failed."
+      })
+    }
+  }
 
-          <div>
-            <div>
-              <Row className="justify-content-center">
-                <Col md="6">
-                  <form onSubmit={this.onSubmit}>
+  render() {
+    if (this.state.currentUser == null) {
+      return <Redirect to='/login' />
+    }
+    else if (this.state.currentUser.role != "Admin") {
+      return <Redirect to='/dashboard' />
+    }
+    else if (this.state.updateSuccess == true) {
+      return <Redirect to='/dashboard' />
+    }
 
-                    <label>Delivery Date: </label>
-                    <input type='date'
+    const columns = [
+      {
+        Header: 'Origin Address',
+        accessor: data => data.origin_address + ', ' + data.origin_city + ', ' + data.origin_postalCode
+      },
+      {
+        Header: 'Destination Address',
+        accessor: data => data.destination_address + ', ' + data.destination_city + ', ' + data.destination_postalCode,
+      },
+      {
+        Header: 'Driver',
+        accessor: 'assigned_truck_driverEmail',
+      },
+      {
+        Header: 'Assigned Truck',
+        accessor: 'assigned_truck_plate',
+      }
+    ]
+
+    return (
+      <div>
+        <Row>
+          {/* Form Left Side */}
+          <Col md="6">
+            <h4 className='text-center'>Schedule Delivery Order</h4>
+
+            <Row className="justify-content-center">
+              <Col md="6">
+                <Form onSubmit={this.onSubmit}>
+
+                  <Form.Group>
+                    <Form.Label>Delivery Date: </Form.Label>
+                    <Form.Control type='date'
                       disabled
                       value={this.state.deliveryDate}
                       className='form-control form-group' />
+                  </Form.Group>
 
-                    <Row>
-                      <Col md="6">
-                        <label>Cargo Type: </label>
-                        <input type='text'
+                  <Row>
+                    <Col md="6">
+                      <Form.Group>
+                        <Form.Label>Cargo Type: </Form.Label>
+                        <Form.Control type='text'
                           disabled
                           value={this.state.CargoType}
                           className='form-control form-group' />
-                      </Col>
-                      <Col md="6">
-                        <label>Cargo Weight (kg):</label>
-                        <input type='text'
+                      </Form.Group>
+                    </Col>
+
+                    <Col md="6">
+                      <Form.Group>
+                        <Form.Label>Cargo Weight (kg):</Form.Label>
+                        <Form.Control type='text'
                           disabled
                           value={this.state.cargo_weight}
                           className='form-control form-group' />
-                      </Col>
+                      </Form.Group>
+                    </Col>
+                  </Row>
 
-                    </Row>
-
-                    {/* Origin */}
-                    <h6>Origin:</h6>
-                    <label>Address: </label>
-                    <input type='text'
+                  {/* Origin */}
+                  <h6>Origin:</h6>
+                  <Form.Group>
+                    <Form.Label>Address: </Form.Label>
+                    <Form.Control type='text'
                       disabled
                       value={this.state.origin_address}
                       className='form-control form-group' />
+                  </Form.Group>
 
-                    <Row>
-                      <Col md="6">
-                        <label>City: </label>
-                        <input type='text'
+                  <Row>
+                    <Col md="6">
+                      <Form.Group>
+                        <Form.Label>City: </Form.Label>
+                        <Form.Control type='text'
                           disabled
                           value={this.state.origin_city}
                           className='form-control form-group' />
-                      </Col>
-                      <Col md="6">
-                        <label>Postal Code: </label>
-                        <input type='text'
+                      </Form.Group>
+                    </Col>
+
+                    <Col md="6">
+                      <Form.Group>
+                        <Form.Label>Postal Code: </Form.Label>
+                        <Form.Control type='text'
                           disabled
                           value={this.state.origin_postalCode}
                           className='form-control form-group' />
-                      </Col>
-                    </Row>
+                      </Form.Group>
+                    </Col>
+                  </Row>
 
-                    {/* Destination */}
-                    <h6>Destination:</h6>
-
-                    <label>Address: </label>
-                    <input type='text'
+                  {/* Destination */}
+                  <h6>Destination:</h6>
+                  <Form.Group>
+                    <Form.Label>Address: </Form.Label>
+                    <Form.Control type='text'
                       disabled
                       value={this.state.dest_address}
                       className='form-control form-group' />
+                  </Form.Group >
 
-                    <Row>
-                      <Col md="6">
-                        <label>City: </label>
-                        <input type='text'
+                  <Row>
+                    <Col md="6">
+                      <Form.Group>
+                        <Form.Label>City: </Form.Label>
+                        <Form.Control type='text'
                           disabled
                           value={this.state.dest_city}
                           className='form-control form-group' />
-                      </Col>
-                      <Col md="6">
-                        <label>Postal Code: </label>
-                        <input type='text'
+                      </Form.Group>
+                    </Col>
+                    
+                    <Col md="6">
+                      <Form.Group>
+                        <Form.Label>Postal Code: </Form.Label>
+                        <Form.Control type='text'
                           disabled
                           value={this.state.dest_postalCode}
                           className='form-control form-group' />
-                      </Col>
-                    </Row>
+                      </Form.Group>
+                    </Col >
+                  </Row >
 
-                    <label>Truck Class: <span className="text-center alert-danger">{this.state.errorTruckClass}</span></label>
+                  <Form.Group>
+                    <Form.Label>Truck Class: <span className="text-center alert-danger">{this.state.errorTruckClass}</span></Form.Label>
                     <select className='form-control form-group'
                       value={this.state.assigned_truckClass}
                       name="class"
@@ -356,14 +370,10 @@ render() {
                       <option value="8">8</option>
                       <option value="9">9</option>
                     </select>
+                  </Form.Group >
 
-                    <label>License Plate: <span className="text-center alert-danger">{this.state.errorTruckPlate}</span></label>
-                    {/* <input type='text'
-                        placeholder='PLATE###'
-                        onChange={this.changeTruckPlate}
-                        value={this.state.assigned_truckPlate}
-                        className='form-control form-group' /> */}
-
+                  <Form.Group>
+                    <Form.Label>License Plate: <span className="text-center alert-danger">{this.state.errorTruckPlate}</span></Form.Label>
                     <Typeahead
                       id="basic-typeahead-single"
                       onChange={this.setTruckSelections}
@@ -371,10 +381,10 @@ render() {
                       placeholder="PLATE###"
                       selected={this.truckSelections}
                     />
-                    <br></br>
+                  </Form.Group >
 
-
-                    <label>Driver Email: <span className="text-center alert-danger">{this.state.errorTruckDriver}</span></label>
+                  <Form.Group>
+                    <Form.Label>Driver Email: <span className="text-center alert-danger">{this.state.errorTruckDriver}</span></Form.Label>
                     <Typeahead
                       id="basic-typeahead-single"
                       onChange={this.setDriverSelections}
@@ -382,30 +392,28 @@ render() {
                       placeholder="Driver"
                       selected={this.driverSelections}
                     />
-                    <br></br>
+                  </Form.Group>
 
-                    <span className="text-center alert-danger">{this.state.errorMessage}</span>
+                  <span className="text-center alert-danger">{this.state.errorMessage}</span>
 
-                    <input type='submit' className='btn btn-primary btn-block'
-                      value='Submit' />
-                    <Link className="mt-3 btn btn-warning btn-block" to='/admin/order-manager'>Back</Link>
-                  </form>
-                </Col>
-              </Row>
-            </div>
-          </div>
-        </Col>
+                  <input type='submit' className='btn btn-primary btn-block'
+                    value='Submit' />
+                  <Link className="mt-3 btn btn-warning btn-block" to='/admin/order-manager'>Back</Link>
+                </Form >
+              </Col >
+            </Row >
+          </Col >
 
-        {/* Schedule Table Right Side */}
-        <Col md="6">
-          <label><h4>Current Deliveries on: {this.state.testDate}</h4></label>
-          <OrderSchedule columns={columns} data={this.state.data} />
-        </Col>
-      </Row>
+          {/* Schedule Table Right Side */}
+          < Col md="6" >
+            <label><h4>Current Deliveries on: {this.state.testDate}</h4></label>
+            <OrderSchedule columns={columns} data={this.state.data} />
+          </Col >
+        </Row >
 
-    </div>
-  );
-}
+      </div >
+    );
+  }
 }
 
 export default CreateAdminOrderForm;
