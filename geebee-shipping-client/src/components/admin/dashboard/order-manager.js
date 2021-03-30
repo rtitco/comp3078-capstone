@@ -61,7 +61,7 @@ export default class OrderManager extends Component {
         <Button className="float-right mr-5 mb-2" variant="success">Add Order(Wrong Link)</Button>
         </Link>
         <div className="mx-5">
-          <Table columns={columns} data={this.state.data} />
+          <Table columns={columns} data={this.state.data} formType="Order"/>
         </div>
       </div>
     )

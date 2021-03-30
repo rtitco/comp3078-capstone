@@ -62,7 +62,7 @@ export default class UserManager extends Component {
         </Link>
         <div className="mx-5">
           {/* this is the data table */}
-          <Table columns={columns} data={this.state.userData} formType="user" tRole="admin"/>
+          <Table columns={columns} data={this.state.userData} formType="User" tRole="admin"/>
         </div>
       </div>
     )

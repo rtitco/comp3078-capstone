@@ -212,7 +212,7 @@ class EditTruckForm extends Component {
 
     render() {
         if (this.state.currentUser.role != "Fleet Manager" || this.state.currentUser == null) {
-            return <Redirect to='/client/fleet' />
+            return <Redirect to='/client' />
         }
         else if (this.state.updateSuccess == true) {
             return <Redirect to='/client/fleet' />
