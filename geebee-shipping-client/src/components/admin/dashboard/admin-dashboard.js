@@ -20,6 +20,9 @@ import OrderManager from './order-manager';
 import CreateAdminOrder from '../forms/create/create-admin-order';
 import { Component } from 'react';
 
+//delete
+import DeleteAnyEntry from '../../shared/react-table/delete-entry';
+
 class AdminDashboard extends Component {
 
     constructor(props) {
@@ -66,6 +69,8 @@ class AdminDashboard extends Component {
 
                                 <Route exact path="/admin/order-manager" component={OrderManager} />
                                 <Route exact path="/admin/order-manager/add" component={CreateAdminOrder} />
+
+                                <Route exact path="/admin/row/delete" component={DeleteAnyEntry} />
                             </Switch>
                         </Col>
                     </Row>

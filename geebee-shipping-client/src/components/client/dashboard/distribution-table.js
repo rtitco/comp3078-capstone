@@ -64,7 +64,7 @@ export default class DistributionTable extends Component {
         <Button className="float-right mr-5 mb-2" variant="success">Create Order</Button>
         </Link>
         <div className="mx-5">
-        <Table columns={columns} data={this.state.data} />
+        <Table columns={columns} data={this.state.data} formType="Order" />
         </div>
       </div>
     )

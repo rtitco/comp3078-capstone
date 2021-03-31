@@ -501,26 +501,6 @@ app.post('/admin/company-manager/edit', async (req, company) => {
     })
 })
 
-//===========================================DELETE FUNCTIONS ===============================================
-app.post('/admin/company-manager/delete', async (req, company) => {
-    await companyModel.findOneAndDelete({ company_name: req.body.company_name.toUpperCase() }, (err, companySearch) => {
-        console.log(companySearch);
-        if (err) {
-            company.send({
-                message: "Company delete failed."
-            })
-        }
-        else if (companySearch != null) {
-            companySearch.save();
-            company.send({ success: true, message: "Company successfully deleted." })
-        } else {
-            company.send({
-                message: "Company delete unsucessful."
-            })
-        }
-    })
-});
-
 //POST for Editing a Truck in the Database
 app.post('/fleet/edit', async (req, truck) => {
     await vehicleModel.findOne({ license_plate:  req.body.licensePlate.toUpperCase() }, (err, truckSearch) => {
@@ -545,6 +525,35 @@ app.post('/fleet/edit', async (req, truck) => {
         }
     });
 })
+
+
+//===========================================DELETE FUNCTIONS ===============================================
+app.post('/admin/company-manager/delete', async (req, res) => {
+    await companyModel.findOneAndDelete({ company_name: req.body.company_name.toUpperCase() }, (err, docs) => {
+        if (err){
+            console.log(err)
+            res.send({ success: false, message: "Company delete failed." })
+        } else if (docs != null) {
+            console.log("Deleted Company : ", docs);
+            res.send({ success: true, message: "Company successfully deleted." })
+        }
+        else {
+            console.log("Deleted Company : ", docs);
+            res.send({ success: true, message: "Company successfully deleted." })
+        }
+    })
+});
+
+app.post('/admin/user-manager/delete', async (req, user) => {
+    await companyModel.findOneAndDelete({ company_name: req.body.company_name.toUpperCase() }, (err, docs) => {
+        if (err){
+            console.log(err)
+        }
+        else{
+            console.log("Deleted User : ", docs);
+        }
+    })
+});
 
 
 module.exports = app;

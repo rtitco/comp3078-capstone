@@ -56,7 +56,7 @@ export default class FleetTable extends Component {
         <Button className="float-right mr-5 mb-2" variant="success">Add Truck</Button>
         </Link>
         <div className="mx-5">
-        <Table columns={columns} data={this.state.data} />
+        <Table columns={columns} data={this.state.data} formType="Fleet" />
         </div>
       </div>
     )

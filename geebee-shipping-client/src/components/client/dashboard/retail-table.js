@@ -45,7 +45,7 @@ export default class RetailTable extends Component {
       <div>
         <h1>Retail Table</h1>
         <div className="mx-5">
-        <Table columns={columns} data={this.state.data} />
+        <Table columns={columns} data={this.state.data} formType="Order" />
         </div>
       </div>
     )
