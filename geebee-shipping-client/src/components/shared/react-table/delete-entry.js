@@ -10,40 +10,52 @@ class DeleteAnyEntry extends Component {
         this.state = {
             currentUser: sessionUser,
             rowData: props.location.state.data,
-            deleteType:props.location.state.deleteType,
+            deleteType: props.location.state.deleteType,
             processComplete: false,
-            pathEnding:""
+            pathEnding: ""
         }
 
     }
 
-    componentDidMount(){
-        if(this.state.deleteType === "Company"){
-            axios.post('http://localhost:8081/admin/company-manager/delete', this.state.rowData)
-                .then(res => {
-                    this.setState({
-                        processComplete:true,
-                        pathEnding:"company-manager"
+    componentDidMount() {
+        if (!this.state.processComplete) {
+            if (this.state.deleteType === "Company") {
+                axios.post('http://localhost:8081/admin/company-manager/delete', this.state.rowData)
+                    .then(res => {
+                        this.setState({
+                            processComplete: true,
+                            pathEnding: "company-manager"
+                        })
+                    }, (error) => {
+                        alert("Delete failed");
                     })
-                }, (error) => {
-                   alert("Delete failed");
-                })
-        }else if(this.state.deleteType === "User"){
-            axios.post('http://localhost:8081/admin/user-manager/delete', this.state.rowData)
-                .then(res => {
-                    this.setState({
-                        processComplete:true,
-                        pathEnding:"user-manager"
+            } else if (this.state.deleteType === "User") {
+                axios.post('http://localhost:8081/admin/user-manager/delete', this.state.rowData)
+                    .then(res => {
+                        this.setState({
+                            processComplete: true,
+                            pathEnding: "user-manager"
+                        })
+                    }, (error) => {
+                        alert("Delete failed");
                     })
-                }, (error) => {
-                   alert("Delete failed");
-                })
+            } else if (this.state.deleteType === "Order") {
+                axios.post('http://localhost:8081/admin/order-manager/delete', this.state.rowData)
+                    .then(res => {
+                        this.setState({
+                            processComplete: true,
+                            pathEnding: "order-manager"
+                        })
+                    }, (error) => {
+                        alert("Delete failed");
+                    })
+            }
         }
     }
     render() {
         if (this.state.processComplete) {
             return <Redirect to={'/admin/' + this.state.pathEnding} />
-        } 
+        }
 
         return (
             <div>

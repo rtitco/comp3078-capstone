@@ -5,28 +5,30 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import axios from 'axios';
 import { Redirect, Link } from "react-router-dom";
-import logo from '../../shared/profile/gb.png'
+import logo from '../../../shared/profile/gb.png'
 
 
 class EditAdminOrderForm extends Component {
 
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     let sessionUser = JSON.parse(window.sessionStorage.getItem("currentUser"))
     this.state = {
       currentUser: sessionUser,
-      deliveryDate: '',
-      origin_address: '',
-      origin_city: '',
-      origin_postalCode: '',
-      dest_address: '',
-      dest_city: '',
-      dest_postalCode: '',
-      cargo_type: '',
-      cargo_weight: '',
-      assigned_truckClass: '',
-      assigned_truckPlate: '',
-      assigned_truckDriver: '',
+      id: props.location.state.data._id,
+      orderDate: props.location.state.data.order_date,
+      deliveryDate: props.location.state.data.delivery_date,
+      origin_address: props.location.state.data.origin_address,
+      origin_city: props.location.state.data.origin_city,
+      origin_postalCode: props.location.state.data.origin_postalCode,
+      dest_address: props.location.state.data.destination_address,
+      dest_city: props.location.state.data.destination_city,
+      dest_postalCode: props.location.state.data.destination_postalCode,
+      cargo_type: props.location.state.data.cargo_type,
+      cargo_weight: props.location.state.data.cargo_weight,
+      assigned_truckClass: props.location.state.data.assigned_truck_class,
+      assigned_truckPlate: props.location.state.data.assigned_truck_plate,
+      assigned_truckDriver: props.location.state.data.assigned_truck_driverEmail,
 
       updateSuccess: false,
       errorMessage: '',
@@ -117,9 +119,11 @@ class EditAdminOrderForm extends Component {
       })
     }
 
-    //POST DATA
+    //POST DATA - put id for edit/delete
     if (classValid && plateValid && driverValid) {
       const orderData = {
+        id: this.state.id,
+        orderDate: this.state.orderDate,
         deliveryDate: this.state.deliveryDate,
         origin_address: this.state.origin_address,
         origin_city: this.state.origin_city,
@@ -133,7 +137,7 @@ class EditAdminOrderForm extends Component {
         assigned_truckPlate: this.state.assigned_truckPlate,
         assigned_truckDriver: this.state.assigned_truckDriver
       }
-      axios.post('http://localhost:8081/admin/order-manager/schedule', orderData)
+      axios.post('http://localhost:8081/order-manager/edit', orderData)
         .then(res => {
           this.setState({
             updateSuccess: res.data.success,
@@ -159,10 +163,10 @@ class EditAdminOrderForm extends Component {
       return <Redirect to='/login' />
     }
     else if (this.state.currentUser.role != "Admin") {
-      return <Redirect to='/dashboard' />
+      return <Redirect to='/client' />
     }
-    else if (this.state.updateSuccess == true) {
-      return <Redirect to='/dashboard' />
+    else if (this.state.updateSuccess === true) {
+      return <Redirect to='/admin/order-manager' />
     }
 
     return (
@@ -236,7 +240,7 @@ class EditAdminOrderForm extends Component {
                     <label>Cargo Type: </label>
                     <input type='text'
                       disabled
-                      value={this.state.CargoType}
+                      value={this.state.cargo_type}
                       className='form-control form-group' />
                   </Col>
                   <Col md="3">
@@ -251,7 +255,7 @@ class EditAdminOrderForm extends Component {
 
                 <label>Truck Class: <span className="text-center alert-danger">{this.state.errorTruckClass}</span></label>
                 <select className='form-control form-group' value={this.state.assigned_truckClass} name="class" onChange={this.changeTruckClass}>
-                  <option disabled selected hidden value="">Select a truck class.</option>
+                  <option disabled hidden value="">Select a truck class.</option>
                   <option value="5">5</option>
                   <option value="6">6</option>
                   <option value="7">7</option>
