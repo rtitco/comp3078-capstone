@@ -9,7 +9,7 @@ import Popover from 'react-bootstrap/Popover';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Button from 'react-bootstrap/Button';
 
-import { FaTrash, FaPen } from 'react-icons/fa';
+import { FaTrash, FaPen, FaEye } from 'react-icons/fa';
 
 
 
@@ -20,6 +20,7 @@ function Table({ columns, data, formType, tRole }) {
   const [deleteInput, setDeleteInput] = useState("");
   const [disableCheck, setDisableCheck] = useState("");
   const [deleteCheck, setDeleteCheck] = useState(false);
+  const [viewCheck, setViewCheck] = useState(false);
 
   //------Selected Row  will be passed to the edit data form
   const [selectedRow, setSelectedRow] = useState([]);
@@ -28,11 +29,16 @@ function Table({ columns, data, formType, tRole }) {
     setSelectedRow(rowData);
     setTimeout(setEditCheck(true), 400);
   }
-  
+
 
   const deleteSelection = (rowData) => {
     setSelectedRow(rowData);
     setTimeout(setDeleteCheck(true), 400);
+  }
+
+  const viewSelection = (rowData) => {
+    setSelectedRow(rowData);
+    setTimeout(setViewCheck(true), 400);
   }
 
   //------Search Filter
@@ -83,7 +89,7 @@ function Table({ columns, data, formType, tRole }) {
     }
   }
 
-  if(deleteCheck){
+  if (deleteCheck) {
     if (formType != "") {
       return <Redirect to={{
         pathname: "./row/delete",
@@ -97,12 +103,21 @@ function Table({ columns, data, formType, tRole }) {
     }
   }
 
+  if (viewCheck) {
+    if (formType == "Driver") {
+      return <Redirect to={{
+        pathname: "./driver/route-details",
+        state: { data: selectedRow }
+      }} />;
+    } 
+  }
+
   //set input state and checks if input is delete 
   const confirmDeleteInput = e => {
     console.log(selectedRow);
     const value = e.target.value || undefined;
     setDeleteInput(value);
-    if(value === "delete"){
+    if (value === "delete") {
       setDisableCheck("delete")
     } else {
       setDisableCheck("")
@@ -125,13 +140,13 @@ function Table({ columns, data, formType, tRole }) {
       <Popover.Content>
         <p className="text-center p-0 m-0">Type <b>delete</b> to confirm. </p>
         <br />
-          <div className="input-group mb-3">
-            <input type="text" className={"form-control"}
-              value={deleteInput}
-              onChange={confirmDeleteInput}
-              placeholder={"Confirm here..."} />
-            <button disabled={!disableCheck} onClick={() => deleteSelection(selectedRow)} type='button' className="btn btn-sm btn-danger p-1">Delete</button>
-          </div>
+        <div className="input-group mb-3">
+          <input type="text" className={"form-control"}
+            value={deleteInput}
+            onChange={confirmDeleteInput}
+            placeholder={"Confirm here..."} />
+          <button disabled={!disableCheck} onClick={() => deleteSelection(selectedRow)} type='button' className="btn btn-sm btn-danger p-1">Delete</button>
+        </div>
 
       </Popover.Content>
     </Popover>
@@ -148,9 +163,19 @@ function Table({ columns, data, formType, tRole }) {
       </OverlayTrigger>
     </td>
   );
+
+  const viewColumn = (
+    <td>
+      <Button><FaEye /></Button>
+    </td>
+  );
+
   const editDeleteShow = (tRole) => {
-    if (tRole === "admin" || tRole === "distribution" || tRole === "Fleet Manager") {
+    if (tRole === "Admin" || tRole === "distribution" || tRole === "Fleet Manager") {
       return editDeleteColumn;
+    }
+    if (tRole === "Driver" || tRole === "Retail") {
+      return viewColumn;
     }
   }
 
