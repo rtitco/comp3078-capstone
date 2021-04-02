@@ -10,7 +10,6 @@ class EditCompanyForm extends Component {
 
   constructor(props) {
     super(props)
-    console.log(props);
     this.state = {
       sendSuccess: false,
       company_id: props.location.state.data.company_id,

@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt')
 const { json } = require('express');
 const e = require('express');
 const app = express();
-
+const ObjectID = require('mongodb').ObjectID;
 //CRUD Operations + routes
 
 //==============================================GET FUNCTIONS==================================================//
@@ -59,7 +59,7 @@ app.get('/orders', async (req, res) => {
 
 //GET for Order Schedule
 app.get('/orders/:date', async (req, res) => {
-    let OrderSchedule = await orderModel.find({delivery_date: req.params.date});
+    let OrderSchedule = await orderModel.find({ delivery_date: req.params.date });
     try {
         res.send(OrderSchedule);
     }
@@ -70,7 +70,7 @@ app.get('/orders/:date', async (req, res) => {
 
 //GET Orders for Specific Driver
 app.get('/orders/:email', async (req, res) => {
-    let Routes = await orderModel.find({assigned_truck_driverEmail: req.params.email});
+    let Routes = await orderModel.find({ assigned_truck_driverEmail: req.params.email });
     try {
         res.send(Routes);
     }
@@ -81,7 +81,7 @@ app.get('/orders/:email', async (req, res) => {
 
 //GET for Drivers
 app.get('/users/:role', async (req, res) => {
-    const Drivers = await userModel.find({role: req.params.role}); //Async function. Wait for results before posting
+    const Drivers = await userModel.find({ role: req.params.role }); //Async function. Wait for results before posting
     try {
         res.send(Drivers);
     }
@@ -91,7 +91,7 @@ app.get('/users/:role', async (req, res) => {
 });
 
 app.get('/fleet/:class', async (req, res) => {
-    const Trucks = await vehicleModel.find({truck_class: req.params.class, vehicle_status: "In Service"});
+    const Trucks = await vehicleModel.find({ truck_class: req.params.class, vehicle_status: "In Service" });
     try {
         res.send(Trucks);
     }
@@ -323,7 +323,7 @@ app.post('/fleet/add', async (req, truck) => {
 
 })
 
-//POST for Orders Table
+//POST for Orders Table --- why is there 2?
 app.post('/orders/add', async (req, order) => {
 
     let newOrder = new orderModel({
@@ -503,7 +503,7 @@ app.post('/admin/company-manager/edit', async (req, company) => {
 
 //POST for Editing a Truck in the Database
 app.post('/fleet/edit', async (req, truck) => {
-    await vehicleModel.findOne({ license_plate:  req.body.licensePlate.toUpperCase() }, (err, truckSearch) => {
+    await vehicleModel.findOne({ license_plate: req.body.licensePlate.toUpperCase() }, (err, truckSearch) => {
         if (err) {
             truck.send({
                 message: "Truck edit failed."
@@ -511,11 +511,11 @@ app.post('/fleet/edit', async (req, truck) => {
         }
         else if (truckSearch != null) {
             truckSearch.vehicle_brand = req.body.brand.toUpperCase(),
-            truckSearch.vehicle_model= req.body.model.toUpperCase(),
-            truckSearch.vehicle_year= req.body.year,
-            truckSearch.truck_class= req.body.truckClass,
-            truckSearch.license_plate= req.body.licensePlate.toUpperCase(),
-            truckSearch.vehicle_status= req.body.status
+                truckSearch.vehicle_model = req.body.model.toUpperCase(),
+                truckSearch.vehicle_year = req.body.year,
+                truckSearch.truck_class = req.body.truckClass,
+                truckSearch.license_plate = req.body.licensePlate.toUpperCase(),
+                truckSearch.vehicle_status = req.body.status
             truckSearch.save();
             truck.send({ success: true, message: "Truck successfully edited." })
         } else {
@@ -526,11 +526,44 @@ app.post('/fleet/edit', async (req, truck) => {
     });
 })
 
+app.post('/order-manager/edit', async (req, order) => {
+
+    await orderModel.findById(req.body.id, (err, orderSearch) => {
+        if (err) {
+            truck.send({
+                message: "Order edit failed."
+            })
+        }
+        else if (orderSearch != null) {
+            orderSearch.order_date = req.body.orderDate,
+            orderSearch.delivery_date = req.body.deliveryDate.toString(),
+            orderSearch.origin_address = req.body.origin_address.toUpperCase(),
+            orderSearch.origin_city = req.body.origin_city.toUpperCase(),
+            orderSearch.origin_postalCode = req.body.origin_postalCode.toUpperCase(),
+            orderSearch.destination_address = req.body.dest_address.toUpperCase(),
+            orderSearch.destination_city = req.body.dest_city.toUpperCase(),
+            orderSearch.destination_postalCode = req.body.dest_postalCode.toUpperCase(),
+            orderSearch.cargo_type = req.body.cargo_type.toUpperCase(),
+            orderSearch.cargo_weight = req.body.cargo_weight,
+            orderSearch.order_status = "Assigned",
+            orderSearch.assigned_truck_class = req.body.assigned_truckClass,
+            orderSearch.assigned_truck_plate = req.body.assigned_truckPlate,
+            orderSearch.assigned_truck_driverEmail = req.body.assigned_truckDriver
+            orderSearch.save();
+            order.send({ success: true, message: "Order successfully edited." })
+        } else {
+            console.log("Order not found");
+            order.send({
+                message: "Order edit unsucessful."
+            })
+        }
+    })
+});
 
 //===========================================DELETE FUNCTIONS ===============================================
 app.post('/admin/company-manager/delete', async (req, res) => {
     await companyModel.findOneAndDelete({ company_name: req.body.company_name.toUpperCase() }, (err, docs) => {
-        if (err){
+        if (err) {
             console.log(err)
             res.send({ success: false, message: "Company delete failed." })
         } else if (docs != null) {
@@ -544,12 +577,26 @@ app.post('/admin/company-manager/delete', async (req, res) => {
     })
 });
 
+app.post('/admin/order-manager/delete', async (req, order) => {
+    await orderModel.findByIdAndDelete(req.body._id, (err, docs) => {
+        if (err) {
+            console.log(err)
+            order.send({ success: false, message: "Order delete failed." })
+        } else if (docs != null) {
+            console.log("Deleted Order : ", docs);
+            order.send({ success: true, message: "Order successfully deleted." })
+        } else {
+            console.log("Deleted order : ", docs);
+        }
+    })
+});
+
 app.post('/admin/user-manager/delete', async (req, user) => {
-    await companyModel.findOneAndDelete({ company_name: req.body.company_name.toUpperCase() }, (err, docs) => {
-        if (err){
+    await companyModel.findByIdAndDelete({ company_name: req.body.company_name.toUpperCase() }, (err, docs) => {
+        if (err) {
             console.log(err)
         }
-        else{
+        else {
             console.log("Deleted User : ", docs);
         }
     })

@@ -60,15 +60,19 @@ function Table({ columns, data, formType, tRole }) {
 
   //checks what table type and sends to respective edit form
   if (editCheck) {
-    if (formType === "company") {
+    if (formType === "Company") {
       return <Redirect to={{
         pathname: "./company-manager/edit",
         state: { data: selectedRow }
       }} />;
     } else if (formType === "Fleet Manager") {
-      console.log(selectedRow)
       return <Redirect to={{
         pathname: "./fleet/edit",
+        state: { data: selectedRow }
+      }} />;
+    } if (formType === "Order") {
+      return <Redirect to={{
+        pathname: "./order-manager/edit",
         state: { data: selectedRow }
       }} />;
     } else {
@@ -95,6 +99,7 @@ function Table({ columns, data, formType, tRole }) {
 
   //set input state and checks if input is delete 
   const confirmDeleteInput = e => {
+    console.log(selectedRow);
     const value = e.target.value || undefined;
     setDeleteInput(value);
     if(value === "delete"){
@@ -139,7 +144,7 @@ function Table({ columns, data, formType, tRole }) {
       </OverlayTrigger>
 
       <OverlayTrigger rootClose={true} trigger="click" placement="top" overlay={deletePopover}>
-        <Button className="text-danger" variant="link"><FaTrash /></Button>
+        <Button className="text-danger" onClick={()=>setDeleteInput("")} variant="link"><FaTrash /></Button>
       </OverlayTrigger>
     </td>
   );

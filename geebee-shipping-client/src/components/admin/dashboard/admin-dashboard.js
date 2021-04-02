@@ -18,6 +18,7 @@ import CreateUserForm from '../forms/create/create-user';
 //orders
 import OrderManager from './order-manager';
 import CreateAdminOrder from '../forms/create/create-admin-order';
+import EditAdminOrder from '../forms/edit/edit-admin-order';
 import { Component } from 'react';
 
 //delete
@@ -69,6 +70,7 @@ class AdminDashboard extends Component {
 
                                 <Route exact path="/admin/order-manager" component={OrderManager} />
                                 <Route exact path="/admin/order-manager/add" component={CreateAdminOrder} />
+                                <Route exact path="/admin/order-manager/edit" component={EditAdminOrder} />
 
                                 <Route exact path="/admin/row/delete" component={DeleteAnyEntry} />
                             </Switch>
