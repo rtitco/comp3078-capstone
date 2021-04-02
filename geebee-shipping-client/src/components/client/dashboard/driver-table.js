@@ -60,7 +60,7 @@ export default class DriverTable extends Component {
       <div>
         <h1>Driver Manager</h1>
         <div className="mx-5">
-          <Table columns={columns} data={this.state.data} formType="Driver" />
+          <Table columns={columns} data={this.state.data} formType="Driver" tRole="Driver"/>
         </div>
       </div>
     )
