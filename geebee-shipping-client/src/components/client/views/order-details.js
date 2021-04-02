@@ -7,7 +7,7 @@ class ViewOrderDetails extends Component {
         let sessionUser = JSON.parse(window.sessionStorage.getItem("currentUser"))
         this.state = {
             currentUser: sessionUser,
-            
+            data: []
         }
     }
 

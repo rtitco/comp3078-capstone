@@ -16,11 +16,12 @@ import LoginNavBar from '../../shared/navbar/login-navbar';
 class LoginForm extends Component {
     constructor() {
         super()
+        let sessionUser = JSON.parse(window.sessionStorage.getItem("currentUser"))
         this.state = {
+            currentUser: sessionUser,
             email: '',
             password: '',
             loggedIn: false,
-            currentUser: null,
             errorMessage: "",
             firstLogin: false,
         }
@@ -87,6 +88,15 @@ class LoginForm extends Component {
 
 
     render() {
+        if (this.state.currentUser != null) {
+            if (this.state.currentUser.role == "Admin") {
+                return <Redirect to='/admin' />
+            }
+            else {
+                return <Redirect to='/client' />
+            }
+        }
+
         if (this.state.loggedIn === true) {
             if (this.state.currentUser.role == "Admin") {
                 if (this.state.currentUser.firstLogin === true) {

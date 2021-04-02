@@ -26,6 +26,7 @@ class ViewRouteDetails extends Component {
         // Pass through props from table (best way to do it, to save time and API calls)
         // Else call mongo (bad way)
         let myData = {
+            data: [],
             _id: "60552a390c7b511468d5a6e6",
             order_date: "2021-03-19",
             delivery_date: "2021-04-10",
