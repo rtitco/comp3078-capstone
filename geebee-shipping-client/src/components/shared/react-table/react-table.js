@@ -161,6 +161,9 @@ function Table({ columns, data, formType, tRole }) {
       <OverlayTrigger rootClose={true} trigger="click" placement="top" overlay={deletePopover}>
         <Button className="text-danger" onClick={()=>setDeleteInput("")} variant="link"><FaTrash /></Button>
       </OverlayTrigger>
+
+      <Button><FaEye /></Button>
+
     </td>
   );
 

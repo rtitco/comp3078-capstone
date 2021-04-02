@@ -11,14 +11,16 @@ export default class DriverTable extends Component {
 
     this.state = {
       currentUser: sessionUser,
-      data: [],
-      loading: true
+      mongoData: [],
+      loading: true,
+      testEmail: sessionUser.email
     }
   }
 
-  async getOrderData() {
-    const orderRes = await axios.get(`http://localhost:8081/orders/${this.state.currentUser.email}`)
-    this.setState({ loading: false, data: orderRes.data })
+  getOrderData = async () => {
+    // const orderRes = await axios.get(`http://localhost:8081/orders/${this.state.currentUser.email}`)
+    const orderRes = await axios.get(`http://localhost:8081/orders/${this.state.testEmail}`)
+    this.setState({ loading: false, mongoData: orderRes.data })
   }
 
   componentDidMount() {
@@ -58,9 +60,9 @@ export default class DriverTable extends Component {
     ]
     return (
       <div>
-        <h1>Driver Manager</h1>
+        <h1>Welcome, {this.state.currentUser.firstName} {this.state.currentUser.lastName}</h1>
         <div className="mx-5">
-          <Table columns={columns} data={this.state.data} formType="Driver" tRole="Driver"/>
+          <Table columns={columns} data={this.state.mongoData} formType="Driver" tRole="Driver"/>
         </div>
       </div>
     )
