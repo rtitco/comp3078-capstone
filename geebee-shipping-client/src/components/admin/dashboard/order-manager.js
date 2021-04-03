@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import Table from '../../shared/react-table/react-table'
 import axios from 'axios'
+import Tabs from 'react-bootstrap/Tabs'
+import Tab from 'react-bootstrap/Tab'
 
 export default class OrderManager extends Component {
   constructor(props) {
@@ -92,73 +94,35 @@ export default class OrderManager extends Component {
         <h1>Order Manager</h1>
         <br></br>
 
-        {/* Order Table Tabs */}
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-          <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#allOrders" type="button" role="tab" aria-controls="allOrders" aria-selected="true">
-              All Orders
-            </button>
-          </li>
-
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" id="completed-tab" data-bs-toggle="tab" data-bs-target="#completedOrders" type="button" role="tab" aria-controls="completedOrders" aria-selected="false">
-              Completed Orders
-            </button>
-          </li>
-
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" id="rejected-tab" data-bs-toggle="tab" data-bs-target="#rejectedOrders" type="button" role="tab" aria-controls="rejectedOrders" aria-selected="false">
-              Emergency Status
-            </button>
-          </li>
-
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" id="emergency-tab" data-bs-toggle="tab" data-bs-target="#emergencyOrders" type="button" role="tab" aria-controls="emergencyOrders" aria-selected="false">
-              Emergency Status
-            </button>
-          </li>
-        </ul>
-
-        {/* Tab Content */}
-        <div class="tab-content" id="myTabContent">
-          <div class="tab-pane fade show active" id="allOrders" role="tabpanel" aria-labelledby="all-tab">
+        <Tabs defaultActiveKey="all-tab" id="uncontrolled-tab-example">
+          <Tab eventKey="all-tab" title="All Orders">
             <div className="mx-5">
               <h5>All Orders</h5>
               <Table columns={columns} data={this.state.orderData} formType="Order" tRole="Admin" />
             </div>
+          </Tab>
 
+          <Tab eventKey="completed-tab" title="Completed Orders">
             <div className="mx-5">
               <h5>Completed Orders</h5>
               <Table columns={columns} data={this.state.completedData} formType="Order" tRole="Admin" />
             </div>
+          </Tab>
 
+          <Tab eventKey="rejected-tab" title="Rejected Orders">
             <div className="mx-5">
               <h5>Rejected Orders</h5>
               <Table columns={columns} data={this.state.rejectData} formType="Order" tRole="Admin" />
             </div>
+          </Tab>
 
+          <Tab eventKey="emergency-tab" title="Emergency Status">
             <div className="mx-5">
               <h5>Emergency Status</h5>
               <Table columns={columns} data={this.state.emergencyData} formType="Order" tRole="Admin" />
             </div>
-          </div>
-
-
-          <div class="tab-pane fade" id="completedOrders" role="tabpanel" aria-labelledby="completed-tab">
-
-          </div>
-
-
-          <div class="tab-pane fade" id="rejectedOrders" role="tabpanel" aria-labelledby="rejected-tab">
-
-          </div>
-
-
-          <div class="tab-pane fade" id="emergencyOrders" role="tabpanel" aria-labelledby="emergency-tab">
-
-          </div>
-
-        </div>
+          </Tab>
+        </Tabs>
 
       </div>
     )
