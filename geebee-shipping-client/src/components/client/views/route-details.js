@@ -194,7 +194,7 @@ class ViewRouteDetails extends Component {
                                         <label>Address:</label>
                                     </Col>
                                     <Col md="3">
-                                        <label>{this.state.origin_address}, {this.state.origin_city}</label>
+                                        <label><a href={`https://www.google.com/maps/dir/?api=1&destination=${this.state.origin_address}%2C+${this.state.origin_city}%2C+${this.state.origin_postalCode}`}>{this.state.origin_address}, {this.state.origin_city}</a></label>
                                     </Col>
                                 </Row>
 
@@ -205,7 +205,7 @@ class ViewRouteDetails extends Component {
                                         <GoogleMap
                                             mapContainerStyle={containerStyle}
                                             center={this.state.origin}
-                                            zoom={10}
+                                            zoom={15}
                                         >
                                             <Marker
                                                 onLoad={onLoad}
@@ -226,7 +226,7 @@ class ViewRouteDetails extends Component {
                                         <label>Address:</label>
                                     </Col>
                                     <Col md="3">
-                                        <label>{this.state.destination_address}, {this.state.destination_city}</label>
+                                        <label><a href={`https://www.google.com/maps/dir/?api=1&destination=${this.state.destination_address}%2C+${this.state.destination_city}%2C+${this.state.destination_postalCode}`}>{this.state.destination_address}, {this.state.destination_city}</a></label>
                                     </Col>
                                 </Row>
                                 <Row className="justify-content-center">
@@ -236,7 +236,7 @@ class ViewRouteDetails extends Component {
                                         <GoogleMap
                                             mapContainerStyle={containerStyle}
                                             center={this.state.destination}
-                                            zoom={10}
+                                            zoom={15}
                                         >
                                             <Marker
                                                 onLoad={onLoad}
