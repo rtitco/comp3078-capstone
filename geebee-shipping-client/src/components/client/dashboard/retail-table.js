@@ -17,13 +17,22 @@ export default class RetailTable extends Component {
     }
   }
 
-  async getOrderData() {
-    const orderRes = await axios.get('http://localhost:8081/orders')
+  async getOrderData(address) {
+    console.log("Searching Destination Address:")
+    console.log(address)
+    const orderRes = await axios.get(`http://localhost:8081/orders/address/${address}`)
     this.setState({ loading: false, data: orderRes.data })
   }
 
+  async getStoreAddress() {
+    console.log(this.state.currentUser.company)
+    const userWork = await axios.get(`http://localhost:8081/companies/name/${this.state.currentUser.company}`)
+    console.log(userWork.data[0].address)
+    this.getOrderData(userWork.data[0].address)
+  }
+
   componentDidMount() {
-    this.getOrderData()
+    this.getStoreAddress()
   }
 
   render() {

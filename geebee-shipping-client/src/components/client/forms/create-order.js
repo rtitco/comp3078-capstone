@@ -131,7 +131,7 @@ class CreateOrderForm extends Component {
         }
 
         //Check Origin Address
-        if (this.validateStringInput(/^([\d]{1,5}[a-mA-M]{0,1}){1}[ ]{0,1}([A-Za-z]{1}[a-z]{1,}[ ]{0,1}){1,}$/,
+        if (this.validateStringInput(/^([\d]{1,5}[a-mA-M]{0,1}){1}[ ]{1}([A-Za-z]{2,}[ ]{0,1}){1,}[.]{0,1}$/,
             this.state.origin_address) == false) {
             this.setState({
                 errorOriginAddress: "Invalid Address."
@@ -169,7 +169,7 @@ class CreateOrderForm extends Component {
             })
         }
         //Check Destination Address
-        if (this.validateStringInput(/^([\d]{1,5}[a-mA-M]{0,1}){1}[ ]{0,1}([A-Za-z]{1}[a-z]{1,}[ ]{0,1}){1,}$/,
+        if (this.validateStringInput(/^([\d]{1,5}[a-mA-M]{0,1}){1}[ ]{1}([A-Za-z]{2,}[ ]{0,1}){1,}[.]{0,1}$/,
             this.state.dest_address) == false) {
             this.setState({
                 errorDestAddress: "Invalid Address."

@@ -4,9 +4,8 @@ import { Marker } from '@react-google-maps/api';
 import Geocode from "react-geocode";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
 import axios from 'axios';
-import { Redirect, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 
 Geocode.setApiKey("AIzaSyB63fYe9MyaTJZbGVDSEYD2-wPXk37Q4jY")
