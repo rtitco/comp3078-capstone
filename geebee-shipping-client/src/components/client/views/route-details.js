@@ -23,6 +23,7 @@ class ViewRouteDetails extends Component {
             origin: {},
             destination: {},
 
+            delivery_id: props.location.state.data._id,
             delivery_date: props.location.state.data.delivery_date,
             cargo_type: props.location.state.data.cargo_type,
             cargo_weight: props.location.state.data.cargo_weight,
@@ -79,6 +80,7 @@ class ViewRouteDetails extends Component {
         return (
             <div>
                 <div>
+                    <h3>Order ID: {this.state.delivery_id}</h3>
                     <Row className="justify-content-center">
                         <Col md="4">
                             <label>Delivery Date:</label>

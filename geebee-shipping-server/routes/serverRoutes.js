@@ -323,7 +323,7 @@ app.post('/fleet/add', async (req, truck) => {
 
 })
 
-//POST for Orders Table --- why is there 2?
+//POST ==> Client Create Order
 app.post('/orders/add', async (req, order) => {
 
     let newOrder = new orderModel({
@@ -354,6 +354,7 @@ app.post('/orders/add', async (req, order) => {
     });
 })
 
+//POST ==> Admin Process Order Form
 app.post('/admin/order-manager/schedule', async (req, order) => {
 
     let newOrder = new orderModel({
