@@ -116,7 +116,7 @@ app.get('/orders/search/:orderStatus', async (req, res) => {
         }
     }
     else{
-        
+        res.status(500).send(err);
     }
 })
 
