@@ -45,8 +45,6 @@ class ViewRouteDetails extends Component {
             updateSuccess: ''
         }
 
-        //Uncomment for maps/geolocation
-        /*
         let originLat = {};
         let destLat = {};
         var originAddress = `${this.state.origin_address} ${this.state.origin_city} ${this.state.origin_postalCode}`
@@ -81,7 +79,7 @@ class ViewRouteDetails extends Component {
                 console.log(error)
             }
         );
-        */
+
         var status = ""
     }
 
@@ -138,14 +136,18 @@ class ViewRouteDetails extends Component {
 
 
     render() {
-        // const onLoad = marker => {
-        //     console.log('marker: ', marker)
-        // }
+        const onLoad = marker => {
+            console.log('marker: ', marker)
+        }
 
         return (
             <div>
-                <Link className="mt-3 btn btn-secondary" to='/client/driver'>Back</Link>
-                <h3>Order ID: {this.state.delivery_id}</h3>
+                <Row>
+                    <Link className="mt-3 btn btn-secondary" to='/client/driver'>Back</Link>
+                    <h3>Order ID: {this.state.delivery_id}</h3>
+                </Row>
+
+                {/* Buttons on Left, Details on Right */}
                 <Row>
                     <Col md="2">
                         <button type="button" class="btn btn-info btn-block" value="On Route" onClick={this.changeStatusOnRoute}>On Route</button>
@@ -155,99 +157,103 @@ class ViewRouteDetails extends Component {
                         <span className="text-center alert-danger">{this.state.updateSuccess}</span>
                     </Col>
 
-                    <Col md="4">
-                        <div>
-                            <Row className="justify-content-center">
-                                <Col md="4">
-                                    <label>Delivery Date:</label>
-                                </Col>
-                                <Col md="4">
-                                    <label>{this.state.delivery_date}</label>
-                                </Col>
-                            </Row>
-                            <Row className="justify-content-center">
-                                <Col md="4">
-                                    <label>Cargo:</label>
-                                </Col>
-                                <Col md="4">
-                                    <label>{this.state.cargo_type}</label>
-                                </Col>
-                            </Row>
-                            <Row className="justify-content-center">
-                                <Col md="4">
-                                    <label>Truck License Plate:</label>
-                                </Col>
-                                <Col md="4">
-                                    <label>{this.state.assigned_truck_plate}</label>
-                                </Col>
-                            </Row>
-                            <Row className="justify-content-center">
-                                <Col md="4">
-                                    <label>Origin Address:</label>
-                                </Col>
-                                <Col md="4">
-                                    <label>{this.state.origin_address}, {this.state.origin_city}</label>
-                                </Col>
-                            </Row>
+                    <Col md="10">
+                        <Row>
+                            <Col md="2">
+                                <label>Delivery Date:</label>
+                            </Col>
+                            <Col md="2">
+                                <label>{this.state.delivery_date}</label>
+                            </Col>
+                        </Row>
 
-                            <Row className="justify-content-center">
-                                {/*<LoadScript
-                            googleMapsApiKey="AIzaSyB63fYe9MyaTJZbGVDSEYD2-wPXk37Q4jY"
-                        >
-                            <GoogleMap
-                                mapContainerStyle={containerStyle}
-                                center={this.state.origin}
-                                zoom={10}
-                            >
-                                <Marker
-                                    // onLoad={onLoad}
-                                    position={this.state.origin}
-                                    visible={true}
-                                />
-                                <></>
-                            </GoogleMap>
-                        </LoadScript>
-                        */}
-                            </Row>
-                        </div>
+                        <Row>
+                            <Col md="2">
+                                <label>Cargo:</label>
+                            </Col>
+                            <Col md="2">
+                                <label>{this.state.cargo_type}</label>
+                            </Col>
+                        </Row>
 
-                        <div>
-                            <br></br>
-                        </div>
-                        <div>
-                            <Row className="justify-content-center">
-                                <Col md="4">
-                                    <label>Destination Address:</label>
-                                </Col>
-                                <Col md="4">
-                                    <label>{this.state.destination_address}, {this.state.destination_city}</label>
-                                </Col>
-                            </Row>
-                            <Row className="justify-content-center">
-                                {/* <LoadScript
-                            googleMapsApiKey="AIzaSyB63fYe9MyaTJZbGVDSEYD2-wPXk37Q4jY"
-                        >
-                            <GoogleMap
-                                mapContainerStyle={containerStyle}
-                                center={this.state.destination}
-                                zoom={10}
-                            >
-                                <Marker
-                                    // onLoad={onLoad}
-                                    position={this.state.destination}
-                                    visible={true}
-                                />
-                                <></>
-                            </GoogleMap>
-                        </LoadScript> */}
-                            </Row>
-                        </div>
+                        <Row>
+                            <Col md="2">
+                                <label>Truck License Plate:</label>
+                            </Col>
+                            <Col md="2">
+                                <label>{this.state.assigned_truck_plate}</label>
+                            </Col>
+                        </Row>
+
+                        <Row>
+                            <Col md="6" className="justify-content-center">
+                                <h5>Origin</h5>
+
+                                <Row className="justify-content-center">
+                                    <Col md="3">
+                                        <label>Address:</label>
+                                    </Col>
+                                    <Col md="3">
+                                        <label>{this.state.origin_address}, {this.state.origin_city}</label>
+                                    </Col>
+                                </Row>
+
+                                <Row className="justify-content-center">
+                                    <LoadScript
+                                        googleMapsApiKey="AIzaSyB63fYe9MyaTJZbGVDSEYD2-wPXk37Q4jY"
+                                    >
+                                        <GoogleMap
+                                            mapContainerStyle={containerStyle}
+                                            center={this.state.origin}
+                                            zoom={10}
+                                        >
+                                            <Marker
+                                                onLoad={onLoad}
+                                                position={this.state.origin}
+                                                visible={true}
+                                            />
+                                            <></>
+                                        </GoogleMap>
+                                    </LoadScript>
+                                </Row>
+                            </Col>
+
+                            <Col md="6">
+                                <h5>Destination</h5>
+
+                                <Row className="justify-content-center">
+                                    <Col md="3">
+                                        <label>Address:</label>
+                                    </Col>
+                                    <Col md="3">
+                                        <label>{this.state.destination_address}, {this.state.destination_city}</label>
+                                    </Col>
+                                </Row>
+                                <Row className="justify-content-center">
+                                    <LoadScript
+                                        googleMapsApiKey="AIzaSyB63fYe9MyaTJZbGVDSEYD2-wPXk37Q4jY"
+                                    >
+                                        <GoogleMap
+                                            mapContainerStyle={containerStyle}
+                                            center={this.state.destination}
+                                            zoom={10}
+                                        >
+                                            <Marker
+                                                onLoad={onLoad}
+                                                position={this.state.destination}
+                                                visible={true}
+                                            />
+                                            <></>
+                                        </GoogleMap>
+                                    </LoadScript>
+                                </Row>
+                            </Col>
+                        </Row>
                     </Col>
                 </Row>
-            </div>
+            </div >
         );
     }
 }
-
 
 export default ViewRouteDetails;
