@@ -10,7 +10,7 @@ export default class RetailTable extends Component {
     this.state = {
       data: [],
       loading: true,
-currentDate: new Date().toString()
+      currentDate: new Date().toString()
     }
   }
 
@@ -25,29 +25,30 @@ currentDate: new Date().toString()
 
   render() {
     const columns = [
-        {
-            Header: 'Order ID',
-            accessor: '_id',
-        },
-        {
-            Header: 'Order Date',
-            accessor: 'order_date',
-        },
-        {
-            Header: 'Delivery Date',
-            accessor: 'delivery_date',
-        },
-        {
-            Header: 'Status',
-            accessor: 'order_status'
-        }
+      {
+        Header: 'Order ID',
+        accessor: '_id',
+      },
+      {
+        Header: 'Order Date',
+        accessor: 'order_date',
+      },
+      {
+        Header: 'Delivery Date',
+        accessor: 'delivery_date',
+      },
+      {
+        Header: 'Status',
+        accessor: 'order_status'
+      }
     ]
     return (
       <div>
         <label>Last Refreshed: {this.state.currentDate}</label>
-        <h1>Retail Table</h1>
+        <h1>Welcome, {this.state.currentUser.firstName} {this.state.currentUser.lastName}</h1>
+
         <div className="mx-5">
-        <Table columns={columns} data={this.state.data} formType="Order" tRole="Retail"/>
+          <Table columns={columns} data={this.state.data} formType="Order" tRole="Retail" />
         </div>
       </div>
     )

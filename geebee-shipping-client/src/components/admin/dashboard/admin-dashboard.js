@@ -54,6 +54,8 @@ class AdminDashboard extends Component {
                             <AdminSideNav />
                         </Col>
                         <Col sm="8" md="8" lg="9" xl="10">
+                            <h1>Welcome, {this.state.currentUser.firstName} {this.state.currentUser.lastName}</h1>
+
                             {/*https://reactrouter.com/web/example/nesting for example of nested router
                             These routes will always start with /dashboard/admin/ as well (the default being the table view).
                             */}

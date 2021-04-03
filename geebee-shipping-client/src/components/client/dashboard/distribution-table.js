@@ -24,47 +24,48 @@ export default class DistributionTable extends Component {
 
   render() {
     const columns = [
-        {
-            Header: 'Order ID',
-            accessor: '_id',
-        },
-        {
-            Header: 'Order Date',
-            accessor: 'order_date',
-        },
-        {
-            Header: 'Delivery Date',
-            accessor: 'delivery_date',
-        },
-        {
-            Header: 'Origin Address',
-            accessor: data => data.origin_address + ', ' + data.origin_city + ', ' + data.origin_postalCode
-        },
-        {
-            Header: 'Destination Address',
-            accessor: data => data.destination_address + ', ' + data.destination_city + ', ' + data.destination_postalCode,
-        },
-        {
-            Header: 'Cargo Type',
-            accessor: 'cargo_type',
-        },
-        {
-            Header: 'Cargo Weight (kg)',
-            accessor: 'cargo_weight',
-        },
-        {
-            Header: 'Status',
-            accessor: 'order_status',
-        }
+      {
+        Header: 'Order ID',
+        accessor: '_id',
+      },
+      {
+        Header: 'Order Date',
+        accessor: 'order_date',
+      },
+      {
+        Header: 'Delivery Date',
+        accessor: 'delivery_date',
+      },
+      {
+        Header: 'Origin Address',
+        accessor: data => data.origin_address + ', ' + data.origin_city + ', ' + data.origin_postalCode
+      },
+      {
+        Header: 'Destination Address',
+        accessor: data => data.destination_address + ', ' + data.destination_city + ', ' + data.destination_postalCode,
+      },
+      {
+        Header: 'Cargo Type',
+        accessor: 'cargo_type',
+      },
+      {
+        Header: 'Cargo Weight (kg)',
+        accessor: 'cargo_weight',
+      },
+      {
+        Header: 'Status',
+        accessor: 'order_status',
+      }
     ]
     return (
       <div>
-        <h1>Order Manager</h1>
+        <h1>Welcome, {this.state.currentUser.firstName} {this.state.currentUser.lastName}</h1>
+
         <Link to="./orders/add">
-        <Button className="float-right mr-5 mb-2" variant="success">Create Order</Button>
+          <Button className="float-right mr-5 mb-2" variant="success">Create Order</Button>
         </Link>
         <div className="mx-5">
-        <Table columns={columns} data={this.state.data} formType="Order" />
+          <Table columns={columns} data={this.state.data} formType="Order" />
         </div>
       </div>
     )
