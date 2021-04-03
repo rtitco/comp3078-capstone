@@ -17,7 +17,6 @@ export default class UserManager extends Component {
   //gets the user data from db
   async getUsersData() {
     const res = await axios.get('http://localhost:8081/users')
-    console.log(res.data)
     this.setState({ loading: false, userData: res.data})
   }
   componentDidMount() {
