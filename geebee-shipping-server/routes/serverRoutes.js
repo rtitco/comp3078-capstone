@@ -561,7 +561,7 @@ app.post('/order-manager/edit', async (req, order) => {
     })
 });
 
-app.post('/route/:id', async (req, res) => {
+app.post('/order-status/:id', async (req, res) => {
     await orderModel.findById(req.body.id, (err, routeSearch) => {
         if (err) {
             res.send({

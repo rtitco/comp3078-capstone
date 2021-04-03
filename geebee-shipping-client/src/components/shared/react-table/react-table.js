@@ -110,6 +110,12 @@ function Table({ columns, data, formType, tRole }) {
         state: { data: selectedRow }
       }} />;
     } 
+    else if (formType == "Retail") {
+      return <Redirect to={{
+        pathname: "./retail/order-details",
+        state: { data: selectedRow }
+      }} />;
+    }
   }
 
   //set input state and checks if input is delete 
