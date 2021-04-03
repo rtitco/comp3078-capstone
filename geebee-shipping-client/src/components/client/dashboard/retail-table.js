@@ -7,7 +7,10 @@ import Button from 'react-bootstrap/Button';
 export default class RetailTable extends Component {
   constructor(props) {
     super(props)
+    let sessionUser = JSON.parse(window.sessionStorage.getItem("currentUser"))
+
     this.state = {
+      currentUser: sessionUser,
       data: [],
       loading: true,
       currentDate: new Date().toString()
@@ -48,7 +51,7 @@ export default class RetailTable extends Component {
         <h1>Welcome, {this.state.currentUser.firstName} {this.state.currentUser.lastName}</h1>
 
         <div className="mx-5">
-          <Table columns={columns} data={this.state.data} formType="Order" tRole="Retail" />
+          <Table columns={columns} data={this.state.data} formType="Retail" tRole="Retail" />
         </div>
       </div>
     )

@@ -122,7 +122,7 @@ class ViewRouteDetails extends Component {
             order_status: this.status
         }
 
-        axios.post(`http://localhost:8081/route/${this.state.id}`, orderData)
+        axios.post(`http://localhost:8081/order-status/${this.state.id}`, orderData)
             .then(res => {
                 this.setState({
                     updateSuccess: res.data.success,

@@ -7,7 +7,6 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-
 import DriverTable from './driver-table'
 import DistributionTable from './distribution-table'
 import FleetTable from './fleet-table'
@@ -18,6 +17,7 @@ import EditTruckForm from '../forms/edit-truck';
 import CreateOrderForm from '../forms/create-order';
 
 import ViewRouteDetails from '../views/route-details';
+import ViewOrderDetails from '../views/order-details';
 
 import DeleteAnyEntry from '../../shared/react-table/delete-entry';
 
@@ -79,7 +79,8 @@ class ClientDashboard extends Component {
                         <Route exact path="/client/orders/add" component={CreateOrderForm} />
 
                         <Route exact path="/client/driver/route-details" component={ViewRouteDetails} />
-                        
+                        <Route exact path="/client/retail/order-details" component={ViewOrderDetails} />
+
                         <Route exact path="/client/row/delete" component={DeleteAnyEntry} />
                     </Switch>
                 </Container>
