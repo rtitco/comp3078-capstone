@@ -6,6 +6,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
+import { Redirect, Link } from "react-router-dom";
+
 
 Geocode.setApiKey("AIzaSyB63fYe9MyaTJZbGVDSEYD2-wPXk37Q4jY")
 Geocode.setLanguage("en")
@@ -142,6 +144,7 @@ class ViewRouteDetails extends Component {
 
         return (
             <div>
+                <Link className="mt-3 btn btn-secondary" to='/client/driver'>Back</Link>
                 <h3>Order ID: {this.state.delivery_id}</h3>
                 <Row>
                     <Col md="2">
