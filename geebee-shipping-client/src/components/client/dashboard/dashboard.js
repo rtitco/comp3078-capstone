@@ -17,6 +17,8 @@ import CreateTruckForm from '../forms/create-truck';
 import EditTruckForm from '../forms/edit-truck';
 import CreateOrderForm from '../forms/create-order';
 
+import ViewRouteDetails from '../views/route-details';
+
 import DeleteAnyEntry from '../../shared/react-table/delete-entry';
 
 class ClientDashboard extends Component {
@@ -76,6 +78,7 @@ class ClientDashboard extends Component {
                         <Route exact path="/client/orders" component={DistributionTable} />
                         <Route exact path="/client/orders/add" component={CreateOrderForm} />
 
+                        <Route exact path="/client/driver/route-details" component={ViewRouteDetails} />
                         
                         <Route exact path="/client/row/delete" component={DeleteAnyEntry} />
                     </Switch>

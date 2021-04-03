@@ -162,14 +162,12 @@ function Table({ columns, data, formType, tRole }) {
         <Button className="text-danger" onClick={()=>setDeleteInput("")} variant="link"><FaTrash /></Button>
       </OverlayTrigger>
 
-      <Button><FaEye /></Button>
-
     </td>
   );
 
   const viewColumn = (
     <td>
-      <Button><FaEye /></Button>
+      <Button onClick={setViewCheck}><FaEye /></Button>
     </td>
   );
 

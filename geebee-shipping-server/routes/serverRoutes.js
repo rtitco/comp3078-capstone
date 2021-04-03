@@ -69,11 +69,8 @@ app.get('/orders/:date', async (req, res) => {
 })
 
 //GET Orders for Specific Driver
-app.get('/orders/:userEmail', async (req, res) => {
-    // let DriverRoutes = await orderModel.find({ assigned_truck_driverEmail: req.params.email });
-    console.log("Test")
-    let DriverRoutes = await orderModel.find({assigned_truck_driverEmail: req.params.userEmail});
-
+app.get('/driver/orders/:userEmail', async (req, res) => {
+    let DriverRoutes = await orderModel.find({ assigned_truck_driverEmail: req.params.userEmail });
     try {
         res.send(DriverRoutes);
     }
