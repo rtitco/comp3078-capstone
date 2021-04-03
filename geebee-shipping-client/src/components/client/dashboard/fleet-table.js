@@ -16,7 +16,7 @@ export default class FleetTable extends Component {
   async getFleetData() {
     const fleetRes = await axios.get('http://localhost:8081/fleet')
     this.setState({ loading: false, data: fleetRes.data })
-}
+  }
 
   componentDidMount() {
     this.getFleetData()
@@ -24,39 +24,40 @@ export default class FleetTable extends Component {
 
   render() {
     const columns = [
-        {
-            Header: 'Truck Class',
-            accessor: 'truck_class',
-        },
-        {
-            Header: 'Brand',
-            accessor: 'vehicle_brand',
-        },
-        {
-            Header: 'Model',
-            accessor: 'vehicle_model',
-        },
-        {
-            Header: 'Year',
-            accessor: 'vehicle_year',
-        },
-        {
-            Header: 'License Plate',
-            accessor: 'license_plate',
-        },
-        {
-            Header: 'Status',
-            accessor: 'vehicle_status'
-        }
+      {
+        Header: 'Truck Class',
+        accessor: 'truck_class',
+      },
+      {
+        Header: 'Brand',
+        accessor: 'vehicle_brand',
+      },
+      {
+        Header: 'Model',
+        accessor: 'vehicle_model',
+      },
+      {
+        Header: 'Year',
+        accessor: 'vehicle_year',
+      },
+      {
+        Header: 'License Plate',
+        accessor: 'license_plate',
+      },
+      {
+        Header: 'Status',
+        accessor: 'vehicle_status'
+      }
     ]
     return (
       <div>
-        <h1>Fleet</h1>
+        <h1>Welcome, {this.state.currentUser.firstName} {this.state.currentUser.lastName}</h1>
+
         <Link to="./fleet/add">
-        <Button className="float-right mr-5 mb-2" variant="success">Add Truck</Button>
+          <Button className="float-right mr-5 mb-2" variant="success">Add Truck</Button>
         </Link>
         <div className="mx-5">
-        <Table columns={columns} data={this.state.data} formType="Fleet" />
+          <Table columns={columns} data={this.state.data} formType="Fleet" />
         </div>
       </div>
     )
