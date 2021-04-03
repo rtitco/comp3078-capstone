@@ -13,14 +13,14 @@ export default class DriverTable extends Component {
       currentUser: sessionUser,
       mongoData: [],
       loading: true,
-      testEmail: sessionUser.email
+      testEmail: sessionUser.email,
+      currentDate: new Date().toString(),
     }
   }
 
   getOrderData = async () => {
-    // const orderRes = await axios.get(`http://localhost:8081/orders/${this.state.currentUser.email}`)
-    const orderRes = await axios.get(`http://localhost:8081/orders/${this.state.testEmail}`)
-    this.setState({ loading: false, mongoData: orderRes.data })
+    const orderRes = await axios.get(`http://localhost:8081/driver/orders/${this.state.currentUser.email}`)
+    this.setState({ mongoData: orderRes.data })
   }
 
   componentDidMount() {
@@ -29,6 +29,10 @@ export default class DriverTable extends Component {
 
   render() {
     const columns = [
+      {
+        Header: 'Order ID',
+        accessor: '_id'
+      },
       {
         Header: 'Delivery Date',
         accessor: 'delivery_date',
@@ -50,10 +54,6 @@ export default class DriverTable extends Component {
         accessor: 'assigned_truck_plate',
       },
       {
-        Header: 'Assigned Driver',
-        accessor: 'assigned_truck_driverEmail',
-      },
-      {
         Header: 'Status',
         accessor: 'order_status',
       }
@@ -61,8 +61,11 @@ export default class DriverTable extends Component {
     return (
       <div>
         <h1>Welcome, {this.state.currentUser.firstName} {this.state.currentUser.lastName}</h1>
+        <div>
+          <label>Last Updated: {this.state.currentDate}</label>
+        </div>
         <div className="mx-5">
-          <Table columns={columns} data={this.state.mongoData} formType="Driver" tRole="Driver"/>
+          <Table columns={columns} data={this.state.mongoData} formType="Driver" tRole="Driver" />
         </div>
       </div>
     )

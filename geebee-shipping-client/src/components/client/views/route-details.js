@@ -14,42 +14,32 @@ const containerStyle = {
     height: '400px'
 };
 
-// const center = {
-//     lat: -3.745,
-//     lng: -38.523
-// };
-
 class ViewRouteDetails extends Component {
     constructor(props) {
         super(props);
-        // props.originAddress
         // Pass through props from table (best way to do it, to save time and API calls)
-        // Else call mongo (bad way)
-        let myData = {
+        this.state = {
             data: [],
-            _id: "60552a390c7b511468d5a6e6",
-            order_date: "2021-03-19",
-            delivery_date: "2021-04-10",
-            origin_address: "209 SIXTH ST",
-            origin_city: "ETOBICOKE",
-            origin_postalCode: "M8V 3A8",
-            destination_address: "1806 DANFORTH AVE",
-            destination_city: "TORONTO",
-            destination_postalCode: "M4C 1H8",
-            cargo_type: "PRODUCE",
-            cargo_weight: 169.9,
-            order_status: "Processing",
-            assigned_truck_class: "",
-            assigned_truck_plate: "",
-            assigned_truck_driverId: "",
-            __v: 0
+            origin: {},
+            destination: {},
+
+            delivery_id: props.location.state.data._id,
+            delivery_date: props.location.state.data.delivery_date,
+            cargo_type: props.location.state.data.cargo_type,
+            cargo_weight: props.location.state.data.cargo_weight,
+            origin_address: props.location.state.data.origin_address,
+            origin_city: props.location.state.data.origin_city,
+            origin_postalCode: props.location.state.data.origin_postalCode,
+            destination_address: props.location.state.data.destination_address,
+            destination_city: props.location.state.data.destination_city,
+            destination_postalCode: props.location.state.data.destination_postalCode,
+            assigned_truck_plate: props.location.state.data.assigned_truck_plate
         }
 
         let originLat = {};
         let destLat = {};
-        var originAddress = `${myData.origin_address} ${myData.origin_city} ${myData.origin_postalCode}`
-        var destAddress = `${myData.destination_address} ${myData.destination_city} ${myData.destination_postalCode}`
-        // var originAddress = "209 Sixth St Etobicoke Ontario Canada M8V3A8"
+        var originAddress = `${this.state.origin_address} ${this.state.origin_city} ${this.state.origin_postalCode}`
+        var destAddress = `${this.state.destination_address} ${this.state.destination_city} ${this.state.destination_postalCode}`
 
         Geocode.fromAddress(originAddress).then(
             (response) => {
@@ -80,33 +70,23 @@ class ViewRouteDetails extends Component {
                 console.log(error)
             }
         );
-
-        this.state = {
-            origin: {},
-            destination: {},
-            orderData: myData
-        }
     }
 
     render() {
         const onLoad = marker => {
             console.log('marker: ', marker)
         }
-
-        // const position = {
-        // lat: 43.6041402,
-        // lng: -79.5053002
-        // }
-
+        
         return (
             <div>
                 <div>
+                    <h3>Order ID: {this.state.delivery_id}</h3>
                     <Row className="justify-content-center">
                         <Col md="4">
                             <label>Delivery Date:</label>
                         </Col>
                         <Col md="4">
-                            <label>{this.state.orderData.delivery_date}</label>
+                            <label>{this.state.delivery_date}</label>
                         </Col>
                     </Row>
                     <Row className="justify-content-center">
@@ -114,7 +94,7 @@ class ViewRouteDetails extends Component {
                             <label>Cargo:</label>
                         </Col>
                         <Col md="4">
-                            <label>{this.state.orderData.cargo_type}</label>
+                            <label>{this.state.cargo_type}</label>
                         </Col>
                     </Row>
                     <Row className="justify-content-center">
@@ -122,7 +102,7 @@ class ViewRouteDetails extends Component {
                             <label>Truck License Plate:</label>
                         </Col>
                         <Col md="4">
-                            <label>{this.state.orderData.assigned_truck_plate}</label>
+                            <label>{this.state.assigned_truck_plate}</label>
                         </Col>
                     </Row>
                     <Row className="justify-content-center">
@@ -130,7 +110,7 @@ class ViewRouteDetails extends Component {
                             <label>Origin Address:</label>
                         </Col>
                         <Col md="4">
-                            <label>{this.state.orderData.origin_address}, {this.state.orderData.origin_city}</label>
+                            <label>{this.state.origin_address}, {this.state.origin_city}</label>
                         </Col>
                     </Row>
                     <Row className="justify-content-center">
@@ -163,7 +143,7 @@ class ViewRouteDetails extends Component {
                             <label>Destination Address:</label>
                         </Col>
                         <Col md="4">
-                            <label>{this.state.orderData.destination_address}, {this.state.orderData.destination_city}</label>
+                            <label>{this.state.destination_address}, {this.state.destination_city}</label>
                         </Col>
                     </Row>
                     <Row className="justify-content-center">

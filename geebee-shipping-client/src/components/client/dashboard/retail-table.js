@@ -9,7 +9,8 @@ export default class RetailTable extends Component {
     super(props)
     this.state = {
       data: [],
-      loading: true
+      loading: true,
+currentDate: new Date().toString()
     }
   }
 
@@ -43,6 +44,7 @@ export default class RetailTable extends Component {
     ]
     return (
       <div>
+        <label>Last Refreshed: {this.state.currentDate}</label>
         <h1>Retail Table</h1>
         <div className="mx-5">
         <Table columns={columns} data={this.state.data} formType="Order" tRole="Retail"/>

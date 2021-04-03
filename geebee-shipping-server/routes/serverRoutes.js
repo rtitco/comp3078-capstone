@@ -69,11 +69,8 @@ app.get('/orders/:date', async (req, res) => {
 })
 
 //GET Orders for Specific Driver
-app.get('/orders/:userEmail', async (req, res) => {
-    // let DriverRoutes = await orderModel.find({ assigned_truck_driverEmail: req.params.email });
-    console.log("Test")
-    let DriverRoutes = await orderModel.find({assigned_truck_driverEmail: req.params.userEmail});
-
+app.get('/driver/orders/:userEmail', async (req, res) => {
+    let DriverRoutes = await orderModel.find({ assigned_truck_driverEmail: req.params.userEmail });
     try {
         res.send(DriverRoutes);
     }
@@ -326,7 +323,7 @@ app.post('/fleet/add', async (req, truck) => {
 
 })
 
-//POST for Orders Table --- why is there 2?
+//POST ==> Client Create Order
 app.post('/orders/add', async (req, order) => {
 
     let newOrder = new orderModel({
@@ -357,6 +354,7 @@ app.post('/orders/add', async (req, order) => {
     });
 })
 
+//POST ==> Admin Process Order Form
 app.post('/admin/order-manager/schedule', async (req, order) => {
 
     let newOrder = new orderModel({
