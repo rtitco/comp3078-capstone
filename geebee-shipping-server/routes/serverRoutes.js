@@ -512,11 +512,11 @@ app.post('/fleet/edit', async (req, truck) => {
         }
         else if (truckSearch != null) {
             truckSearch.vehicle_brand = req.body.brand.toUpperCase(),
-                truckSearch.vehicle_model = req.body.model.toUpperCase(),
-                truckSearch.vehicle_year = req.body.year,
-                truckSearch.truck_class = req.body.truckClass,
-                truckSearch.license_plate = req.body.licensePlate.toUpperCase(),
-                truckSearch.vehicle_status = req.body.status
+            truckSearch.vehicle_model = req.body.model.toUpperCase(),
+            truckSearch.vehicle_year = req.body.year,
+            truckSearch.truck_class = req.body.truckClass,
+            truckSearch.license_plate = req.body.licensePlate.toUpperCase(),
+            truckSearch.vehicle_status = req.body.status
             truckSearch.save();
             truck.send({ success: true, message: "Truck successfully edited." })
         } else {
@@ -537,19 +537,19 @@ app.post('/order-manager/edit', async (req, order) => {
         }
         else if (orderSearch != null) {
             orderSearch.order_date = req.body.orderDate,
-            orderSearch.delivery_date = req.body.deliveryDate.toString(),
-            orderSearch.origin_address = req.body.origin_address.toUpperCase(),
-            orderSearch.origin_city = req.body.origin_city.toUpperCase(),
-            orderSearch.origin_postalCode = req.body.origin_postalCode.toUpperCase(),
-            orderSearch.destination_address = req.body.dest_address.toUpperCase(),
-            orderSearch.destination_city = req.body.dest_city.toUpperCase(),
-            orderSearch.destination_postalCode = req.body.dest_postalCode.toUpperCase(),
-            orderSearch.cargo_type = req.body.cargo_type.toUpperCase(),
-            orderSearch.cargo_weight = req.body.cargo_weight,
-            orderSearch.order_status = "Assigned",
-            orderSearch.assigned_truck_class = req.body.assigned_truckClass,
-            orderSearch.assigned_truck_plate = req.body.assigned_truckPlate,
-            orderSearch.assigned_truck_driverEmail = req.body.assigned_truckDriver
+                orderSearch.delivery_date = req.body.deliveryDate.toString(),
+                orderSearch.origin_address = req.body.origin_address.toUpperCase(),
+                orderSearch.origin_city = req.body.origin_city.toUpperCase(),
+                orderSearch.origin_postalCode = req.body.origin_postalCode.toUpperCase(),
+                orderSearch.destination_address = req.body.dest_address.toUpperCase(),
+                orderSearch.destination_city = req.body.dest_city.toUpperCase(),
+                orderSearch.destination_postalCode = req.body.dest_postalCode.toUpperCase(),
+                orderSearch.cargo_type = req.body.cargo_type.toUpperCase(),
+                orderSearch.cargo_weight = req.body.cargo_weight,
+                orderSearch.order_status = "Assigned",
+                orderSearch.assigned_truck_class = req.body.assigned_truckClass,
+                orderSearch.assigned_truck_plate = req.body.assigned_truckPlate,
+                orderSearch.assigned_truck_driverEmail = req.body.assigned_truckDriver
             orderSearch.save();
             order.send({ success: true, message: "Order successfully edited." })
         } else {
@@ -560,6 +560,43 @@ app.post('/order-manager/edit', async (req, order) => {
         }
     })
 });
+
+app.post('/route/:id', async (req, res) => {
+    await orderModel.findById(req.body.id, (err, routeSearch) => {
+        if (err) {
+            res.send({
+                success: "Database error."
+            })
+        }
+
+        else if (routeSearch != null) {
+            routeSearch.order_date = req.body.orderDate,
+            routeSearch.delivery_date = req.body.deliveryDate,
+            routeSearch.origin_address = req.body.origin_address,
+            routeSearch.origin_city = req.body.origin_city,
+            routeSearch.origin_postalCode = req.body.origin_postalCode,
+            routeSearch.destination_address = req.body.dest_address,
+            routeSearch.destination_city = req.body.dest_city,
+            routeSearch.destination_postalCode = req.body.dest_postalCode,
+            routeSearch.cargo_type = req.body.cargo_type,
+            routeSearch.cargo_weight = req.body.cargo_weight,
+            routeSearch.order_status = req.body.order_status,
+            routeSearch.assigned_truck_class = req.body.assigned_truckClass,
+            routeSearch.assigned_truck_plate = req.body.assigned_truckPlate,
+            routeSearch.assigned_truck_driverEmail = req.body.assigned_truckDriver
+            routeSearch.save();
+            res.send({
+                success: "Update Success"
+            })
+        }
+
+        else {
+            order.send({
+                success: "Order edit unsucessful."
+            })
+        }
+    })
+})
 
 //===========================================DELETE FUNCTIONS ===============================================
 app.post('/admin/company-manager/delete', async (req, res) => {
