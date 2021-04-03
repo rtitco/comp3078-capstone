@@ -12,9 +12,10 @@ const ObjectID = require('mongodb').ObjectID;
 
 //==============================================GET FUNCTIONS==================================================//
 
-//GET for Users Table
+//==============================================Users Table==============================================
+// GET ==> All users
 app.get('/users', async (req, res) => {
-    const Users = await userModel.find({}); //Async function. Wait for results before posting
+    const Users = await userModel.find({});
     try {
         res.send(Users);
     }
@@ -23,9 +24,21 @@ app.get('/users', async (req, res) => {
     }
 });
 
-//GET for Companies
+// GET ==> User with Driver Role
+app.get('/users/:role', async (req, res) => {
+    const Drivers = await userModel.find({ role: req.params.role });
+    try {
+        res.send(Drivers);
+    }
+    catch (err) {
+        res.status(500).send(err);
+    }
+});
+
+//==============================================Companies Table==============================================
+//GET ==> All Companies
 app.get('/companies', async (req, res) => {
-    const Companies = await companyModel.find({}); //Async function. Wait for results before posting
+    const Companies = await companyModel.find({});
     try {
         res.send(Companies);
     }
@@ -34,8 +47,8 @@ app.get('/companies', async (req, res) => {
     }
 });
 
-
-//GET for Trucks
+//==============================================Trucks Table==============================================
+//GET ==> All Trucks in Fleet
 app.get('/fleet', async (req, res) => {
     const Vehicles = await vehicleModel.find({}); //Async function. Wait for results before posting
     try {
@@ -46,50 +59,7 @@ app.get('/fleet', async (req, res) => {
     }
 });
 
-//GET for Orders
-app.get('/orders', async (req, res) => {
-    const Orders = await orderModel.find({}); //Async function. Wait for results before posting
-    try {
-        res.send(Orders);
-    }
-    catch (err) {
-        res.status(500).send(err);
-    }
-});
-
-//GET for Order Schedule
-app.get('/orders/:date', async (req, res) => {
-    let OrderSchedule = await orderModel.find({ delivery_date: req.params.date });
-    try {
-        res.send(OrderSchedule);
-    }
-    catch (err) {
-        res.status(500).send(err);
-    }
-})
-
-//GET Orders for Specific Driver
-app.get('/driver/orders/:userEmail', async (req, res) => {
-    let DriverRoutes = await orderModel.find({ assigned_truck_driverEmail: req.params.userEmail });
-    try {
-        res.send(DriverRoutes);
-    }
-    catch (err) {
-        console.log(err)
-    }
-})
-
-//GET for Drivers
-app.get('/users/:role', async (req, res) => {
-    const Drivers = await userModel.find({ role: req.params.role }); //Async function. Wait for results before posting
-    try {
-        res.send(Drivers);
-    }
-    catch (err) {
-        res.status(500).send(err);
-    }
-});
-
+//GET ==> Particular Class and In Service
 app.get('/fleet/:class', async (req, res) => {
     const Trucks = await vehicleModel.find({ truck_class: req.params.class, vehicle_status: "In Service" });
     try {
@@ -100,12 +70,96 @@ app.get('/fleet/:class', async (req, res) => {
     }
 })
 
+//==============================================Orders Table==============================================
+//GET ==> All Orders
+app.get('/orders', async (req, res) => {
+    const Orders = await orderModel.find({}); //Async function. Wait for results before posting
+    try {
+        res.send(Orders);
+    }
+    catch (err) {
+        res.status(500).send(err);
+    }
+});
+
+//GET ==> Orders for Particular Date
+app.get('/orders/:date', async (req, res) => {
+    let OrderSchedule = await orderModel.find({ delivery_date: req.params.date });
+    try {
+        res.send(OrderSchedule);
+    }
+    catch (err) {
+        res.status(500).send(err);
+    }
+})
+
+//GET ==> Orders for Specific Driver
+app.get('/driver/orders/:userEmail', async (req, res) => {
+    let DriverRoutes = await orderModel.find({ assigned_truck_driverEmail: req.params.userEmail });
+    try {
+        res.send(DriverRoutes);
+    }
+    catch (err) {
+        console.log(err)
+    }
+})
+
+//GET ==> Orders With Specific Status
+app.get('/orders/search/:orderStatus', async (req, res) => {
+    if (req.params.orderStatus == "Emergency" || req.params.orderStatus == "Rejected" || req.params.orderStatus == "Completed") {
+        const Orders = await orderModel.find({ order_status: req.params.orderStatus });
+        try {
+            res.send(Orders);
+        }
+        catch (err) {
+            res.status(500).send(err);
+        }
+    }
+    else{
+        
+    }
+})
+
 //==============================================POST FUNCTIONS==================================================//
 
-//POST ==> Admin Creating New User
+//POST ==> Login Form
+app.post('/login', async (req, loginRes) => {
+    var foundBool = false;
+    var foundUser = "";
 
+    //find matching email address in the database
+    await userModel.find({ email: req.body.email }, (err, userRes) => {
+        if (err) {
+            loginRes.send({ success: false, message: "Incorrect Email/Password Provided." })
+        }
+        //if db entry found, save to foundUser
+        if (userRes.length > 0) {
+            foundBool = true;
+            foundUser = userRes[0]
+        }
+        else {
+            loginRes.send({ message: "Incorrect Email/Password Provided." })
+        }
+    });
+
+    if (foundBool) {
+        //check if the req.body.password matches the db entry
+        bcrypt.compare(req.body.password, foundUser.password, (err, res) => {
+            if (err) {
+                loginRes.send({ success: false, message: "Incorrect Email/Password Provided." })
+            }
+            if (res == true) {
+                loginRes.send({ user: foundUser, success: true, message: "Login Successful." })
+            }
+            if (res == false) {
+                loginRes.send({ success: false, message: "Incorrect Email/Password Provided." })
+            }
+        })
+    }
+})
+
+//POST ==> Admin ==> Create New User
 app.post('/admin/users/add', async (req, newUser) => {
-
     //Check if email exists in DB
     userModel.find({ email: req.body.email }, (err, exists) => {
         if (err) {
@@ -159,7 +213,6 @@ app.post('/admin/users/add', async (req, newUser) => {
                         }
                     })
                 }
-
             })
         }
     })
@@ -227,43 +280,7 @@ app.post('/admin/users/edit', async (req, editUser) => {
     })
 })
 
-//POST for Login Form
-app.post('/login', async (req, loginRes) => {
-    var foundBool = false;
-    var foundUser = "";
-
-    //find matching email address in the database
-    await userModel.find({ email: req.body.email }, (err, userRes) => {
-        if (err) {
-            loginRes.send({ success: false, message: "Incorrect Email/Password Provided." })
-        }
-        //if db entry found, save to foundUser
-        if (userRes.length > 0) {
-            foundBool = true;
-            foundUser = userRes[0]
-        }
-        else {
-            loginRes.send({ message: "Incorrect Email/Password Provided." })
-        }
-    });
-
-    if (foundBool) {
-        //check if the req.body.password matches the db entry
-        bcrypt.compare(req.body.password, foundUser.password, (err, res) => {
-            if (err) {
-                loginRes.send({ success: false, message: "Incorrect Email/Password Provided." })
-            }
-            if (res == true) {
-                loginRes.send({ user: foundUser, success: true, message: "Login Successful." })
-            }
-            if (res == false) {
-                loginRes.send({ success: false, message: "Incorrect Email/Password Provided." })
-            }
-        })
-    }
-})
-
-//POST for Companies Table
+//POST ==> Admin ==> Create New Company
 app.post('/admin/company-manager/add', async (req, company) => {
     await companyModel.find({ company_name: req.body.company_name.toUpperCase() }, (err, companySearch) => {
         if (err) {
@@ -298,9 +315,7 @@ app.post('/admin/company-manager/add', async (req, company) => {
     })
 })
 
-
-
-//POST for Adding New Truck to Database
+//POST ==> Admin ==> Add New Truck to Fleet
 app.post('/fleet/add', async (req, truck) => {
 
     let newTruck = new vehicleModel({
@@ -323,7 +338,7 @@ app.post('/fleet/add', async (req, truck) => {
 
 })
 
-//POST ==> Client Create Order
+//POST ==> Client ==> Create Order
 app.post('/orders/add', async (req, order) => {
 
     let newOrder = new orderModel({
@@ -353,39 +368,6 @@ app.post('/orders/add', async (req, order) => {
         }
     });
 })
-
-//POST ==> Admin Process Order Form
-app.post('/admin/order-manager/schedule', async (req, order) => {
-
-    let newOrder = new orderModel({
-        order_date: req.body.order_date,
-        delivery_date: req.body.deliveryDate,
-        origin_address: req.body.origin_address,
-        origin_city: req.body.origin_city,
-        origin_postalCode: req.body.origin_postalCode,
-        destination_address: req.body.dest_address,
-        destination_city: req.body.dest_city,
-        destination_postalCode: req.body.dest_postalCode,
-        cargo_type: req.body.cargo_type,
-        cargo_weight: req.body.cargo_weight,
-        order_status: "Awaiting Delivery",
-        assigned_truck_class: req.body.assigned_truckClass,
-        assigned_truck_plate: req.body.assigned_truckPlate,
-        assigned_truck_driverEmail: req.body.assigned_truckDriver //check if email in user db
-    });
-
-    newOrder.save((err, res) => {
-        if (err) {
-            //error handling
-            order.send({ message: "Error creating order." })
-        }
-        else {
-            order.send({ success: true });
-        }
-    });
-})
-
-
 
 //===========================================EDIT FUNCTIONS ===============================================
 
@@ -476,7 +458,7 @@ app.post('/profile', async (req, updateRes) => {
     })
 })
 
-//POST for Edit Companies Table
+//POST ==> Admin ==> Edit Companies Table
 app.post('/admin/company-manager/edit', async (req, company) => {
     await companyModel.findOne({ company_name: req.body.previousCompanyName.toUpperCase() }, (err, companySearch) => {
         console.log(companySearch);
@@ -502,7 +484,7 @@ app.post('/admin/company-manager/edit', async (req, company) => {
     })
 })
 
-//POST for Editing a Truck in the Database
+//POST ==> Fleet Manager ==> Edit Truck in Fleet
 app.post('/fleet/edit', async (req, truck) => {
     await vehicleModel.findOne({ license_plate: req.body.licensePlate.toUpperCase() }, (err, truckSearch) => {
         if (err) {
@@ -512,11 +494,11 @@ app.post('/fleet/edit', async (req, truck) => {
         }
         else if (truckSearch != null) {
             truckSearch.vehicle_brand = req.body.brand.toUpperCase(),
-            truckSearch.vehicle_model = req.body.model.toUpperCase(),
-            truckSearch.vehicle_year = req.body.year,
-            truckSearch.truck_class = req.body.truckClass,
-            truckSearch.license_plate = req.body.licensePlate.toUpperCase(),
-            truckSearch.vehicle_status = req.body.status
+                truckSearch.vehicle_model = req.body.model.toUpperCase(),
+                truckSearch.vehicle_year = req.body.year,
+                truckSearch.truck_class = req.body.truckClass,
+                truckSearch.license_plate = req.body.licensePlate.toUpperCase(),
+                truckSearch.vehicle_status = req.body.status
             truckSearch.save();
             truck.send({ success: true, message: "Truck successfully edited." })
         } else {
@@ -527,6 +509,7 @@ app.post('/fleet/edit', async (req, truck) => {
     });
 })
 
+//POST ==> Admin ==> Schedule Order Delivery
 app.post('/order-manager/edit', async (req, order) => {
 
     await orderModel.findById(req.body.id, (err, orderSearch) => {
@@ -546,7 +529,7 @@ app.post('/order-manager/edit', async (req, order) => {
                 orderSearch.destination_postalCode = req.body.dest_postalCode.toUpperCase(),
                 orderSearch.cargo_type = req.body.cargo_type.toUpperCase(),
                 orderSearch.cargo_weight = req.body.cargo_weight,
-                orderSearch.order_status = "Assigned",
+                orderSearch.order_status = "Awaiting Delivery",
                 orderSearch.assigned_truck_class = req.body.assigned_truckClass,
                 orderSearch.assigned_truck_plate = req.body.assigned_truckPlate,
                 orderSearch.assigned_truck_driverEmail = req.body.assigned_truckDriver
@@ -561,6 +544,7 @@ app.post('/order-manager/edit', async (req, order) => {
     })
 });
 
+//POST ==> Client ==> Driver/Retail Edit Order Status
 app.post('/order-status/:id', async (req, res) => {
     await orderModel.findById(req.body.id, (err, routeSearch) => {
         if (err) {
@@ -568,28 +552,26 @@ app.post('/order-status/:id', async (req, res) => {
                 success: "Database error."
             })
         }
-
         else if (routeSearch != null) {
             routeSearch.order_date = req.body.orderDate,
-            routeSearch.delivery_date = req.body.deliveryDate,
-            routeSearch.origin_address = req.body.origin_address,
-            routeSearch.origin_city = req.body.origin_city,
-            routeSearch.origin_postalCode = req.body.origin_postalCode,
-            routeSearch.destination_address = req.body.dest_address,
-            routeSearch.destination_city = req.body.dest_city,
-            routeSearch.destination_postalCode = req.body.dest_postalCode,
-            routeSearch.cargo_type = req.body.cargo_type,
-            routeSearch.cargo_weight = req.body.cargo_weight,
-            routeSearch.order_status = req.body.order_status,
-            routeSearch.assigned_truck_class = req.body.assigned_truckClass,
-            routeSearch.assigned_truck_plate = req.body.assigned_truckPlate,
-            routeSearch.assigned_truck_driverEmail = req.body.assigned_truckDriver
+                routeSearch.delivery_date = req.body.deliveryDate,
+                routeSearch.origin_address = req.body.origin_address,
+                routeSearch.origin_city = req.body.origin_city,
+                routeSearch.origin_postalCode = req.body.origin_postalCode,
+                routeSearch.destination_address = req.body.dest_address,
+                routeSearch.destination_city = req.body.dest_city,
+                routeSearch.destination_postalCode = req.body.dest_postalCode,
+                routeSearch.cargo_type = req.body.cargo_type,
+                routeSearch.cargo_weight = req.body.cargo_weight,
+                routeSearch.order_status = req.body.order_status,
+                routeSearch.assigned_truck_class = req.body.assigned_truckClass,
+                routeSearch.assigned_truck_plate = req.body.assigned_truckPlate,
+                routeSearch.assigned_truck_driverEmail = req.body.assigned_truckDriver
             routeSearch.save();
             res.send({
                 success: "Update Success"
             })
         }
-
         else {
             order.send({
                 success: "Order edit unsucessful."
