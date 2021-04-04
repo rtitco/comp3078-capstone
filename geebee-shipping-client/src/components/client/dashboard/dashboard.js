@@ -21,6 +21,8 @@ import ViewOrderDetails from '../views/order-details';
 
 import DeleteAnyEntry from '../../shared/react-table/delete-entry';
 
+import SupportFooter from '../footer/footer';
+
 class ClientDashboard extends Component {
     constructor(props) {
         super(props)
@@ -62,7 +64,7 @@ class ClientDashboard extends Component {
         }
         return (
             <div>
-                <LoginNavBar />
+                <LoginNavBar fname={this.state.currentUser.firstName} lname={this.state.currentUser.lastName} />
                 <Container fluid>
                     <Switch>
                         <Route exact path="/client">
@@ -84,6 +86,7 @@ class ClientDashboard extends Component {
                         <Route exact path="/client/row/delete" component={DeleteAnyEntry} />
                     </Switch>
                 </Container>
+                <SupportFooter/>
             </div>
         );
     }

@@ -1,15 +1,13 @@
 html,
 body {
-  height: 100%;
-  background-color:whitesmoke;
+  height: 100%;  
 }
 
 .login-bg{
   height: 100%;
-  background-image: url('bg-login.jpg');
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-position: center;
+  background-color:#31326f;
+  width: 100%;
+  position: absolute;
 }
 .login-box {
   position: absolute;
@@ -17,6 +15,15 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   background-color:white;
+}
+.btn-login{
+  background-color:#9ddfd3;
+  color:#31326f;
+  border-color:whitesmoke;
+}
+.btn-login:hover{
+  background-color:#31326f;
+  color:white;
 }
 @media (max-width: 500px) {
   .login-box {

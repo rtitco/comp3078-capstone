@@ -66,8 +66,6 @@ export default class RetailTable extends Component {
     return (
       <div>
         <label>Last Refreshed: {this.state.currentDate}</label>
-        <h1>Welcome, {this.state.currentUser.firstName} {this.state.currentUser.lastName}</h1>
-
         <Tabs defaultActiveKey="all-tab" id="uncontrolled-tab-example">
           <Tab eventKey="all-tab" title="In Progress">
             <div className="mx-5">

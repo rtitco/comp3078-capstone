@@ -122,13 +122,13 @@ class LoginForm extends Component {
         return (
             <div className="login-bg">
                 {/* <LoginNavBar /> */}
-                <Container className="login-bg">
+                <Container className="">
                     <Row className="justify-content-md-center">
-                        <Col className="login-box p-5" lg="3" md="6" sm="8">
+                        <Col className="login-box rounded p-5" lg="3" md="6" sm="8">
                             <p className="text-center">
                                 <img src={logo} alt='logo' />
                             </p>
-                            <Form onSubmit={this.onSubmit}>
+                            <Form className="" onSubmit={this.onSubmit}>
                                 <Form.Group controlId="formBasicEmail">
                                     <Form.Label>Email address</Form.Label>
                                     <Form.Control
@@ -149,7 +149,7 @@ class LoginForm extends Component {
                                     />
                                 </Form.Group>
                                 <span className="text-center alert-danger">{this.state.errorMessage}</span>
-                                <Button variant="primary" className="btn-block" type="submit">
+                                <Button variant="primary" className="btn-block btn-login" type="submit">
                                     Log In
                     </Button>
                             </Form>

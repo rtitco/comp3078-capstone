@@ -139,14 +139,13 @@ class ViewRouteDetails extends Component {
 
         return (
             <div>
-                <Row>
-                    <Link className="mt-3 btn btn-secondary" to='/client/driver'>Back</Link>
-                    <h3>Order ID: {this.state.delivery_id}</h3>
-                </Row>
+
+                    <Link className="mx-3 my-2 btn btn-secondary " to='/client/driver'>Back</Link>
+
 
                 {/* Buttons on Left, Details on Right */}
                 <Row>
-                    <Col md="2">
+                    <Col md="2" >
                         <button type="button" class="btn btn-info btn-block" value="On Route" onClick={this.changeStatusOnRoute}>On Route</button>
                         <button type="button" class="btn btn-warning btn-block" value="Delay" onClick={this.changeStatusDelay}>Delay</button>
                         <button type="button" class="btn btn-danger btn-block" value="Emergency" onClick={this.changeStatusEmergency}>Emergency</button>
@@ -155,47 +154,54 @@ class ViewRouteDetails extends Component {
                     </Col>
 
                     <Col md="10">
-                        <Row>
-                            <Col md="2">
+                        <Row className="justify-content-center">
+                            <Col  className="bg-white pt-4" md="4">
+                                <h3 className="pb-3">Order ID: {this.state.delivery_id}</h3>
+                                <h2 className="h5">Details:</h2>
+                                <hr/>
+                            </Col>
+                        </Row>
+                        <Row className="justify-content-center">
+                            <Col  className="bg-white" xs="6" md="2">
                                 <label>Delivery Date:</label>
                             </Col>
-                            <Col md="2">
+                            <Col  className="bg-white" xs="6" md="2">
                                 <label>{this.state.delivery_date}</label>
                             </Col>
                         </Row>
 
-                        <Row>
-                            <Col md="2">
+                        <Row className="justify-content-center">
+                            <Col  className="bg-white" xs="6" md="2">
                                 <label>Cargo:</label>
                             </Col>
-                            <Col md="2">
+                            <Col  className="bg-white" xs="6" md="2">
                                 <label>{this.state.cargo_type}</label>
                             </Col>
                         </Row>
 
-                        <Row>
-                            <Col md="2">
+                        <Row className="justify-content-center">
+                            <Col  className="bg-white"xs="6" md="2">
                                 <label>Truck License Plate:</label>
                             </Col>
-                            <Col md="2">
+                            <Col  className="bg-white pb-4" xs="6" md="2">
                                 <label>{this.state.assigned_truck_plate}</label>
                             </Col>
                         </Row>
 
-                        <Row>
-                            <Col md="6" className="justify-content-center">
+                        <Row className="my-4">
+                            <Col md="6" className="bg-white py-5">
                                 <h5>Origin</h5>
-
+                                <hr/>
                                 <Row className="justify-content-center">
-                                    <Col md="3">
+                                    <Col md="2">
                                         <label>Address:</label>
                                     </Col>
-                                    <Col md="3">
+                                    <Col md="6">
                                         <label><a target="_blank" href={`https://www.google.com/maps/dir/?api=1&destination=${this.state.origin_address}%2C+${this.state.origin_city}%2C+${this.state.origin_postalCode}`}>{this.state.origin_address}, {this.state.origin_city}</a></label>
                                     </Col>
                                 </Row>
 
-                                <Row className="justify-content-center">
+                                <Row className="justify-content-center ">
                                     <LoadScript
                                         googleMapsApiKey="AIzaSyB63fYe9MyaTJZbGVDSEYD2-wPXk37Q4jY"
                                     >
@@ -215,14 +221,14 @@ class ViewRouteDetails extends Component {
                                 </Row>
                             </Col>
 
-                            <Col md="6">
+                            <Col md="6" className="bg-white mt-4 py-5">
                                 <h5>Destination</h5>
-
+                                <hr/>
                                 <Row className="justify-content-center">
-                                    <Col md="3">
+                                    <Col md="2">
                                         <label>Address:</label>
                                     </Col>
-                                    <Col md="3">
+                                    <Col md="6">
                                         <label><a target="_blank" href={`https://www.google.com/maps/dir/?api=1&destination=${this.state.destination_address}%2C+${this.state.destination_city}%2C+${this.state.destination_postalCode}`}>{this.state.destination_address}, {this.state.destination_city}</a></label>
                                     </Col>
                                 </Row>

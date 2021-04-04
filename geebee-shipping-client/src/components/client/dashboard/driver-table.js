@@ -16,7 +16,6 @@ export default class DriverTable extends Component {
       mongoData: [],
       loading: true,
       testEmail: sessionUser.email,
-      currentDate: new Date().toString(),
     }
   }
 
@@ -32,41 +31,25 @@ export default class DriverTable extends Component {
   render() {
     const columns = [
       {
-        Header: 'Order ID',
-        accessor: '_id'
-      },
-      {
         Header: 'Delivery Date',
         accessor: 'delivery_date',
-      },
-      {
-        Header: 'Origin Address',
-        accessor: data => data.origin_address + ', ' + data.origin_city + ', ' + data.origin_postalCode
       },
       {
         Header: 'Destination Address',
         accessor: data => data.destination_address + ', ' + data.destination_city + ', ' + data.destination_postalCode,
       },
       {
-        Header: 'Cargo Type',
-        accessor: 'cargo_type',
+        Header: 'Order Status',
+        accessor: 'order_status'
       },
-      {
-        Header: 'Assigned Truck - License Plate',
-        accessor: 'assigned_truck_plate',
-      },
-      {
-        Header: 'Status',
-        accessor: 'order_status',
-      }
+
     ]
     return (
       <div>
-        <h1>Welcome, {this.state.currentUser.firstName} {this.state.currentUser.lastName}</h1>
         <div>
-          <label>Last Updated: {this.state.currentDate}</label>
+          <label>Last Updated: {new Date().toString()}</label>
         </div>
-        <div className="mx-5">
+        <div >
           <Table columns={columns} data={this.state.mongoData} formType="Driver" tRole="Driver" />
         </div>
       </div>

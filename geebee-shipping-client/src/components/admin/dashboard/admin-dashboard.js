@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-d
 
 //Switch to logged in header (keeping for formatting), which will have the logo at the top and the logout / profile access
 import LoginNavBar from '../../shared/navbar/login-navbar';
-import AdminSideNav from './admin-side-nav/admin-side-nav';
+import AdminNavBar from './admin-navbar/admin-navbar';
 //Company
 import CompanyManager from './company-manager';
 import CreateCompany from '../forms/create/create-company';
@@ -46,16 +46,10 @@ class AdminDashboard extends Component {
         }
         return (
             <div>
-                <LoginNavBar />
+                      <AdminNavBar fname={this.state.currentUser.firstName} lname={this.state.currentUser.lastName} />
                 <Container className="mt-4" fluid>
                     <Row className="">
-                        <Col sm="3" md="3" lg="3" xl="2">
-                            {/*This will be the side navigation the routes links here must start with /dashboard/admin/ */}
-                            <AdminSideNav />
-                        </Col>
-                        <Col sm="9" md="9" lg="9" xl="10">
-                            <h1>Welcome, {this.state.currentUser.firstName} {this.state.currentUser.lastName}</h1>
-
+                        <Col>
                             {/*https://reactrouter.com/web/example/nesting for example of nested router
                             These routes will always start with /dashboard/admin/ as well (the default being the table view).
                             */}
