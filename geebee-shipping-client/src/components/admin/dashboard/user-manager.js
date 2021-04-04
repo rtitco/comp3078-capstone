@@ -90,35 +90,35 @@ export default class UserManager extends Component {
         </Link>
 
         <Tabs defaultActiveKey="admin-tab" id="uncontrolled-tab-example">
-          <Tab eventKey="admin-tab" title="All Orders">
+          <Tab eventKey="admin-tab" title="Admin">
             <div className="mx-5">
               <h5>Admin</h5>
               <Table columns={columns} data={this.state.adminData} formType="User" tRole="admin" />
             </div>
           </Tab>
 
-          <Tab eventKey="retail-tab" title="Completed Orders">
+          <Tab eventKey="retail-tab" title="Retail">
             <div className="mx-5">
               <h5>Retail</h5>
               <Table columns={columns} data={this.state.retailData} formType="User" tRole="admin" />
             </div>
           </Tab>
 
-          <Tab eventKey="driver-tab" title="Rejected Orders">
+          <Tab eventKey="driver-tab" title="Driver">
             <div className="mx-5">
               <h5>Driver</h5>
               <Table columns={columns} data={this.state.driverData} formType="User" tRole="admin" />
             </div>
           </Tab>
 
-          <Tab eventKey="fleet-tab" title="Emergency Status">
+          <Tab eventKey="fleet-tab" title="Fleet Manager">
             <div className="mx-5">
               <h5>Fleet Manager</h5>
               <Table columns={columns} data={this.state.fleetData} formType="User" tRole="admin" />
             </div>
           </Tab>
 
-          <Tab eventKey="distribution-tab" title="Emergency Status">
+          <Tab eventKey="distribution-tab" title="Distribution">
             <div className="mx-5">
               <h5>Distribution</h5>
               <Table columns={columns} data={this.state.distributionData} formType="User" tRole="admin" />

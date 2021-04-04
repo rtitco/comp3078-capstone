@@ -49,11 +49,11 @@ class AdminDashboard extends Component {
                 <LoginNavBar />
                 <Container className="mt-4" fluid>
                     <Row className="">
-                        <Col sm="4" md="4" lg="3" xl="2">
+                        <Col sm="3" md="3" lg="3" xl="2">
                             {/*This will be the side navigation the routes links here must start with /dashboard/admin/ */}
                             <AdminSideNav />
                         </Col>
-                        <Col sm="8" md="8" lg="9" xl="10">
+                        <Col sm="9" md="9" lg="9" xl="10">
                             <h1>Welcome, {this.state.currentUser.firstName} {this.state.currentUser.lastName}</h1>
 
                             {/*https://reactrouter.com/web/example/nesting for example of nested router
