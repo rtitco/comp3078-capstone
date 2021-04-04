@@ -104,6 +104,26 @@ app.get('/orders', async (req, res) => {
     }
 });
 
+app.get('/orders/in-progress', async (req, res) => {
+    const Orders = await orderModel.find({order_status: { $ne:"Completed"}}); 
+    try {
+        res.send(Orders);
+    }
+    catch (err) {
+        res.status(500).send(err);
+    }
+});
+
+app.get('/orders/completed', async (req, res) => {
+    const Orders = await orderModel.find({order_status: 'Completed'}); 
+    try{
+        res.send(Orders);
+    }
+    catch (err) {
+        res.status(500).send(err);
+    }
+});
+
 //GET ==> Orders for Particular Date
 app.get('/orders/:date', async (req, res) => {
     let OrderSchedule = await orderModel.find({ delivery_date: req.params.date });
@@ -493,7 +513,6 @@ app.post('/profile', async (req, updateRes) => {
 //POST ==> Admin ==> Edit Companies Table
 app.post('/admin/company-manager/edit', async (req, company) => {
     await companyModel.findOne({ company_name: req.body.previousCompanyName.toUpperCase() }, (err, companySearch) => {
-        console.log(companySearch);
         if (err) {
             company.send({
                 message: "Company Database Search Failed."
@@ -568,7 +587,6 @@ app.post('/order-manager/edit', async (req, order) => {
             orderSearch.save();
             order.send({ success: true, message: "Order successfully edited." })
         } else {
-            console.log("Order not found");
             order.send({
                 message: "Order edit unsucessful."
             })

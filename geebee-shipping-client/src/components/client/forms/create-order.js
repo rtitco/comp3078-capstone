@@ -258,7 +258,14 @@ class CreateOrderForm extends Component {
         //Check Destination Address
         if (this.validateStringInput(rgx_address, this.state.dest_address) == false) {
             this.setState({ errorDestAddress: "Invalid Address." })
-        } else {
+        }
+        else if (this.state.dest_address == this.state.origin_address) {
+            this.setState({
+                errorDestAddress: "Addresses cannot be the same.",
+                errorOriginAddress: "Addresses cannot be the same."
+            })
+        }
+        else {
             destAddValid = true
             this.setState({ errorDestAddress: '' })
         }
