@@ -68,8 +68,6 @@ class CreateOrderForm extends Component {
     }
 
     getCompanyCityPostal = async (location, inputAddress) => {
-        console.log("Input address:")
-        console.log(inputAddress)
         const companyRes = await axios.get(`http://localhost:8081/companies/address/${inputAddress}`)
         let myCity = [];
         let myPostalCodes = [];
@@ -170,7 +168,7 @@ class CreateOrderForm extends Component {
         this.setOrigAddSelections(mySelection)
     }
 
-    //==============================On Input Change Functions==========================================
+    //==============================Event Handler Functions==========================================
     changeDeliveryDate = (event) => {
         this.setState({
             deliveryDate: event.target.value
@@ -328,17 +326,11 @@ class CreateOrderForm extends Component {
                         errorCargoWeight: res.data.messageCargoWeight
                     })
                 }, (error) => {
-                    this.setState({
-                        errorMessage: "Update Failed."
-                        // errorMessage: "Entry Failed."
-                    })
+                    this.setState({ errorMessage: "Update Failed." })
                 })
         }
         else {
-            this.setState({
-                errorMessage: "Update Failed."
-                // errorMessage: "Entry Failed."
-            })
+            this.setState({ errorMessage: "Update Failed." })
         }
     }
 

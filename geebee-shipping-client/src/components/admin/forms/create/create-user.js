@@ -39,7 +39,7 @@ class CreateUserForm extends Component {
         this.getCompanyData();
     }
 
-
+    //Get data from MongoDB
     getCompanyData = async () => {
         const companyRes = await axios.get('http://localhost:8081/companies')
         let myCompanies = [];
@@ -54,6 +54,7 @@ class CreateUserForm extends Component {
         this.setState({ loading: false, mongoData: myCompanies })
     }
 
+    //=================================================Autofill Functions===================================================//
 
     // const [singleSelections, setSingleSelections] = useState([]);
     setSingleSelections = (mySelection) => {
@@ -65,10 +66,7 @@ class CreateUserForm extends Component {
         }
     }
 
-    // changes state values 
-    // takes value of event and saves it to fullname, username, etc
-    // used in onChange in form fields, used to check any change in field
-
+    //=================================================Validation Function Template===================================================//
     validateStringInput = (regexStr, strInput) => {
         if (strInput < 1) {
             return false;
@@ -78,6 +76,8 @@ class CreateUserForm extends Component {
         }
         return true;
     }
+
+    //=================================================Form Event Handler Functions===================================================//
 
     changeEmail = (event) => {
         this.setState({
@@ -112,62 +112,48 @@ class CreateUserForm extends Component {
         let roleValid = false;
         let passwordValid = false;
 
-        //Validation
+        //=================================================Validation===================================================//
 
+        const rgx_email = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/
+        const rgx_company = /^[A-Za-z]{1,}([ \-]{0,1}([A-Za-z\-]{1,}))*[.]{0,1}$/
+        const rgx_password = /^[a-zA-Z\d!?<>@#$%^&*()\-_=+]{8,15}$/
+        
         //Check Email
-        if (this.validateStringInput(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/,
-            this.state.email) == false) {
-            this.setState({
-                errorEmail: "Invalid Email Address."
-            })
-
+        if (this.validateStringInput(rgx_email, this.state.email) == false) {
+            this.setState({ errorEmail: "Invalid Email Address." })
         } else {
             emailValid = true;
-            this.setState({
-                errorEmail: ''
-            })
+            this.setState({ errorEmail: '' })
         }
 
         //Check Company
-        if (this.validateStringInput(/^[A-Za-z]{1,}([ \-]{0,1}([A-Za-z\-]{1,}))*[.]{0,1}$/,
-            this.state.company) == false) {
-            this.setState({
-                errorCompany: "Invalid Company Name."
-            })
+        if (this.validateStringInput(rgx_company, this.state.company) == false) {
+            this.setState({ errorCompany: "Invalid Company Name." })
         } else {
             companyValid = true
-            this.setState({
-                errorCompany: ''
-            })
+            this.setState({ errorCompany: '' })
         }
 
         //Check Role
         if (this.state.role.length < 1) {
-            this.setState({
-                errorRole: "Please select a User Role."
-            })
+            this.setState({ errorRole: "Please select a User Role." })
         } else {
             roleValid = true
-            this.setState({
-                errorRole: ''
-            })
+            this.setState({ errorRole: '' })
         }
 
         //Check Password
-        if (this.validateStringInput(/^[a-zA-Z\d!?<>@#$%^&*()\-_=+]{8,15}$/,
-            this.state.password) == false) {
+        if (this.validateStringInput(rgx_password, this.state.password) == false) {
             this.setState({
                 errorPw: "Passwords must be at least 8 characters in length one(1) letter, one(1) number, and one(1) special character"
             })
         } else {
             passwordValid = true;
-            this.setState({
-                errorPw: ''
-            })
+            this.setState({ errorPw: '' })
         }
 
+        //If validation passed, then data sent through POST
         if (emailValid && companyValid && roleValid && passwordValid) {
-            // if (this.state.formValid) {
             const registered = {
                 firstName: this.state.firstName,
                 lastName: this.state.lastName,
@@ -196,20 +182,13 @@ class CreateUserForm extends Component {
                             password: ''
                         })
                     } else {
-                        this.setState({
-                            password: ''
-                        })
+                        this.setState({ password: '' })
                     }
                 }, (error) => {
-                    this.setState({
-                        errorMessage: "Failed to create User."
-                    })
+                    this.setState({ errorMessage: "Failed to create User." })
                 })
-        }
-        else {
-            this.setState({
-                errorMessage: "Failed to create User."
-            })
+        } else {
+            this.setState({ errorMessage: "Failed to create User." })
         }
     }
 
@@ -280,7 +259,6 @@ class CreateUserForm extends Component {
                     </Col>
                 </Row>
             </div >
-
         );
     }
 }

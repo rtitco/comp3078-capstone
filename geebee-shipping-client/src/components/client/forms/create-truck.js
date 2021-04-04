@@ -32,6 +32,7 @@ class CreateTruckForm extends Component {
         }
     }
 
+    //=========================================Validation Function Template============================================//
     validateStringInput = (regexStr, strInput) => {
         if (strInput < 1) {
             return false;
@@ -42,6 +43,7 @@ class CreateTruckForm extends Component {
         return true;
     }
 
+    //=========================================Event Handler Functions============================================//
     changeBrand = (event) => {
         this.setState({
             brand: event.target.value
@@ -89,12 +91,15 @@ class CreateTruckForm extends Component {
         let plateValid = false
         let statusValid = false
 
+        //=====================================================Validation=============================================================//
+        const rgx_brand = /^[a-zA-Z]{3,}$/
+        const rgx_model = /^[a-zA-Z\d]{3,}$/
+        const rgx_year = /^[\d]{4}$/
+        const rgx_license = /^[A-Za-z]{3,5}[ ]{0,1}[\d]{3,5}$/
+
         //Check Brand
-        if (this.validateStringInput(/^[a-zA-Z]{3,}$/,
-            this.state.brand) == false) {
-            this.setState({
-                errorBrand: "Invalid Brand Name."
-            })
+        if (this.validateStringInput(rgx_brand, this.state.brand) == false) {
+            this.setState({ errorBrand: "Invalid Brand Name." })
         } else {
             brandValid = true
             this.setState({
@@ -103,68 +108,47 @@ class CreateTruckForm extends Component {
         }
 
         //Check Model
-        if (this.validateStringInput(/^[a-zA-Z\d]{3,}$/,
-            this.state.model) == false) {
-            this.setState({
-                errorModel: "Invalid Model Name."
-            })
+        if (this.validateStringInput(rgx_model, this.state.model) == false) {
+            this.setState({ errorModel: "Invalid Model Name." })
         } else {
             modelValid = true
-            this.setState({
-                errorModel: ''
-            })
+            this.setState({ errorModel: '' })
         }
 
         //Check Year
-        if (this.validateStringInput(/^[\d]{4}$/,
-            this.state.year) == false || this.state.year <= "1990" || this.state.year > "2022") {
-            this.setState({
-                errorYear: "Invalid Year."
-            })
+        if (this.validateStringInput(
+            rgx_year, this.state.year) == false || this.state.year <= "1990" || this.state.year > "2022") {
+            this.setState({ errorYear: "Invalid Year." })
         } else {
             yearValid = true
-            this.setState({
-                errorYear: ''
-            })
+            this.setState({ errorYear: '' })
         }
 
         //Check Class
         if (this.state.brand.length < 1) {
-            this.setState({
-                errorClass: "Please select a truck Class."
-            })
+            this.setState({ errorClass: "Please select a truck Class." })
         } else {
             classValid = true
-            this.setState({
-                errorClass: ''
-            })
+            this.setState({ errorClass: '' })
         }
 
         //Check License Plate
-        if (this.validateStringInput(/^[A-Za-z]{3,5}[ ]{0,1}[\d]{3,5}$/,
-            this.state.licensePlate) == false) {
-            this.setState({
-                errorLicensePlate: "Invalid License Plate."
-            })
+        if (this.validateStringInput(rgx_license, this.state.licensePlate) == false) {
+            this.setState({ errorLicensePlate: "Invalid License Plate." })
         } else {
             plateValid = true
-            this.setState({
-                errorLicensePlate: ''
-            })
+            this.setState({ errorLicensePlate: '' })
         }
 
         //Check Status
         if (this.state.status.length < 1) {
-            this.setState({
-                errorStatus: "Please select a status."
-            })
+            this.setState({ errorStatus: "Please select a status." })
         } else {
             statusValid = true
-            this.setState({
-                errorStatus: ''
-            })
+            this.setState({ errorStatus: '' })
         }
 
+        //If validation passes, send data to POST
         if (brandValid && modelValid && yearValid && classValid && plateValid && statusValid) {
             const truckData = {
                 brand: this.state.brand,
@@ -174,7 +158,6 @@ class CreateTruckForm extends Component {
                 licensePlate: this.state.licensePlate,
                 status: this.state.status
             }
-            // everything stored in registered will send to backend (url) then to mongo
             axios.post('http://localhost:8081/fleet/add', truckData)
                 .then(res => {
                     this.setState({
@@ -192,9 +175,6 @@ class CreateTruckForm extends Component {
                         errorMessage: "Update Failed. Please Fill All Fields."
                     })
                 })
-
-            // here you redirect to profile page or home page
-            // window.location = '/'
             this.setState({
                 brand: '',
                 model: '',
@@ -203,11 +183,8 @@ class CreateTruckForm extends Component {
                 licensePlate: '',
                 status: ''
             })
-        }
-        else {
-            this.setState({
-                errorMessage: "Update Failed. Please Fill All Fields."
-            })
+        } else {
+            this.setState({ errorMessage: "Update Failed. Please Fill All Fields." })
         }
     }
 
