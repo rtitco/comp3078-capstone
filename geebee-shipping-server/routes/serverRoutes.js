@@ -71,8 +71,8 @@ app.get('/companies/address/:address', async (req, res) => {
 
 //==============================================Trucks Table==============================================
 //GET ==> All Trucks in Fleet
-app.get('/fleet', async (req, res) => {
-    const Vehicles = await vehicleModel.find({}); //Async function. Wait for results before posting
+app.get('/fleet/:status', async (req, res) => {
+    const Vehicles = await vehicleModel.find({vehicle_status: req.params.status}); //Async function. Wait for results before posting
     try {
         res.send(Vehicles);
     }
@@ -137,7 +137,7 @@ app.get('/orders/:date', async (req, res) => {
 
 //GET ==> Orders for Specific Driver
 app.get('/driver/orders/:userEmail', async (req, res) => {
-    let DriverRoutes = await orderModel.find({ assigned_truck_driverEmail: req.params.userEmail });
+    let DriverRoutes = await orderModel.find({ assigned_truck_driverEmail: req.params.userEmail, order_status: {$ne: "Completed"} });
     try {
         res.send(DriverRoutes);
     }
