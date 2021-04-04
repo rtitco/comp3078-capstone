@@ -49,7 +49,7 @@ app.get('/companies', async (req, res) => {
 
 //GET ==> Company that Employee Works at
 app.get('/companies/name/:companyName', async (req, add) => {
-    const Company = await companyModel.find({company_name: req.params.companyName});
+    const Company = await companyModel.find({ company_name: req.params.companyName });
     try {
         add.send(Company);
     }
@@ -60,7 +60,7 @@ app.get('/companies/name/:companyName', async (req, add) => {
 
 // 
 app.get('/companies/address/:address', async (req, res) => {
-    const Company = await companyModel.find({address: req.params.address});
+    const Company = await companyModel.find({ address: req.params.address });
     try {
         res.send(Company);
     }
@@ -105,7 +105,7 @@ app.get('/orders', async (req, res) => {
 });
 
 app.get('/orders/in-progress', async (req, res) => {
-    const Orders = await orderModel.find({order_status: { $ne:"Completed"}}); 
+    const Orders = await orderModel.find({ order_status: { $ne: "Completed" } });
     try {
         res.send(Orders);
     }
@@ -115,8 +115,8 @@ app.get('/orders/in-progress', async (req, res) => {
 });
 
 app.get('/orders/completed', async (req, res) => {
-    const Orders = await orderModel.find({order_status: 'Completed'}); 
-    try{
+    const Orders = await orderModel.find({ order_status: 'Completed' });
+    try {
         res.send(Orders);
     }
     catch (err) {
@@ -157,19 +157,32 @@ app.get('/orders/search/:orderStatus', async (req, res) => {
             res.status(500).send(err);
         }
     }
-    else{
+    else {
         res.status(500).send(err);
     }
 })
 
-app.get('/orders/address/:address', async (req, res) => {
-    let Orders = await orderModel.find({ destination_address: req.params.address });
-    try {
-        res.send(Orders);
+app.get('/orders/address/:progress/:address', async (req, res) => {
+    let Orders = []
+    if (req.params.progress == "Completed") {
+        Orders = await orderModel.find({ destination_address: req.params.address, order_status: "Completed" });
+        try {
+            res.send(Orders);
+        }
+        catch (err) {
+            res.status(500).send(err);
+        }
     }
-    catch (err) {
-        res.status(500).send(err);
+    else {
+        Orders = await orderModel.find({ destination_address: req.params.address, order_status: { $ne: "Completed" } });
+        try {
+            res.send(Orders);
+        }
+        catch (err) {
+            res.status(500).send(err);
+        }
     }
+
 })
 
 //==============================================POST FUNCTIONS==================================================//
