@@ -49,7 +49,7 @@ app.get('/companies', async (req, res) => {
 
 //GET ==> Company that Employee Works at
 app.get('/companies/name/:companyName', async (req, add) => {
-    const Company = await companyModel.find({company_name: req.params.companyName});
+    const Company = await companyModel.find({ company_name: req.params.companyName });
     try {
         add.send(Company);
     }
@@ -60,7 +60,7 @@ app.get('/companies/name/:companyName', async (req, add) => {
 
 // 
 app.get('/companies/address/:address', async (req, res) => {
-    const Company = await companyModel.find({address: req.params.address});
+    const Company = await companyModel.find({ address: req.params.address });
     try {
         res.send(Company);
     }
@@ -71,8 +71,8 @@ app.get('/companies/address/:address', async (req, res) => {
 
 //==============================================Trucks Table==============================================
 //GET ==> All Trucks in Fleet
-app.get('/fleet', async (req, res) => {
-    const Vehicles = await vehicleModel.find({}); //Async function. Wait for results before posting
+app.get('/fleet/:status', async (req, res) => {
+    const Vehicles = await vehicleModel.find({vehicle_status: req.params.status}); //Async function. Wait for results before posting
     try {
         res.send(Vehicles);
     }
@@ -104,6 +104,26 @@ app.get('/orders', async (req, res) => {
     }
 });
 
+app.get('/orders/in-progress', async (req, res) => {
+    const Orders = await orderModel.find({ order_status: { $ne: "Completed" } });
+    try {
+        res.send(Orders);
+    }
+    catch (err) {
+        res.status(500).send(err);
+    }
+});
+
+app.get('/orders/completed', async (req, res) => {
+    const Orders = await orderModel.find({ order_status: 'Completed' });
+    try {
+        res.send(Orders);
+    }
+    catch (err) {
+        res.status(500).send(err);
+    }
+});
+
 //GET ==> Orders for Particular Date
 app.get('/orders/:date', async (req, res) => {
     let OrderSchedule = await orderModel.find({ delivery_date: req.params.date });
@@ -117,7 +137,7 @@ app.get('/orders/:date', async (req, res) => {
 
 //GET ==> Orders for Specific Driver
 app.get('/driver/orders/:userEmail', async (req, res) => {
-    let DriverRoutes = await orderModel.find({ assigned_truck_driverEmail: req.params.userEmail });
+    let DriverRoutes = await orderModel.find({ assigned_truck_driverEmail: req.params.userEmail, order_status: {$ne: "Completed"} });
     try {
         res.send(DriverRoutes);
     }
@@ -137,19 +157,32 @@ app.get('/orders/search/:orderStatus', async (req, res) => {
             res.status(500).send(err);
         }
     }
-    else{
+    else {
         res.status(500).send(err);
     }
 })
 
-app.get('/orders/address/:address', async (req, res) => {
-    let Orders = await orderModel.find({ destination_address: req.params.address });
-    try {
-        res.send(Orders);
+app.get('/orders/address/:progress/:address', async (req, res) => {
+    let Orders = []
+    if (req.params.progress == "Completed") {
+        Orders = await orderModel.find({ destination_address: req.params.address, order_status: "Completed" });
+        try {
+            res.send(Orders);
+        }
+        catch (err) {
+            res.status(500).send(err);
+        }
     }
-    catch (err) {
-        res.status(500).send(err);
+    else {
+        Orders = await orderModel.find({ destination_address: req.params.address, order_status: { $ne: "Completed" } });
+        try {
+            res.send(Orders);
+        }
+        catch (err) {
+            res.status(500).send(err);
+        }
     }
+
 })
 
 //==============================================POST FUNCTIONS==================================================//
@@ -493,7 +526,6 @@ app.post('/profile', async (req, updateRes) => {
 //POST ==> Admin ==> Edit Companies Table
 app.post('/admin/company-manager/edit', async (req, company) => {
     await companyModel.findOne({ company_name: req.body.previousCompanyName.toUpperCase() }, (err, companySearch) => {
-        console.log(companySearch);
         if (err) {
             company.send({
                 message: "Company Database Search Failed."
@@ -568,7 +600,6 @@ app.post('/order-manager/edit', async (req, order) => {
             orderSearch.save();
             order.send({ success: true, message: "Order successfully edited." })
         } else {
-            console.log("Order not found");
             order.send({
                 message: "Order edit unsucessful."
             })

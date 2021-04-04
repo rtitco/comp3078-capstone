@@ -39,9 +39,7 @@ export default class OrderManager extends Component {
   }
 
   getCompletedData = async () => {
-    console.log("Getting data from db")
     const completedRes = await axios.get(`http://localhost:8081/orders/search/${this.state.statusCompleted}`)
-    console.log(completedRes.data)
     this.setState({
       loading: false,
       completedData: completedRes.data,

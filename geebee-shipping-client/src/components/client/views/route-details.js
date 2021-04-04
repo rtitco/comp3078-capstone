@@ -52,7 +52,6 @@ class ViewRouteDetails extends Component {
         Geocode.fromAddress(originAddress).then(
             (response) => {
                 originLat = response.results[0].geometry.location;
-                console.log(originLat)
                 this.setState(
                     {
                         origin: originLat
@@ -67,7 +66,6 @@ class ViewRouteDetails extends Component {
         Geocode.fromAddress(destAddress).then(
             (response) => {
                 destLat = response.results[0].geometry.location;
-                console.log(destLat)
                 this.setState(
                     {
                         destination: destLat

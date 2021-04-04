@@ -3,6 +3,8 @@ import Table from '../../shared/react-table/react-table'
 import { Redirect, Link } from "react-router-dom";
 import axios from 'axios'
 import Button from 'react-bootstrap/Button';
+import Tabs from 'react-bootstrap/Tabs'
+import Tab from 'react-bootstrap/Tab'
 
 export default class DistributionTable extends Component {
   constructor(props) {
@@ -10,18 +12,27 @@ export default class DistributionTable extends Component {
     let sessionUser = JSON.parse(window.sessionStorage.getItem("currentUser"))
     this.state = {
       currentUser: sessionUser,
-      data: [],
+      orders_inProgress: [],
+      orders_completed: [],
       loading: true
     }
   }
 
-  async getOrderData() {
-    const orderRes = await axios.get('http://localhost:8081/orders')
-    this.setState({ loading: false, data: orderRes.data })
+  async getOrdersInProgress() {
+    const inprogress = await axios.get('http://localhost:8081/orders/in-progress')
+    console.log("In Progress Orders: ")
+    console.log(inprogress.data)
+    this.setState({ loading: false, orders_inProgress: inprogress.data })
+  }
+
+  async getOrdersCompleted() {
+    const completed = await axios.get('http://localhost:8081/orders/completed')
+    this.setState({ loading: false, orders_completed: completed.data })
   }
 
   componentDidMount() {
-    this.getOrderData()
+    this.getOrdersInProgress()
+    this.getOrdersCompleted()
   }
 
   render() {
@@ -66,9 +77,23 @@ export default class DistributionTable extends Component {
         <Link to="./orders/add">
           <Button className="float-right mr-5 mb-2" variant="success">Create Order</Button>
         </Link>
-        <div className="mx-5">
-          <Table columns={columns} data={this.state.data} formType="Order" />
-        </div>
+
+        <Tabs defaultActiveKey="all-tab" id="uncontrolled-tab-example">
+          <Tab eventKey="all-tab" title="In Progress">
+            <div className="mx-5">
+              <h5>In Progress</h5>
+              <Table columns={columns} data={this.state.orders_inProgress} formType="Order" />
+            </div>
+          </Tab>
+
+          <Tab eventKey="completed-tab" title="Completed Orders">
+            <div className="mx-5">
+            <h5>Completed</h5>
+              <Table columns={columns} data={this.state.orders_completed} formType="Order" />
+            </div>
+          </Tab>
+        </Tabs>
+
       </div>
     )
   }
