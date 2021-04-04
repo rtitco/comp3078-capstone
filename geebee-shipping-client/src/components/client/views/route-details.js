@@ -4,9 +4,8 @@ import { Marker } from '@react-google-maps/api';
 import Geocode from "react-geocode";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
 import axios from 'axios';
-import { Redirect, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 
 Geocode.setApiKey("AIzaSyB63fYe9MyaTJZbGVDSEYD2-wPXk37Q4jY")
@@ -194,7 +193,7 @@ class ViewRouteDetails extends Component {
                                         <label>Address:</label>
                                     </Col>
                                     <Col md="3">
-                                        <label>{this.state.origin_address}, {this.state.origin_city}</label>
+                                        <label><a target="_blank" href={`https://www.google.com/maps/dir/?api=1&destination=${this.state.origin_address}%2C+${this.state.origin_city}%2C+${this.state.origin_postalCode}`}>{this.state.origin_address}, {this.state.origin_city}</a></label>
                                     </Col>
                                 </Row>
 
@@ -205,7 +204,7 @@ class ViewRouteDetails extends Component {
                                         <GoogleMap
                                             mapContainerStyle={containerStyle}
                                             center={this.state.origin}
-                                            zoom={10}
+                                            zoom={15}
                                         >
                                             <Marker
                                                 onLoad={onLoad}
@@ -226,7 +225,7 @@ class ViewRouteDetails extends Component {
                                         <label>Address:</label>
                                     </Col>
                                     <Col md="3">
-                                        <label>{this.state.destination_address}, {this.state.destination_city}</label>
+                                        <label><a target="_blank" href={`https://www.google.com/maps/dir/?api=1&destination=${this.state.destination_address}%2C+${this.state.destination_city}%2C+${this.state.destination_postalCode}`}>{this.state.destination_address}, {this.state.destination_city}</a></label>
                                     </Col>
                                 </Row>
                                 <Row className="justify-content-center">
@@ -236,7 +235,7 @@ class ViewRouteDetails extends Component {
                                         <GoogleMap
                                             mapContainerStyle={containerStyle}
                                             center={this.state.destination}
-                                            zoom={10}
+                                            zoom={15}
                                         >
                                             <Marker
                                                 onLoad={onLoad}

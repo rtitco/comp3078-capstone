@@ -7,7 +7,9 @@ import Button from 'react-bootstrap/Button';
 export default class DistributionTable extends Component {
   constructor(props) {
     super(props)
+    let sessionUser = JSON.parse(window.sessionStorage.getItem("currentUser"))
     this.state = {
+      currentUser: sessionUser,
       data: [],
       loading: true
     }

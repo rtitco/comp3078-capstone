@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import Table from '../../shared/react-table/react-table'
-import { Redirect, Link } from "react-router-dom";
 import axios from 'axios'
-import Button from 'react-bootstrap/Button';
 
 export default class RetailTable extends Component {
   constructor(props) {
@@ -17,13 +15,20 @@ export default class RetailTable extends Component {
     }
   }
 
-  async getOrderData() {
-    const orderRes = await axios.get('http://localhost:8081/orders')
+  //get orders for current store
+  async getOrderData(address) {
+    const orderRes = await axios.get(`http://localhost:8081/orders/address/${address}`)
     this.setState({ loading: false, data: orderRes.data })
   }
 
+  //find address user's work address
+  async getStoreAddress() {
+    const userWork = await axios.get(`http://localhost:8081/companies/name/${this.state.currentUser.company}`)
+    this.getOrderData(userWork.data[0].address)
+  }
+
   componentDidMount() {
-    this.getOrderData()
+    this.getStoreAddress()
   }
 
   render() {

@@ -72,7 +72,7 @@ class EditAdminOrderForm extends Component {
     this.setState({ driverData: myDrivers })
   }
 
-  async getLicensePlates(classNum) {
+  getLicensePlates = async (classNum) => {
     const truckRes = await axios.get(`http://localhost:8081/fleet/${classNum}`)
     let myTrucks = [];
     let currentID = 0;
@@ -154,43 +154,31 @@ class EditAdminOrderForm extends Component {
     let driverValid = false
 
     //===================================VALIDATION===================================//
+    const rgx_licensePlate = /^[A-Za-z]{3,5}[ ]{0,1}[\d]{3,5}$/
+    const rgx_driverEmail = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/
 
     //Check Truck Class
     if (this.state.assigned_truckClass.length < 1) {
-      this.setState({
-        errorTruckClass: "Please Select a Truck Class."
-      })
+      this.setState({ errorTruckClass: "Please Select a Truck Class." })
     } else {
       classValid = true
-      this.setState({
-        errorTruckClass: ''
-      })
+      this.setState({ errorTruckClass: '' })
     }
 
     //Check Truck License Plate
-    if (this.validateStringInput(/^[A-Za-z]{3,5}[ ]{0,1}[\d]{3,5}$/,
-      this.state.assigned_truckPlate) == false) {
-      this.setState({
-        errorEmail: "Invalid Email Address."
-      })
+    if (this.validateStringInput(rgx_licensePlate, this.state.assigned_truckPlate) == false) {
+      this.setState({ errorEmail: "Invalid Email Address." })
     } else {
       plateValid = true
-      this.setState({
-        errorEmail: ''
-      })
+      this.setState({ errorEmail: '' })
     }
 
     //Check Driver Email
-    if (this.validateStringInput(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/,
-      this.state.assigned_truckDriver) == false) {
-      this.setState({
-        errorTruckDriver: "Invalid Email Address."
-      })
+    if (this.validateStringInput(rgx_driverEmail, this.state.assigned_truckDriver) == false) {
+      this.setState({ errorTruckDriver: "Invalid Email Address." })
     } else {
       driverValid = true
-      this.setState({
-        errorTruckDriver: ''
-      })
+      this.setState({ errorTruckDriver: '' })
     }
 
     //===================================POST DATA===================================//
@@ -220,15 +208,11 @@ class EditAdminOrderForm extends Component {
             errorTruckDriver: res.data.messageTruckDriver
           })
         }, (error) => {
-          this.setState({
-            errorMessage: "Update Failed."
-          })
+          this.setState({ errorMessage: "Update Failed." })
         })
     }
     else {
-      this.setState({
-        errorMessage: "Update Failed."
-      })
+      this.setState({ errorMessage: "Update Failed." })
     }
   }
 
@@ -276,30 +260,21 @@ class EditAdminOrderForm extends Component {
 
                   <Form.Group>
                     <Form.Label>Delivery Date: </Form.Label>
-                    <Form.Control type='date'
-                      disabled
-                      value={this.state.deliveryDate}
-                      className='form-control form-group' />
+                    <Form.Control type='date' value={this.state.deliveryDate} className='form-control form-group' disabled />
                   </Form.Group>
 
                   <Row>
                     <Col md="6">
                       <Form.Group>
                         <Form.Label>Cargo Type: </Form.Label>
-                        <Form.Control type='text'
-                          disabled
-                          value={this.state.cargo_type}
-                          className='form-control form-group' />
+                        <Form.Control type='text' value={this.state.cargo_type} className='form-control form-group' disabled />
                       </Form.Group>
                     </Col>
 
                     <Col md="6">
                       <Form.Group>
                         <Form.Label>Cargo Weight (kg):</Form.Label>
-                        <Form.Control type='text'
-                          disabled
-                          value={this.state.cargo_weight}
-                          className='form-control form-group' />
+                        <Form.Control type='text' value={this.state.cargo_weight} className='form-control form-group' disabled />
                       </Form.Group>
                     </Col>
                   </Row>
@@ -308,30 +283,20 @@ class EditAdminOrderForm extends Component {
                   <h6>Origin:</h6>
                   <Form.Group>
                     <Form.Label>Address: </Form.Label>
-                    <Form.Control type='text'
-                      disabled
-                      value={this.state.origin_address}
-                      className='form-control form-group' />
+                    <Form.Control type='text' value={this.state.origin_address} className='form-control form-group' disabled />
                   </Form.Group>
 
                   <Row>
                     <Col md="6">
                       <Form.Group>
                         <Form.Label>City: </Form.Label>
-                        <Form.Control type='text'
-                          disabled
-                          value={this.state.origin_city}
-                          className='form-control form-group' />
+                        <Form.Control type='text' value={this.state.origin_city} className='form-control form-group' disabled />
                       </Form.Group>
                     </Col>
-
                     <Col md="6">
                       <Form.Group>
                         <Form.Label>Postal Code: </Form.Label>
-                        <Form.Control type='text'
-                          disabled
-                          value={this.state.origin_postalCode}
-                          className='form-control form-group' />
+                        <Form.Control type='text' value={this.state.origin_postalCode} className='form-control form-group' disabled />
                       </Form.Group>
                     </Col>
                   </Row>
@@ -340,30 +305,21 @@ class EditAdminOrderForm extends Component {
                   <h6>Destination:</h6>
                   <Form.Group>
                     <Form.Label>Address: </Form.Label>
-                    <Form.Control type='text'
-                      disabled
-                      value={this.state.dest_address}
-                      className='form-control form-group' />
+                    <Form.Control type='text' value={this.state.dest_address} className='form-control form-group' disabled/>
                   </Form.Group >
 
                   <Row>
                     <Col md="6">
                       <Form.Group>
                         <Form.Label>City: </Form.Label>
-                        <Form.Control type='text'
-                          disabled
-                          value={this.state.dest_city}
-                          className='form-control form-group' />
+                        <Form.Control type='text' value={this.state.dest_city} className='form-control form-group' disabled/>
                       </Form.Group>
                     </Col>
 
                     <Col md="6">
                       <Form.Group>
                         <Form.Label>Postal Code: </Form.Label>
-                        <Form.Control type='text'
-                          disabled
-                          value={this.state.dest_postalCode}
-                          className='form-control form-group' />
+                        <Form.Control type='text' value={this.state.dest_postalCode} className='form-control form-group' disabled/>
                       </Form.Group>
                     </Col >
                   </Row >
@@ -424,7 +380,6 @@ class EditAdminOrderForm extends Component {
         </Row >
 
       </div >
-
     );
   }
 }

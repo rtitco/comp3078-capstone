@@ -88,83 +88,63 @@ class CreateCompanyForm extends Component {
     let phoneValid = false
 
 
-    //Validation
+    //====================================================Validation===============================================================//
+    const rgx_name = /^[A-Za-z\-\d]{1,}([ \-]{0,1}([A-Za-z\-\d]{1,})){0,}[.]{0,1}$/
+    const rgx_address = /^([\d]{1,5}[a-mA-M]{0,1}){1}[ ]{1}([A-Za-z]{2,}[ ]{0,1}){1,}[.]{0,1}$/
+    const rgx_city = /^[A-Za-z]{1,}([ \-]{0,1}([A-Za-z]{1}[a-z]{1,}))*$/
+    const rgx_postalCode = /^([a-zA-z]{1}[\d]{1}[a-zA-z]{1}){1}[ ]{0,1}([\d]{1}[a-zA-z]{1}[\d]{1}){1}$/
+    const rgx_phone = /^[\d]{10}$/
+
     //Company Name
-    if (this.validateStringInput(/^[A-Za-z]{1,}([ \-]{0,1}([A-Za-z\-]{1,}))*[.]{0,1}$/, this.state.company_name) == false) {
-      this.setState({
-        errorCompany: "Invalid Company Name."
-      })
+    if (this.validateStringInput(rgx_name, this.state.company_name) == false) {
+      this.setState({ errorCompany: "Invalid Company Name." })
     } else {
       nameValid = true
-      this.setState({
-        errorCompany: ''
-      })
+      this.setState({ errorCompany: '' })
     }
 
     // Company Address
-    if (this.validateStringInput(/^([\d]{1,5}[a-mA-M]{0,1}){1}[ ]{1}([A-Za-z]{2,}[ ]{0,1}){1,}[.]{0,1}$/,
-      this.state.address) == false) {
-      this.setState({
-        errorAddress: "Invalid Address."
-      })
+    if (this.validateStringInput(rgx_address, this.state.address) == false) {
+      this.setState({ errorAddress: "Invalid Address." })
     } else {
       addressValid = true
-      this.setState({
-        errorAddress: ''
-      })
+      this.setState({ errorAddress: '' })
     }
 
     // Company City
-    if (this.validateStringInput(/^[A-Za-z]{1,}([ \-]{0,1}([A-Za-z]{1}[a-z]{1,}))*$/,
-      this.state.city) == false) {
-      this.setState({
-        errorCity: "Invalid City."
-      })
+    if (this.validateStringInput(rgx_city, this.state.city) == false) {
+      this.setState({ errorCity: "Invalid City." })
     } else {
       cityValid = true
-      this.setState({
-        errorCity: ''
-      })
+      this.setState({ errorCity: '' })
     }
 
     // Company Province
     if (this.state.province.length < 1) {
-      this.setState({
-        errorProvince: "Please select a Province or Territory."
-      })
+      this.setState({ errorProvince: "Please select a Province or Territory." })
     } else {
       provinceValid = true
-      this.setState({
-        errorProvince: ''
-      })
+      this.setState({ errorProvince: '' })
     }
 
     // Company Postal Code
-    if (this.validateStringInput(/^([a-zA-z]{1}[\d]{1}[a-zA-z]{1}){1}[ ]{0,1}([\d]{1}[a-zA-z]{1}[\d]{1}){1}$/,
+    if (this.validateStringInput(rgx_postalCode,
       this.state.postal_code) == false) {
-      this.setState({
-        errorPostalCode: "Invalid Postal Code."
-      })
+      this.setState({ errorPostalCode: "Invalid Postal Code." })
     } else {
       postalCodeValid = true
-      this.setState({
-        errorPostalCode: ''
-      })
+      this.setState({ errorPostalCode: '' })
     }
 
     // Company Phone
-    if (this.validateStringInput(/^[\d]{10}$/,
-      this.state.company_phone) == false) {
-      this.setState({
-        errorPhone: "Invalid Phone Number."
-      })
+    if (this.validateStringInput(rgx_phone, this.state.company_phone) == false) {
+      this.setState({ errorPhone: "Invalid Phone Number." })
     } else {
       phoneValid = true
-      this.setState({
-        errorPhone: ''
-      })
+      this.setState({ errorPhone: '' })
     }
 
+    //If validation passes, send to POST
     if (nameValid && addressValid && cityValid && provinceValid && postalCodeValid && phoneValid) {
       const newCompany = {
         company_name: this.state.company_name,
@@ -198,15 +178,11 @@ class CreateCompanyForm extends Component {
               company_phone: ''
             })
           }
-
         }, (error) => {
-          this.setState({
-            errorMessage: "Failed to Add Company."
-          })
+          this.setState({ errorMessage: "Failed to Add Company." })
         })
     }
   }
-
 
   render() {
     if (this.state.sendSuccess === true) {

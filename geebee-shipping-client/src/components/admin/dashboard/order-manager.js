@@ -17,12 +17,10 @@ export default class OrderManager extends Component {
 
       errorStatus: '',
 
-      statusCompleted: 'Completed'
+      statusCompleted: 'Completed',
+      statusEmergency: 'Emergency',
+      statusRejected: 'Rejected'
     }
-
-    // this.statusEmergency = 'Emergency';
-    // this.statusRejected = 'Rejected';
-
   }
 
   getOrderData = async () => {
@@ -30,15 +28,15 @@ export default class OrderManager extends Component {
     this.setState({ loading: false, orderData: orderRes.data })
   }
 
-  // getRejectedData = async () => {
-  //   const rejectRes = await axios.get(`http://localhost:8081/admin/order-manager/${this.statusRejected}`)
-  //   this.setState({ rejectData: rejectRes.data })
-  // }
+  getRejectedData = async () => {
+    const rejectRes = await axios.get(`http://localhost:8081/admin/order-manager/${this.statusRejected}`)
+    this.setState({ rejectData: rejectRes.data })
+  }
 
-  // getEmergencyData = async () => {
-  //   const emergencyRes = await axios.get(`http://localhost:8081/admin/order-manager/${this.statusEmergency}`)
-  //   this.setState({ emergencyData: emergencyRes.data })
-  // }
+  getEmergencyData = async () => {
+    const emergencyRes = await axios.get(`http://localhost:8081/admin/order-manager/${this.statusEmergency}`)
+    this.setState({ emergencyData: emergencyRes.data })
+  }
 
   getCompletedData = async () => {
     console.log("Getting data from db")
@@ -52,8 +50,8 @@ export default class OrderManager extends Component {
 
   componentDidMount() {
     this.getOrderData()
-    // this.getRejectedData()
-    // this.getEmergencyData()
+    this.getRejectedData()
+    this.getEmergencyData()
     this.getCompletedData()
   }
 

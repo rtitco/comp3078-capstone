@@ -16,7 +16,6 @@ export default class CompanyManager extends Component {
 
   async getCompaniesData() {
     const res = await axios.get('http://localhost:8081/companies')
-    console.log(res.data)
     this.setState({ loading: false, data: res.data })
   }
   componentDidMount() {

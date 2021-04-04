@@ -47,6 +47,28 @@ app.get('/companies', async (req, res) => {
     }
 });
 
+//GET ==> Company that Employee Works at
+app.get('/companies/name/:companyName', async (req, add) => {
+    const Company = await companyModel.find({company_name: req.params.companyName});
+    try {
+        add.send(Company);
+    }
+    catch (err) {
+        add.status(500).send(err);
+    }
+})
+
+// 
+app.get('/companies/address/:address', async (req, res) => {
+    const Company = await companyModel.find({address: req.params.address});
+    try {
+        res.send(Company);
+    }
+    catch (err) {
+        res.status(500).send(err);
+    }
+})
+
 //==============================================Trucks Table==============================================
 //GET ==> All Trucks in Fleet
 app.get('/fleet', async (req, res) => {
@@ -116,6 +138,16 @@ app.get('/orders/search/:orderStatus', async (req, res) => {
         }
     }
     else{
+        res.status(500).send(err);
+    }
+})
+
+app.get('/orders/address/:address', async (req, res) => {
+    let Orders = await orderModel.find({ destination_address: req.params.address });
+    try {
+        res.send(Orders);
+    }
+    catch (err) {
         res.status(500).send(err);
     }
 })
