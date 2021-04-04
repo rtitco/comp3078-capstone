@@ -121,7 +121,7 @@ class LoginForm extends Component {
 
         return (
             <div className="login-bg">
-                <LoginNavBar />
+                {/* <LoginNavBar /> */}
                 <Container className="login-bg">
                     <Row className="justify-content-md-center">
                         <Col className="login-box p-5" lg="3" md="6" sm="8">
