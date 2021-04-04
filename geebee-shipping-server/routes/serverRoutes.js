@@ -14,8 +14,8 @@ const ObjectID = require('mongodb').ObjectID;
 
 //==============================================Users Table==============================================
 // GET ==> All users
-app.get('/users', async (req, res) => {
-    const Users = await userModel.find({});
+app.get('/users/:role', async (req, res) => {
+    const Users = await userModel.find({role: req.params.role});
     try {
         res.send(Users);
     }
