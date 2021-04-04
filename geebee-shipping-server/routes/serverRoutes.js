@@ -58,6 +58,17 @@ app.get('/companies/name/:companyName', async (req, add) => {
     }
 })
 
+// 
+app.get('/companies/address/:address', async (req, res) => {
+    const Company = await companyModel.find({address: req.params.address});
+    try {
+        res.send(Company);
+    }
+    catch (err) {
+        res.status(500).send(err);
+    }
+})
+
 //==============================================Trucks Table==============================================
 //GET ==> All Trucks in Fleet
 app.get('/fleet', async (req, res) => {

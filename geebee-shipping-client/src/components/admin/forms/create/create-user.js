@@ -13,7 +13,6 @@ class CreateUserForm extends Component {
     constructor() {
         super()
         let sessionUser = JSON.parse(window.sessionStorage.getItem("currentUser"))
-        this.getCompanyData();
 
         this.state = {
             currentUser: sessionUser,
@@ -35,6 +34,11 @@ class CreateUserForm extends Component {
             mongoData: []
         }
     }
+
+    componentDidMount() {
+        this.getCompanyData();
+    }
+
 
     getCompanyData = async () => {
         const companyRes = await axios.get('http://localhost:8081/companies')

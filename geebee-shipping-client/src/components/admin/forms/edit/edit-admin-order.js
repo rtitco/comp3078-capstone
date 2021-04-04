@@ -72,7 +72,7 @@ class EditAdminOrderForm extends Component {
     this.setState({ driverData: myDrivers })
   }
 
-  async getLicensePlates(classNum) {
+  getLicensePlates = async (classNum) => {
     const truckRes = await axios.get(`http://localhost:8081/fleet/${classNum}`)
     let myTrucks = [];
     let currentID = 0;
