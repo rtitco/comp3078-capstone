@@ -71,8 +71,6 @@ export default class FleetTable extends Component {
     ]
     return (
       <div>
-        <h1>Welcome, {this.state.currentUser.firstName} {this.state.currentUser.lastName}</h1>
-
         <Link to="./fleet/add">
           <Button className="float-right mr-5 mb-2" variant="success">Add Truck</Button>
         </Link>

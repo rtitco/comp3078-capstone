@@ -1,0 +1,11 @@
+.navbar-bb{
+    background-color: #31326f !important;
+}
+
+.nav-link{
+    font-size:1.1rem;
+    color:white;
+}
+.nav-link a:hover{
+    color:#9ddfd3;
+}

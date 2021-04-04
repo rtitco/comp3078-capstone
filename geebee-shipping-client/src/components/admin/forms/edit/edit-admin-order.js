@@ -73,7 +73,8 @@ class EditAdminOrderForm extends Component {
   }
 
   getLicensePlates = async (classNum) => {
-    const truckRes = await axios.get(`http://localhost:8081/fleet/${classNum}`)
+    
+    const truckRes = await axios.get(`http://localhost:8081/fleet/search/${classNum}`)
     let myTrucks = [];
     let currentID = 0;
 

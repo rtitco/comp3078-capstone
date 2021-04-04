@@ -1,17 +1,17 @@
 import React from 'react'
 import { Navbar, Nav } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
-
-const LoginNavBar = () => {
+import './login-navbar.css';
+const LoginNavBar = (props) => {
 
   function logout(){
     sessionStorage.clear();
   }
 
   return (
-    <Navbar bg="light" expand="lg">
+    <Navbar className="navbar-bb" variant="dark" expand="lg">
       <LinkContainer to="/">
-        <Navbar.Brand>Geebee Shipping Solutions</Navbar.Brand>
+        <Navbar.Brand className="text-white">BusyBee Shipping Solutions</Navbar.Brand>
       </LinkContainer>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">

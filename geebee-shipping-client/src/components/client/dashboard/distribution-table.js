@@ -72,8 +72,6 @@ export default class DistributionTable extends Component {
     ]
     return (
       <div>
-        <h1>Welcome, {this.state.currentUser.firstName} {this.state.currentUser.lastName}</h1>
-
         <Link to="./orders/add">
           <Button className="float-right mr-5 mb-2" variant="success">Create Order</Button>
         </Link>

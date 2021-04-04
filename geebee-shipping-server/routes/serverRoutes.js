@@ -82,7 +82,7 @@ app.get('/fleet/:status', async (req, res) => {
 });
 
 //GET ==> Particular Class and In Service
-app.get('/fleet/:class', async (req, res) => {
+app.get('/fleet/search/:class', async (req, res) => {
     const Trucks = await vehicleModel.find({ truck_class: req.params.class, vehicle_status: "In Service" });
     try {
         res.send(Trucks);
