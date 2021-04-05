@@ -109,11 +109,8 @@ app.get('/orders/status/:status', async (req, res) => {
     let Orders = []
 
     if (req.params.status == "Active") {
-        // Orders = await orderModel.find({ 
-        //     $or: [{order_status: { $ne: "Completed" }}, {order_status: { $ne: "Processing" }}]
-        // });
-        Orders = await orderModel.find({ 
-            $and: [ {order_status: {$ne: "Completed"}}, {order_status: {$ne: "Processing"}} ]
+        Orders = await orderModel.find({
+            $and: [{ order_status: { $ne: "Completed" } }, { order_status: { $ne: "Processing" } }]
         });
     }
     else if (req.params.status == "Emergency" || req.params.status == "Rejected" || req.params.status == "Processing" || req.params.status == "Completed") {

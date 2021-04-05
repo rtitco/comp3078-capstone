@@ -96,45 +96,31 @@ export default class OrderManager extends Component {
     ]
     return (
       <div>
-        <br></br>
-        <h1>Order Manager</h1>
-        <br></br>
-
-        <Tabs defaultActiveKey="processing-tab" id="uncontrolled-tab-example">
+        <Tabs defaultActiveKey="processing-tab" id="uncontrolled-tab-example" className="mt-3">
 
         <Tab eventKey="processing-tab" title="New Orders">
             <br />
-            <div className="mx-5">
               <Table columns={columns} data={this.state.processingData} formType="Order" tRole="Admin" />
-            </div>
           </Tab>
 
           <Tab eventKey="active-tab" title="Active Orders">
             <br />
-            <div className="mx-5">
               <Table columns={columns} data={this.state.activeData} formType="Order" tRole="Admin" />
-            </div>
           </Tab>
 
           <Tab eventKey="completed-tab" title="Completed Orders">
             <br />
-            <div className="mx-5">
               <Table columns={columns} data={this.state.completedData} formType="Order" tRole="Admin" />
-            </div>
           </Tab>
 
           <Tab eventKey="rejected-tab" title="Rejected Orders">
             <br />
-            <div className="mx-5">
               <Table columns={columns} data={this.state.rejectData} formType="Order" tRole="Admin" />
-            </div>
           </Tab>
 
           <Tab eventKey="emergency-tab" title="Emergency Status">
             <br />
-            <div className="mx-5">
               <Table columns={columns} data={this.state.emergencyData} formType="Order" tRole="Admin" />
-            </div>
           </Tab>
         </Tabs>
 

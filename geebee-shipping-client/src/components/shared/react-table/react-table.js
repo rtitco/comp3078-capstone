@@ -190,6 +190,7 @@ function Table({ columns, data, formType, tRole }) {
   // Render the UI for your table
   return (
     <div>
+
       <div className="input-group mb-3">
         <span className="input-group-text" id="lblSearch">Search</span>
         <input type="text" className={"form-control col-sm-5 col-md-3 col-lg-2"}
@@ -197,6 +198,7 @@ function Table({ columns, data, formType, tRole }) {
           onChange={handleFilterChange}
           placeholder={"Input keyword here..."} />
       </div>
+
       <BTable striped bordered hover size="sm" {...getTableProps()}>
         <thead>
           {headerGroups.map(headerGroup => (
@@ -209,10 +211,12 @@ function Table({ columns, data, formType, tRole }) {
             </tr>
           ))}
         </thead>
+
         <tbody>
           {rows.map((row, i) => {
             prepareRow(row)
             return (
+
               <tr {...row.getRowProps()} onClick={() => setSelectedRow(row.original)}>
                 {row.cells.map(cell => {
                   return (
@@ -229,6 +233,7 @@ function Table({ columns, data, formType, tRole }) {
             )
           })}
         </tbody>
+        
       </BTable>
     </div>
   )
