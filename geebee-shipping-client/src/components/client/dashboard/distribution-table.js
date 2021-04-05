@@ -16,23 +16,31 @@ export default class DistributionTable extends Component {
       orders_completed: [],
       orders_processed: [],
       loading: true,
-      waiting: "Awaiting Delivery"
+      waiting: "Awaiting Delivery",
+      companyName: ''
     }
   }
 
   async getOrdersInProgress() {
     const inprogress = await axios.get('http://localhost:8081/orders/status/Incomplete')
-    this.setState({ loading: false, orders_inProgress: inprogress.data })
+    this.setState({ orders_inProgress: inprogress.data })
   }
 
   async getOrdersCompleted() {
     const completed = await axios.get('http://localhost:8081/orders/status/Completed')
-    this.setState({ loading: false, orders_completed: completed.data })
+    this.setState({ orders_completed: completed.data })
   }
 
   async getOrdersProcessed() {
     const processed = await axios.get(`http://localhost:8081/orders/status/${this.state.waiting}`)
-    this.setState({ loading: false, orders_processed: processed.data })
+    this.setState({ orders_processed: processed.data })
+  }
+
+  async getCompanyName(address){
+    const company = await axios.get(`http://localhost:8081/companies/address/${address}`)
+    // return setState({
+    //   companyName: company.data.company_name
+      
   }
 
   componentDidMount() {
@@ -56,11 +64,13 @@ export default class DistributionTable extends Component {
         accessor: 'delivery_date',
       },
       {
-        Header: 'Origin Address',
+        Header: 'Origin',
         accessor: data => data.origin_address + ', ' + data.origin_city + ', ' + data.origin_postalCode
+        // accessor: data => {this.getCompanyName(data.origin_address)}
+
       },
       {
-        Header: 'Destination Address',
+        Header: 'Destination',
         accessor: data => data.destination_address + ', ' + data.destination_city + ', ' + data.destination_postalCode,
       },
       {
@@ -87,13 +97,13 @@ export default class DistributionTable extends Component {
               <Table columns={columns} data={this.state.orders_inProgress} formType="Order" />
           </Tab>
 
-          <Tab eventKey="processed-tab" title="Awaiting Delivery">
+          {/* <Tab eventKey="processed-tab" title="Awaiting Delivery">
               <Table columns={columns} data={this.state.orders_processed} formType="Order" />
           </Tab>
 
           <Tab eventKey="completed-tab" title="Completed Orders">
               <Table columns={columns} data={this.state.orders_completed} formType="Order" />
-          </Tab>
+          </Tab> */}
         </Tabs>
 
       </div>

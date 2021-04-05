@@ -16,15 +16,10 @@ class CreateOrderForm extends Component {
         let sessionUser = JSON.parse(window.sessionStorage.getItem("currentUser"))
         this.state = {
             currentUser: sessionUser,
+            
             deliveryDate: '',
             originCompany: '',
             destinationCompany: '',
-            // origin_address: '',
-            // origin_city: '',
-            // origin_postalCode: '',
-            // dest_address: '',
-            // dest_city: '',
-            // dest_postalCode: '',
             cargo_type: '',
             cargo_weight: '',
             assigned_truckClass: '',
@@ -35,21 +30,10 @@ class CreateOrderForm extends Component {
             errorMessage: '',
             errorDate: '',
             errorOriginAddress: '',
-            // errorOriginCity: '',
-            // errorOriginPostalCode: '',
             errorDestAddress: '',
-            // errorDestCity: '',
-            // errorDestPostalCode: '',
 
             singleSelections: [],
-
             companyNames: [],
-
-            // companyAddresses: [],
-            // companyOrigPostalCode: [],
-            // companyOrigCity: [],
-            // companyDestPostalCode: [],
-            // companyDestCity: []
         }
         let myAdd = ''
     }
@@ -75,30 +59,6 @@ class CreateOrderForm extends Component {
         // this.setState({ companyAddresses: myAddresses })
         this.setState({ companyNames: myCompanies })
     }
-
-    // getCompanyCityPostal = async (location, inputAddress) => {
-    //     const companyRes = await axios.get(`http://localhost:8081/companies/address/${inputAddress}`)
-    //     let myCity = [];
-    //     let myPostalCodes = [];
-    //     let cityID = 0;
-    //     let postalID = 0;
-
-    //     companyRes.data.forEach(element => {
-    //         let city = element.city
-    //         let postal = element.postal_code
-    //         myCity.push({ id: cityID, label: city })
-    //         myPostalCodes.push({ id: postalID, label: postal })
-    //         cityID++;
-    //         postalID++;
-    //     })
-
-    //     if (location == "origin") {
-    //         this.setState({ companyOrigCity: myCity, companyOrigPostalCode: myPostalCodes })
-    //     }
-    //     else {
-    //         this.setState({ companyDestCity: myCity, companyDestPostalCode: myPostalCodes })
-    //     }
-    // }
 
     //==============================Set Autocomplete Selections==========================================
     //Companies

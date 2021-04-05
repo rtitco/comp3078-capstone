@@ -58,15 +58,16 @@ app.get('/companies/name/:companyName', async (req, add) => {
     }
 })
 
-// 
-app.get('/companies/address/:address', async (req, res) => {
+// GET ==> Company based on Address
+app.get('/companies/address/:address', async (req, companyFound) => {
     const Company = await companyModel.find({ address: req.params.address });
-    try {
-        res.send(Company);
+    try{
+        companyFound.send(Company)
     }
-    catch (err) {
-        res.status(500).send(err);
+    catch(err){
+        companyFound("Error with Database")
     }
+
 })
 
 //==============================================Trucks Table==============================================
@@ -113,7 +114,7 @@ app.get('/orders/status/:status', async (req, res) => {
             $and: [{ order_status: { $ne: "Completed" } }, { order_status: { $ne: "Processing" } }]
         });
     }
-    else if (req.params.status == "Incomplete"){
+    else if (req.params.status == "Incomplete") {
         Orders = await orderModel.find({ order_status: { $ne: "Completed" } });
     }
     else {
