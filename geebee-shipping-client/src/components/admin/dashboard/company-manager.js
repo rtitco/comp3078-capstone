@@ -50,8 +50,8 @@ export default class CompanyManager extends Component {
       }
     ]
     return (
-      <div>
-        <Button href="/admin/company-manager/add" className="float-right mr-5 mb-2" variant="success">Add Company</Button>{''}
+      <div class="mt-4">
+        <Button href="/admin/company-manager/add" className="float-right mr-5 mb-2 btn-top-margin" variant="primary" >Add Company</Button>{''}
           <Table columns={columns} data={this.state.data} formType="Company" tRole="Admin" />
       </div>
     )

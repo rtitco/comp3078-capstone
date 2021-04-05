@@ -201,7 +201,7 @@ class EditCompanyForm extends Component {
       <div>
 
         <Row className="justify-content-md-center mt-5">
-          <Col lg="6" >
+          <Col lg="6"  className="bg-light p-5" >
             <h1>Edit Company</h1>
             <hr />
             <Form onSubmit={this.onSubmit}>

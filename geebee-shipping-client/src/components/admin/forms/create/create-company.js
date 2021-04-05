@@ -192,7 +192,7 @@ class CreateCompanyForm extends Component {
       <div>
 
         <Row className="justify-content-md-center mt-5">
-          <Col lg="6" >
+          <Col lg="6" className="bg-light p-5" >
             <h1>Add Company</h1>
             <hr />
             <Form onSubmit={this.onSubmit}>
@@ -271,7 +271,7 @@ class CreateCompanyForm extends Component {
               <Button variant="primary" type="submit" className="btn btn-primary btn-block">
                 Submit
               </Button>
-              <Link className="mt-3 btn btn-warning btn-block" to='/admin/company-manager'>Back</Link>
+              <Link className="mt-3 btn btn-secondary btn-block" to='/admin/company-manager'>Back</Link>
             </Form>
           </Col>
         </Row>

@@ -252,7 +252,7 @@ class EditAdminOrderForm extends Component {
       <div>
         <Row>
           {/* Form Left Side */}
-          <Col md="6">
+          <Col md="6"  className="bg-light p-5">
             <h4 className='text-center'>Schedule Delivery Order</h4>
 
             <Row className="justify-content-center">

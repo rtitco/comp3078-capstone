@@ -1,3 +1,22 @@
 body{
-    background-color: #F1F1F5;
+    background-color: #FFFFFF;
+}
+
+.btn-primary{
+  background-color: #8CA0E3;
+  border:0;
+}
+
+.btn-primary:hover{
+  background-color: #6878aa !important;
+}
+
+.btn-secondary{
+  background-color: #101C42;
+  border:0;
+}
+
+.btn-secondary:hover{
+  background-color: #040813 !important;
+  color:white;
 }
