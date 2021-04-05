@@ -60,7 +60,7 @@ class LoginForm extends Component {
 
         if (formValid) {
             const loginUser = {
-                email: this.state.email,
+                email: this.state.email.toLowerCase(),
                 password: this.state.password
             }
 

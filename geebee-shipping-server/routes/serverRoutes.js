@@ -116,7 +116,7 @@ app.get('/orders/status/:status', async (req, res) => {
     else if (req.params.status == "Incomplete"){
         Orders = await orderModel.find({ order_status: { $ne: "Completed" } });
     }
-    else if (req.params.status == "Emergency" || req.params.status == "Rejected" || req.params.status == "Processing" || req.params.status == "Completed") {
+    else {
         Orders = await orderModel.find({ order_status: req.params.status });
     }
     try {

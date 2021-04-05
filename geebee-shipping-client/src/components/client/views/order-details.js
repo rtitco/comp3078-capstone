@@ -78,16 +78,7 @@ class ViewOrderDetails extends Component {
 
         return (
             <div>
-                <Row>
-                    <Col>
-                        <Row>
-                            <Link className="mt-3 btn btn-secondary" to='/client'>Back</Link>
-                        </Row>
-                        <Row>
-                            <h3>Order ID: {this.state.delivery_id}</h3>
-                        </Row>
-                    </Col>
-                </Row>
+                <Link className="mx-3 my-2 btn btn-secondary " to='/client'>Back</Link>
 
                 {/* Buttons on Left, Details on Right */}
                 <Row>
@@ -98,29 +89,36 @@ class ViewOrderDetails extends Component {
                     </Col>
 
                     <Col md="10">
-                        <Row>
-                            <Col md="2">
+                        <Row className="justify-content-center">
+                            <Col className="bg-light pt-4" md="4">
+                                <h3 className="pb-3">Order ID: {this.state.delivery_id}</h3>
+                                <h2 className="h5">Details: </h2>
+                                <hr />
+                            </Col>
+                        </Row>
+                        <Row className="justify-content-center">
+                            <Col className="bg-light" xs="6" md="2">
                                 <label>Delivery Date:</label>
                             </Col>
-                            <Col md="2">
+                            <Col className="bg-light" xs="6" md="2">
                                 <label>{this.state.delivery_date}</label>
                             </Col>
                         </Row>
 
-                        <Row>
-                            <Col md="2">
+                        <Row className="justify-content-center">
+                            <Col className="bg-light" xs="6" md="2">
                                 <label>Cargo:</label>
                             </Col>
-                            <Col md="2">
+                            <Col className="bg-light" xs="6" md="2">
                                 <label>{this.state.cargo_type}</label>
                             </Col>
                         </Row>
 
-                        <Row>
-                            <Col md="2">
+                        <Row className="justify-content-center">
+                            <Col className="bg-light" xs="6" md="2">
                                 <label>Truck License Plate:</label>
                             </Col>
-                            <Col md="2">
+                            <Col className="bg-light" xs="6" md="2">
                                 <label>{this.state.assigned_truck_plate}</label>
                             </Col>
                         </Row>
@@ -129,7 +127,6 @@ class ViewOrderDetails extends Component {
             </div >
         )
     }
-
 }
 
 export default ViewOrderDetails;

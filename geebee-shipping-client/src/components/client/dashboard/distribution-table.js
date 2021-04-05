@@ -14,7 +14,9 @@ export default class DistributionTable extends Component {
       currentUser: sessionUser,
       orders_inProgress: [],
       orders_completed: [],
-      loading: true
+      orders_processed: [],
+      loading: true,
+      waiting: "Awaiting Delivery"
     }
   }
 
@@ -28,9 +30,15 @@ export default class DistributionTable extends Component {
     this.setState({ loading: false, orders_completed: completed.data })
   }
 
+  async getOrdersProcessed() {
+    const processed = await axios.get(`http://localhost:8081/orders/status/${this.state.waiting}`)
+    this.setState({ loading: false, orders_processed: processed.data })
+  }
+
   componentDidMount() {
     this.getOrdersInProgress()
     this.getOrdersCompleted()
+    this.getOrdersProcessed()
   }
 
   render() {
@@ -74,19 +82,17 @@ export default class DistributionTable extends Component {
           <Button className="float-right mr-5 mb-2 btn-top-margin">Create Order</Button>
         </Link>
 
-        <Tabs defaultActiveKey="all-tab" id="uncontrolled-tab-example">
+        <Tabs defaultActiveKey="all-tab" id="uncontrolled-tab-example" className="py-3">
           <Tab eventKey="all-tab" title="In Progress">
-            <div className="mx-5">
-              <h5>In Progress</h5>
               <Table columns={columns} data={this.state.orders_inProgress} formType="Order" />
-            </div>
+          </Tab>
+
+          <Tab eventKey="processed-tab" title="Awaiting Delivery">
+              <Table columns={columns} data={this.state.orders_processed} formType="Order" />
           </Tab>
 
           <Tab eventKey="completed-tab" title="Completed Orders">
-            <div className="mx-5">
-            <h5>Completed</h5>
               <Table columns={columns} data={this.state.orders_completed} formType="Order" />
-            </div>
           </Tab>
         </Tabs>
 
