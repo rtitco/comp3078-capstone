@@ -73,7 +73,7 @@ export default class DistributionTable extends Component {
     return (
       <div>
         <Link to="./orders/add">
-          <Button className="float-right mr-5 mb-2" variant="success">Create Order</Button>
+          <Button className="float-right mr-5 mb-2 btn-top-margin">Create Order</Button>
         </Link>
 
         <Tabs defaultActiveKey="all-tab" id="uncontrolled-tab-example">

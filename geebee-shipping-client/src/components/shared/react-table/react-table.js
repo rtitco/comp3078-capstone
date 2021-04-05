@@ -1,8 +1,7 @@
 import './react-table.css';
 
 import { useState } from 'react'
-import BTable from 'react-bootstrap/Table';
-import { useTable, useGlobalFilter } from 'react-table'
+import { useTable, useGlobalFilter, useSortBy } from 'react-table'
 import { Redirect } from "react-router-dom";
 
 import Popover from 'react-bootstrap/Popover';
@@ -61,7 +60,7 @@ function Table({ columns, data, formType, tRole }) {
       {
         columns,
         data,
-      }, useGlobalFilter)
+      }, useGlobalFilter, useSortBy)
 
 
   //checks what table type and sends to respective edit form
@@ -199,15 +198,24 @@ function Table({ columns, data, formType, tRole }) {
           placeholder={"Input keyword here..."} />
       </div>
 
-      <BTable striped bordered hover size="sm" {...getTableProps()}>
+      <table className="table table-striped table-hover" {...getTableProps()}>
         <thead>
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => (
-                <th {...column.getHeaderProps()}>
+                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                   {column.render('Header')}
+                  <span>
+                    {column.isSorted
+                      ? column.isSortedDesc
+                        ? ' 🔽'
+                        : ' 🔼'
+                      : ''}
+                  </span>
                 </th>
+               
               ))}
+               <th></th>
             </tr>
           ))}
         </thead>
@@ -234,7 +242,7 @@ function Table({ columns, data, formType, tRole }) {
           })}
         </tbody>
         
-      </BTable>
+      </table>
     </div>
   )
 }

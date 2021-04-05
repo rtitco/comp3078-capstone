@@ -3,3 +3,19 @@
     width: 140px;
   }
 
+  th {
+    background-color: #3A506B;
+    color:white;
+} 
+
+  .table-striped > tbody > tr:nth-child(2n) > td, .table-striped > tbody > tr:nth-child(2n) > th {
+    background-color: white;
+ }
+
+  .table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+    background-color: #F9FBF2;
+ }
+
+ .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color: #FFFBAD;
+}

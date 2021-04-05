@@ -155,41 +155,41 @@ class ViewRouteDetails extends Component {
 
                     <Col md="10">
                         <Row className="justify-content-center">
-                            <Col  className="bg-white pt-4" md="4">
+                            <Col  className="bg-light pt-4" md="4">
                                 <h3 className="pb-3">Order ID: {this.state.delivery_id}</h3>
                                 <h2 className="h5">Details:</h2>
                                 <hr/>
                             </Col>
                         </Row>
                         <Row className="justify-content-center">
-                            <Col  className="bg-white" xs="6" md="2">
+                            <Col  className="bg-light" xs="6" md="2">
                                 <label>Delivery Date:</label>
                             </Col>
-                            <Col  className="bg-white" xs="6" md="2">
+                            <Col  className="bg-light" xs="6" md="2">
                                 <label>{this.state.delivery_date}</label>
                             </Col>
                         </Row>
 
                         <Row className="justify-content-center">
-                            <Col  className="bg-white" xs="6" md="2">
+                            <Col  className="bg-light" xs="6" md="2">
                                 <label>Cargo:</label>
                             </Col>
-                            <Col  className="bg-white" xs="6" md="2">
+                            <Col  className="bg-light" xs="6" md="2">
                                 <label>{this.state.cargo_type}</label>
                             </Col>
                         </Row>
 
                         <Row className="justify-content-center">
-                            <Col  className="bg-white"xs="6" md="2">
+                            <Col  className="bg-light"xs="6" md="2">
                                 <label>Truck License Plate:</label>
                             </Col>
-                            <Col  className="bg-white pb-4" xs="6" md="2">
+                            <Col  className="bg-light pb-4" xs="6" md="2">
                                 <label>{this.state.assigned_truck_plate}</label>
                             </Col>
                         </Row>
 
                         <Row className="my-4">
-                            <Col md="6" className="bg-white py-5">
+                            <Col md="6" className="bg-light py-5">
                                 <h5>Origin</h5>
                                 <hr/>
                                 <Row className="justify-content-center">
@@ -221,7 +221,7 @@ class ViewRouteDetails extends Component {
                                 </Row>
                             </Col>
 
-                            <Col md="6" className="bg-white mt-4 py-5">
+                            <Col md="6" className="bg-light mt-4 py-5">
                                 <h5>Destination</h5>
                                 <hr/>
                                 <Row className="justify-content-center">

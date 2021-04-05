@@ -1,7 +1,9 @@
 .navbar-bb{
-    background-color: #31326f !important;
+    background-color: #101C42 !important;
+    border-bottom:3px solid #8C9BE3 ;
 }
 
  .navbar-nav > .nav-link{
     font-size:1.1rem;
+    
 }

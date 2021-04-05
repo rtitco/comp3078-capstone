@@ -1,13 +1,14 @@
 .nav-tabs > .nav-link{
     font-size:1.1rem;
-    color:black;
-    background-color: #B8B8CD;
+    color:#101C42;
+    background-color: #CED4F3;
 }
 
 .nav-tabs > .nav-link a:hover{
-    color:#9ddfd3;
+    color:white;
 }
 
 .nav-tabs > .nav-link.active{
-    background-color: #9ddfd3;
+    background-color: #3A506B;
+    color:white;
 }

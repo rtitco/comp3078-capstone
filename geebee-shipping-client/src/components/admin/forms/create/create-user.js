@@ -208,7 +208,7 @@ class CreateUserForm extends Component {
                 </p> */}
                 <h1 className='text-center h2'>Register A New User</h1>
                 <Row className="justify-content-center">
-                    <Col md="6">
+                    <Col md="6"  className="bg-light p-5">
                         <div>
                             <div className='form-div mt-2'>
                                 <form onSubmit={this.onSubmit}>
