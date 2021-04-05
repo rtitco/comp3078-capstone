@@ -1,7 +1,7 @@
 import React from 'react'
 import { Navbar, Nav } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
-import './login-navbar.css';
+import '../../shared/navbar.css';
 const LoginNavBar = (props) => {
 
   function logout(){
@@ -9,7 +9,7 @@ const LoginNavBar = (props) => {
   }
 
   return (
-    <Navbar className="navbar-bb" variant="dark" expand="lg">
+    <Navbar className="navbar-bb" expand="lg">
       <LinkContainer to="/">
         <Navbar.Brand className="text-white">BusyBee Shipping Solutions</Navbar.Brand>
       </LinkContainer>

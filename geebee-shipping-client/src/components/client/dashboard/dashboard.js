@@ -63,7 +63,7 @@ class ClientDashboard extends Component {
             }
         }
         return (
-            <div>
+            <div className="dashboard-container">
                 <LoginNavBar fname={this.state.currentUser.firstName} lname={this.state.currentUser.lastName} />
                 <Container fluid>
                     <Switch>

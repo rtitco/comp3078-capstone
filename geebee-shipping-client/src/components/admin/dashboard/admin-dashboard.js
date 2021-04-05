@@ -2,6 +2,8 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
+import '../../shared/dashboard-styles.css';
+
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 
 //Switch to logged in header (keeping for formatting), which will have the logo at the top and the logout / profile access
@@ -17,7 +19,6 @@ import UserManager from './user-manager';
 import CreateUserForm from '../forms/create/create-user';
 //orders
 import OrderManager from './order-manager';
-// import CreateAdminOrder from '../forms/create/create-admin-order';
 import EditAdminOrder from '../forms/edit/edit-admin-order';
 import { Component } from 'react';
 
@@ -45,8 +46,8 @@ class AdminDashboard extends Component {
             return <Redirect to='/dashboard' />
         }
         return (
-            <div>
-                      <AdminNavBar fname={this.state.currentUser.firstName} lname={this.state.currentUser.lastName} />
+            <div className="dashboard-container">
+                <AdminNavBar fname={this.state.currentUser.firstName} lname={this.state.currentUser.lastName} />
                 <Container className="mt-4" fluid>
                     <Row className="">
                         <Col>

@@ -5,6 +5,7 @@ import logo from '../../../shared/profile/gb.png';
 import { Navbar, Nav } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import React from 'react'
+import '../../../shared/navbar.css';
 
 const AdminNavBar = (props) => {
 
@@ -13,7 +14,7 @@ const AdminNavBar = (props) => {
   }
 
   return (
-    <Navbar bg="light" expand="lg">
+    <Navbar className="navbar-bb" variant="dark" expand="lg">
 
       <LinkContainer to="/">
         <Navbar.Brand>Geebee Shipping Solutions - {props.fname} {props.lname}</Navbar.Brand>
