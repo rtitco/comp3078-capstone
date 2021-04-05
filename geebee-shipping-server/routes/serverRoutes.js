@@ -15,7 +15,7 @@ const ObjectID = require('mongodb').ObjectID;
 //==============================================Users Table==============================================
 // GET ==> All users
 app.get('/users/:role', async (req, res) => {
-    const Users = await userModel.find({role: req.params.role});
+    const Users = await userModel.find({ role: req.params.role });
     try {
         res.send(Users);
     }
@@ -72,7 +72,7 @@ app.get('/companies/address/:address', async (req, res) => {
 //==============================================Trucks Table==============================================
 //GET ==> All Trucks in Fleet
 app.get('/fleet/:status', async (req, res) => {
-    const Vehicles = await vehicleModel.find({vehicle_status: req.params.status}); //Async function. Wait for results before posting
+    const Vehicles = await vehicleModel.find({ vehicle_status: req.params.status }); //Async function. Wait for results before posting
     try {
         res.send(Vehicles);
     }
@@ -104,18 +104,21 @@ app.get('/orders', async (req, res) => {
     }
 });
 
-app.get('/orders/in-progress', async (req, res) => {
-    const Orders = await orderModel.find({ order_status: { $ne: "Completed" } });
-    try {
-        res.send(Orders);
-    }
-    catch (err) {
-        res.status(500).send(err);
-    }
-});
+//GET ==> All Orders with a Specified Status
+app.get('/orders/status/:status', async (req, res) => {
+    let Orders = []
 
-app.get('/orders/completed', async (req, res) => {
-    const Orders = await orderModel.find({ order_status: 'Completed' });
+    if (req.params.status == "Active") {
+        // Orders = await orderModel.find({ 
+        //     $or: [{order_status: { $ne: "Completed" }}, {order_status: { $ne: "Processing" }}]
+        // });
+        Orders = await orderModel.find({ 
+            $and: [ {order_status: {$ne: "Completed"}}, {order_status: {$ne: "Processing"}} ]
+        });
+    }
+    else if (req.params.status == "Emergency" || req.params.status == "Rejected" || req.params.status == "Processing" || req.params.status == "Completed") {
+        Orders = await orderModel.find({ order_status: req.params.status });
+    }
     try {
         res.send(Orders);
     }
@@ -137,28 +140,12 @@ app.get('/orders/:date', async (req, res) => {
 
 //GET ==> Orders for Specific Driver
 app.get('/driver/orders/:userEmail', async (req, res) => {
-    let DriverRoutes = await orderModel.find({ assigned_truck_driverEmail: req.params.userEmail, order_status: {$ne: "Completed"} });
+    let DriverRoutes = await orderModel.find({ assigned_truck_driverEmail: req.params.userEmail, order_status: { $ne: "Completed" } });
     try {
         res.send(DriverRoutes);
     }
     catch (err) {
         console.log(err)
-    }
-})
-
-//GET ==> Orders With Specific Status
-app.get('/orders/search/:orderStatus', async (req, res) => {
-    if (req.params.orderStatus == "Emergency" || req.params.orderStatus == "Rejected" || req.params.orderStatus == "Completed") {
-        const Orders = await orderModel.find({ order_status: req.params.orderStatus });
-        try {
-            res.send(Orders);
-        }
-        catch (err) {
-            res.status(500).send(err);
-        }
-    }
-    else {
-        res.status(500).send(err);
     }
 })
 

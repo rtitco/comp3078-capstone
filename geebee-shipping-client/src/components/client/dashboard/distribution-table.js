@@ -19,7 +19,7 @@ export default class DistributionTable extends Component {
   }
 
   async getOrdersInProgress() {
-    const inprogress = await axios.get('http://localhost:8081/orders/in-progress')
+    const inprogress = await axios.get('http://localhost:8081/orders/active')
     console.log("In Progress Orders: ")
     console.log(inprogress.data)
     this.setState({ loading: false, orders_inProgress: inprogress.data })

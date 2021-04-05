@@ -90,7 +90,7 @@ export default class UserManager extends Component {
         </Link>
 
         <Tabs defaultActiveKey="admin-tab" id="uncontrolled-tab-example">
-          <Tab eventKey="admin-tab" title="Admin">
+          <Tab eventKey="admin-tab" title="Admin" variant="dark">
             <div className="mx-5">
               <h5>Admin</h5>
               <Table columns={columns} data={this.state.adminData} formType="User" tRole="admin" />

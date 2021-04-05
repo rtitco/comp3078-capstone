@@ -8,38 +8,47 @@ export default class OrderManager extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      orderData: [],
+      activeData: [],
       rejectData: [],
       emergencyData: [],
+      processingData: [],
       completedData: [],
       loading: true,
       showModal: false,
 
       errorStatus: '',
 
+      statusActive: 'Active',
       statusCompleted: 'Completed',
       statusEmergency: 'Emergency',
-      statusRejected: 'Rejected'
+      statusRejected: 'Rejected',
+      statusProcessing: 'Processing'
     }
+
   }
 
   getOrderData = async () => {
-    const orderRes = await axios.get('http://localhost:8081/orders')
-    this.setState({ loading: false, orderData: orderRes.data })
+    const orderRes = await axios.get(`http://localhost:8081/orders/status/${this.state.statusActive}`)
+    this.setState({ loading: false, activeData: orderRes.data })
   }
 
   getRejectedData = async () => {
-    const rejectRes = await axios.get(`http://localhost:8081/admin/order-manager/${this.statusRejected}`)
+    const rejectRes = await axios.get(`http://localhost:8081/orders/status/${this.state.statusRejected}`)
     this.setState({ rejectData: rejectRes.data })
   }
 
   getEmergencyData = async () => {
-    const emergencyRes = await axios.get(`http://localhost:8081/admin/order-manager/${this.statusEmergency}`)
+    const emergencyRes = await axios.get(`http://localhost:8081/orders/status/${this.state.statusEmergency}`)
     this.setState({ emergencyData: emergencyRes.data })
   }
 
+  getProcessingData = async () => {
+    const processingRes = await axios.get(`http://localhost:8081/orders/status/${this.state.statusProcessing}`)
+    this.setState({ processingData: processingRes.data })
+  }
+
   getCompletedData = async () => {
-    const completedRes = await axios.get(`http://localhost:8081/orders/search/${this.state.statusCompleted}`)
+    const completedRes = await axios.get(`http://localhost:8081/orders/status/${this.state.statusCompleted}`)
     this.setState({
       loading: false,
       completedData: completedRes.data,
@@ -50,6 +59,7 @@ export default class OrderManager extends Component {
     this.getOrderData()
     this.getRejectedData()
     this.getEmergencyData()
+    this.getProcessingData()
     this.getCompletedData()
   }
 
@@ -90,31 +100,39 @@ export default class OrderManager extends Component {
         <h1>Order Manager</h1>
         <br></br>
 
-        <Tabs defaultActiveKey="all-tab" id="uncontrolled-tab-example">
-          <Tab eventKey="all-tab" title="All Orders">
+        <Tabs defaultActiveKey="processing-tab" id="uncontrolled-tab-example">
+
+        <Tab eventKey="processing-tab" title="New Orders">
+            <br />
             <div className="mx-5">
-              <h5>All Orders</h5>
-              <Table columns={columns} data={this.state.orderData} formType="Order" tRole="Admin" />
+              <Table columns={columns} data={this.state.processingData} formType="Order" tRole="Admin" />
+            </div>
+          </Tab>
+
+          <Tab eventKey="active-tab" title="Active Orders">
+            <br />
+            <div className="mx-5">
+              <Table columns={columns} data={this.state.activeData} formType="Order" tRole="Admin" />
             </div>
           </Tab>
 
           <Tab eventKey="completed-tab" title="Completed Orders">
+            <br />
             <div className="mx-5">
-              <h5>Completed Orders</h5>
               <Table columns={columns} data={this.state.completedData} formType="Order" tRole="Admin" />
             </div>
           </Tab>
 
           <Tab eventKey="rejected-tab" title="Rejected Orders">
+            <br />
             <div className="mx-5">
-              <h5>Rejected Orders</h5>
               <Table columns={columns} data={this.state.rejectData} formType="Order" tRole="Admin" />
             </div>
           </Tab>
 
           <Tab eventKey="emergency-tab" title="Emergency Status">
+            <br />
             <div className="mx-5">
-              <h5>Emergency Status</h5>
               <Table columns={columns} data={this.state.emergencyData} formType="Order" tRole="Admin" />
             </div>
           </Tab>
