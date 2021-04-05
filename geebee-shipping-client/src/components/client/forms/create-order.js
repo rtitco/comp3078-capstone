@@ -17,12 +17,14 @@ class CreateOrderForm extends Component {
         this.state = {
             currentUser: sessionUser,
             deliveryDate: '',
-            origin_address: '',
-            origin_city: '',
-            origin_postalCode: '',
-            dest_address: '',
-            dest_city: '',
-            dest_postalCode: '',
+            originCompany: '',
+            destinationCompany: '',
+            // origin_address: '',
+            // origin_city: '',
+            // origin_postalCode: '',
+            // dest_address: '',
+            // dest_city: '',
+            // dest_postalCode: '',
             cargo_type: '',
             cargo_weight: '',
             assigned_truckClass: '',
@@ -33,19 +35,21 @@ class CreateOrderForm extends Component {
             errorMessage: '',
             errorDate: '',
             errorOriginAddress: '',
-            errorOriginCity: '',
-            errorOriginPostalCode: '',
+            // errorOriginCity: '',
+            // errorOriginPostalCode: '',
             errorDestAddress: '',
-            errorDestCity: '',
-            errorDestPostalCode: '',
+            // errorDestCity: '',
+            // errorDestPostalCode: '',
 
             singleSelections: [],
-            companyAddresses: [],
 
-            companyOrigPostalCode: [],
-            companyOrigCity: [],
-            companyDestPostalCode: [],
-            companyDestCity: []
+            companyNames: [],
+
+            // companyAddresses: [],
+            // companyOrigPostalCode: [],
+            // companyOrigCity: [],
+            // companyDestPostalCode: [],
+            // companyDestCity: []
         }
         let myAdd = ''
     }
@@ -56,97 +60,62 @@ class CreateOrderForm extends Component {
 
     getCompanyAddresses = async () => {
         const companyRes = await axios.get(`http://localhost:8081/companies`)
-        let myAddresses = []
+        // let myAddresses = []
+        let myCompanies = []
         let currentID = 0;
 
         companyRes.data.forEach(element => {
-            let address = element.address
-            myAddresses.push({ id: currentID, label: address })
+            // let address = element.address
+            // myAddresses.push({ id: currentID, label: address })
+
+            let company = element.company_name
+            myCompanies.push({ id: currentID, label: company })
             currentID++;
         });
-        this.setState({ companyAddresses: myAddresses })
+        // this.setState({ companyAddresses: myAddresses })
+        this.setState({ companyNames: myCompanies })
     }
 
-    getCompanyCityPostal = async (location, inputAddress) => {
-        const companyRes = await axios.get(`http://localhost:8081/companies/address/${inputAddress}`)
-        let myCity = [];
-        let myPostalCodes = [];
-        let cityID = 0;
-        let postalID = 0;
+    // getCompanyCityPostal = async (location, inputAddress) => {
+    //     const companyRes = await axios.get(`http://localhost:8081/companies/address/${inputAddress}`)
+    //     let myCity = [];
+    //     let myPostalCodes = [];
+    //     let cityID = 0;
+    //     let postalID = 0;
 
-        companyRes.data.forEach(element => {
-            let city = element.city
-            let postal = element.postal_code
-            myCity.push({ id: cityID, label: city })
-            myPostalCodes.push({ id: postalID, label: postal })
-            cityID++;
-            postalID++;
-        })
+    //     companyRes.data.forEach(element => {
+    //         let city = element.city
+    //         let postal = element.postal_code
+    //         myCity.push({ id: cityID, label: city })
+    //         myPostalCodes.push({ id: postalID, label: postal })
+    //         cityID++;
+    //         postalID++;
+    //     })
 
-        if (location == "origin") {
-            this.setState({ companyOrigCity: myCity, companyOrigPostalCode: myPostalCodes })
-        }
-        else {
-            this.setState({ companyDestCity: myCity, companyDestPostalCode: myPostalCodes })
-        }
-    }
+    //     if (location == "origin") {
+    //         this.setState({ companyOrigCity: myCity, companyOrigPostalCode: myPostalCodes })
+    //     }
+    //     else {
+    //         this.setState({ companyDestCity: myCity, companyDestPostalCode: myPostalCodes })
+    //     }
+    // }
 
     //==============================Set Autocomplete Selections==========================================
-    //Addresses
-    setOrigAddSelections = (mySelection) => {
+    //Companies
+    setOriginSelections = (mySelection) => {
         if (mySelection != undefined && mySelection[0] != undefined) {
-            this.changeOriginAddress(mySelection[0].label)
             this.setState({
-                originAddSelections: [mySelection],
-                origin_address: mySelection[0].label
+                originSelections: [mySelection],
+                originCompany: mySelection[0].label
             })
         }
     }
 
-    setDestAddSelections = (mySelection) => {
-        if (mySelection != undefined && mySelection[0] != undefined) {
-            this.changeDestAddress(mySelection[0].label)
-            this.setState({
-                destAddSelections: [mySelection],
-                dest_address: mySelection[0].label
-            })
-        }
-    }
-
-    //Cities
-    setOrigCitySelections = (mySelection) => {
+    setDestinationSelections = (mySelection) => {
         if (mySelection != undefined && mySelection[0] != undefined) {
             this.setState({
-                originCitySelections: [mySelection],
-                origin_city: mySelection[0].label
-            })
-        }
-    }
-
-    setDestCitySelections = (mySelection) => {
-        if (mySelection != undefined && mySelection[0] != undefined) {
-            this.setState({
-                destCitySelections: [mySelection],
-                dest_city: mySelection[0].label
-            })
-        }
-    }
-
-    //Postal Codes
-    setOrigPostSelections = (mySelection) => {
-        if (mySelection != undefined && mySelection[0] != undefined) {
-            this.setState({
-                originPostSelections: [mySelection],
-                origin_postalCode: mySelection[0].label
-            })
-        }
-    }
-
-    setDestPostSelections = (mySelection) => {
-        if (mySelection != undefined && mySelection[0] != undefined) {
-            this.setState({
-                destPostSelections: [mySelection],
-                dest_postalCode: mySelection[0].label
+                destinationSelections: [mySelection],
+                destinationCompany: mySelection[0].label
             })
         }
     }
@@ -175,21 +144,6 @@ class CreateOrderForm extends Component {
         })
     }
 
-    changeOriginAddress = (mySelection) => {
-        this.getCompanyCityPostal("origin", mySelection)
-        this.setState({
-            origin_address: mySelection
-        })
-    }
-
-    // Dest
-    changeDestAddress = (mySelection) => {
-        this.getCompanyCityPostal("destination", mySelection)
-        this.setState({
-            dest_address: mySelection
-        })
-    }
-
     changeCargoType = (event) => {
         this.setState({
             cargo_type: event.target.value
@@ -205,23 +159,16 @@ class CreateOrderForm extends Component {
     //==============================onSubmit() Function==========================================
 
     onSubmit = (event) => {
-        // prevents form from acting in default way, stops refreshing
         event.preventDefault()
 
         let dateValid = false
-        let origAddValid = false
-        let origCityValid = false
-        let origPostValid = false
-        let destAddValid = false
-        let destCityValid = false
-        let destPostValid = false
+        let originCompValid = false
+        let destinationCompValid = false
         let typeValid = false
         let weightValid = false
 
         //====================================VALIDATION==========================================//
-        const rgx_address = /^([\d]{1,5}[a-mA-M]{0,1}){1}[ ]{1}([A-Za-z]{2,}[ ]{0,1}){1,}[.]{0,1}$/
-        const rgx_city = /^[A-Za-z]{1,}([ \-]{0,1}([A-Za-z]{1}[a-z]{1,}))*$/
-        const rgx_postalCode = /^([a-zA-z]{1}[\d]{1}[a-zA-z]{1}){1}[ ]{0,1}([\d]{1}[a-zA-z]{1}[\d]{1}){1}$/
+        const rgx_companyName = /^[A-Za-z\-\d]{1,}([ \-]{0,1}([A-Za-z\-\d]{1,})){0,}[.]{0,1}$/
 
         //Check Delivery Date
         if (this.state.deliveryDate.length < 1) {
@@ -231,59 +178,25 @@ class CreateOrderForm extends Component {
             this.setState({ errorEmail: '' })
         }
 
-        //Check Origin Address
-        if (this.validateStringInput(rgx_address, this.state.origin_address) == false) {
-            this.setState({ errorOriginAddress: "Invalid Address." })
+        if (this.state.originCompany == this.state.destinationCompany) {
+            this.setState({
+                errorOriginAddress: "Companies cannot be the same",
+                errorDestAddress: "Companies cannot be the same"
+            })
+        }
+
+        if (this.validateStringInput(rgx_companyName, this.state.originCompany) == false) {
+            this.setState({ errorOriginAddress: "Invalid Company Name." })
         } else {
-            origAddValid = true
+            originCompValid = true
             this.setState({ errorOriginAddress: '' })
         }
 
-        //Check Origin City
-        if (this.validateStringInput(rgx_city, this.state.origin_city) == false) {
-            this.setState({ errorOriginCity: "Invalid City." })
+        if (this.validateStringInput(rgx_companyName, this.state.destinationCompany) == false) {
+            this.setState({ errorDestAddress: "Invalid Company Name." })
         } else {
-            origCityValid = true
-            this.setState({ errorOriginCity: '' })
-        }
-
-        //Check Origin Postal Code
-        if (this.validateStringInput(rgx_postalCode, this.state.origin_postalCode) == false) {
-            this.setState({ errorOriginPostalCode: "Invalid Postal Code." })
-        } else {
-            origPostValid = true
-            this.setState({ errorOriginPostalCode: '' })
-        }
-
-        //Check Destination Address
-        if (this.validateStringInput(rgx_address, this.state.dest_address) == false) {
-            this.setState({ errorDestAddress: "Invalid Address." })
-        }
-        else if (this.state.dest_address == this.state.origin_address) {
-            this.setState({
-                errorDestAddress: "Addresses cannot be the same.",
-                errorOriginAddress: "Addresses cannot be the same."
-            })
-        }
-        else {
-            destAddValid = true
+            destinationCompValid = true
             this.setState({ errorDestAddress: '' })
-        }
-
-        //Check Destination City
-        if (this.validateStringInput(rgx_city, this.state.dest_city) == false) {
-            this.setState({ errorDestCity: "Invalid City." })
-        } else {
-            destCityValid = true
-            this.setState({ errorDestCity: '' })
-        }
-
-        //Check Destination Postal Code
-        if (this.validateStringInput(rgx_postalCode, this.state.dest_postalCode) == false) {
-            this.setState({ errorDestPostalCode: "Invalid Postal Code." })
-        } else {
-            destPostValid = true
-            this.setState({ errorDestPostalCode: '' })
         }
 
         //Check Cargo Type
@@ -302,15 +215,12 @@ class CreateOrderForm extends Component {
             this.setState({ errorCargoWeight: '' })
         }
 
-        if (dateValid && origAddValid && origCityValid && origPostValid && destAddValid && destCityValid && destPostValid && typeValid && weightValid) {
+        // if (dateValid && origAddValid && origCityValid && origPostValid && destAddValid && destCityValid && destPostValid && typeValid && weightValid) {
+        if (dateValid && originCompValid && destinationCompValid && typeValid && weightValid) {
             const orderData = {
                 deliveryDate: this.state.deliveryDate,
-                origin_address: this.state.origin_address,
-                origin_city: this.state.origin_city,
-                origin_postalCode: this.state.origin_postalCode,
-                dest_address: this.state.dest_address,
-                dest_city: this.state.dest_city,
-                dest_postalCode: this.state.dest_postalCode,
+                origin_company: this.state.originCompany,
+                destination_company: this.state.destinationCompany,
                 cargo_type: this.state.cargo_type,
                 cargo_weight: this.state.cargo_weight,
                 assigned_truckClass: this.state.assigned_truckClass,
@@ -324,11 +234,7 @@ class CreateOrderForm extends Component {
                         errorMessage: res.data.message,
                         errorDate: res.data.messageDate,
                         errorOriginAddress: res.data.messageOriginAddress,
-                        errorOriginCity: res.data.messageOriginCity,
-                        errorOriginPostalCode: res.data.messageOriginPostalCode,
                         errorDestAddress: res.data.messageDestAddress,
-                        errorDestCity: res.data.messageDestCity,
-                        errorDestPostalCode: res.data.messageDestPostalCode,
                         errorCargoType: res.data.messageCargoType,
                         errorCargoWeight: res.data.messageCargoWeight
                     })
@@ -367,72 +273,24 @@ class CreateOrderForm extends Component {
                                     value={this.state.deliveryDate}
                                     className='form-control form-group' />
 
-                                {/* Origin */}
-                                <label>Origin Address: <span className="text-center alert-danger">{this.state.errorOriginAddress}</span></label>
+
+                                <label>Origin Company: <span className="text-center alert-danger">{this.state.errorOriginAddress}</span></label>
                                 <Typeahead
                                     id="basic-typeahead-single"
-                                    onChange={this.setOrigAddSelections}
-                                    options={this.state.companyAddresses}
-                                    placeholder="Input an Address"
-                                    selected={this.originAddSelections}
+                                    onChange={this.setOriginSelections}
+                                    options={this.state.companyNames}
+                                    placeholder="Select a Company"
+                                    selected={this.originSelections}
                                 />
 
-                                <Row>
-                                    <Col md="6">
-                                        <label>Origin City: <span className="text-center alert-danger">{this.state.errorOriginCity}</span></label>
-                                        <Typeahead
-                                            id="basic-typeahead-single"
-                                            onChange={this.setOrigCitySelections}
-                                            options={this.state.companyOrigCity}
-                                            placeholder="City"
-                                            selected={this.originCitySelections}
-                                        />
-                                    </Col>
-
-                                    <Col md="6">
-                                        <label>Origin Postal Code: <span className="text-center alert-danger">{this.state.errorOriginPostalCode}</span></label>
-                                        <Typeahead
-                                            id="basic-typeahead-single"
-                                            onChange={this.setOrigPostSelections}
-                                            options={this.state.companyOrigPostalCode}
-                                            placeholder="Postal Code"
-                                            selected={this.originPostSelections}
-                                        />
-                                    </Col>
-                                </Row>
-
-                                {/* Destination */}
-                                <label>Destination Address: <span className="text-center alert-danger">{this.state.errorDestAddress}</span></label>
+                                <label>Destination Company: <span className="text-center alert-danger">{this.state.errorDestAddress}</span></label>
                                 <Typeahead
                                     id="basic-typeahead-single"
-                                    onChange={this.setDestAddSelections}
-                                    options={this.state.companyAddresses}
-                                    placeholder="Input an Address"
-                                    selected={this.destAddSelections}
+                                    onChange={this.setDestinationSelections}
+                                    options={this.state.companyNames}
+                                    placeholder="Select a Company"
+                                    selected={this.destinationSelections}
                                 />
-
-                                <Row>
-                                    <Col md="6">
-                                        <label>Destination City: <span className="text-center alert-danger">{this.state.errorDestCity}</span></label>
-                                        <Typeahead
-                                            id="basic-typeahead-single"
-                                            onChange={this.setDestCitySelections}
-                                            options={this.state.companyDestCity}
-                                            placeholder="City"
-                                            selected={this.destCitySelections}
-                                        />
-                                    </Col>
-                                    <Col md="6">
-                                        <label>Destination Postal Code: <span className="text-center alert-danger">{this.state.errorDestPostalCode}</span></label>
-                                        <Typeahead
-                                            id="basic-typeahead-single"
-                                            onChange={this.setDestPostSelections}
-                                            options={this.state.companyDestPostalCode}
-                                            placeholder="City"
-                                            selected={this.destPostSelections}
-                                        />
-                                    </Col>
-                                </Row>
 
                                 <Row>
                                     <Col md="6">
