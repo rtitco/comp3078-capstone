@@ -100,6 +100,7 @@ class ViewOrderDetails extends Component {
                                 <hr />
                             </Col>
                         </Row>
+                        
                         <Row className="justify-content-center">
                             <Col className="bg-light" xs="6" md="2">
                                 <label>Delivery Date:</label>

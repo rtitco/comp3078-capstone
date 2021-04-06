@@ -49,7 +49,10 @@ class AdminDashboard extends Component {
         return (
             <div className="dashboard-container">
                 <AdminNavBar fname={this.state.currentUser.firstName} lname={this.state.currentUser.lastName} />
-                <Container className="mt-4" fluid>
+                <div>
+                    <label>Last Updated: {new Date().toString()}</label>
+                </div>
+                <Container className="mt-2" fluid>
                     <Row className="">
                         <Col>
                             {/*https://reactrouter.com/web/example/nesting for example of nested router
@@ -72,7 +75,7 @@ class AdminDashboard extends Component {
 
 
                                 <Route exact path="/admin/row/delete" component={DeleteAnyEntry} />
-                        
+
                             </Switch>
                         </Col>
                     </Row>

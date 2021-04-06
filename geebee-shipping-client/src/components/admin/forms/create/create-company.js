@@ -190,7 +190,6 @@ class CreateCompanyForm extends Component {
     }
     return (
       <div>
-
         <Row className="justify-content-md-center mt-5">
           <Col lg="6" className="bg-light p-5" >
             <h1>Add Company</h1>

@@ -71,6 +71,9 @@ export default class FleetTable extends Component {
     ]
     return (
       <div>
+        <div>
+        <label>Last Updated: {new Date().toString()}</label>
+        </div>
         <Link to="./fleet/add">
           <Button className="float-right mr-5 mb-2" variant="success">Add Truck</Button>
         </Link>
