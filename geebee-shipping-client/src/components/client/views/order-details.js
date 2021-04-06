@@ -123,7 +123,7 @@ class ViewOrderDetails extends Component {
                                 <label>Truck License Plate:</label>
                             </Col>
                             <Col className="bg-light" xs="6" md="2">
-                                <label>{this.state.assigned_truck_plate}</label>
+                                <label>{this.state.assigned_truck_plate ? this.state.assigned_truck_plate.substr(0,4) + ' ' + this.state.assigned_truck_plate.substr(4, 7) : this.state.assigned_truck_plate}</label>
                             </Col>
                         </Row>
                     </Col>

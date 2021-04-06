@@ -38,7 +38,7 @@ app.get('/users/:role', async (req, res) => {
 app.get('/users/info/:email', async (req, res) => {
     const Driver = await userModel.find({ email: req.params.email });
     try {
-        res.send(Driver);
+        res.send(Driver[0]);
     }
     catch (err) {
         res.status(500).send(err);

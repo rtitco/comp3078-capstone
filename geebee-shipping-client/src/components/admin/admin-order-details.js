@@ -106,7 +106,11 @@ class AdminViewOrderDetails extends Component {
                 <Row className="justify-content-center">
                     <h3 className="pb-3">Order ID: {this.state.delivery_id}</h3>
                 </Row>
-                
+
+                <div className="detailsSection">
+
+                </div>
+
                 <Row className="adminDetails">
                     <Col className="detailsContainer">
                         <Row className="justify-content-center">
@@ -138,7 +142,7 @@ class AdminViewOrderDetails extends Component {
                                 <label>Truck License Plate:</label>
                             </Col>
                             <Col className="bg-light">
-                                <label>{this.state.assigned_truck_plate}</label>
+                                <label>{this.state.assigned_truck_plate ? this.state.assigned_truck_plate.substr(0,4)  + ' ' + this.state.assigned_truck_plate.substr(4,7): this.state.assigned_truck_plate }</label>
                             </Col>
                         </Row>
 
@@ -192,7 +196,10 @@ class AdminViewOrderDetails extends Component {
                                 <label>Phone Number:</label>
                             </Col>
                             <Col className="bg-light pb-4">
-                                <label>{this.state.driver.phoneNumber}</label>
+                                <label>
+                                    {this.state.driver.phoneNumber ?
+                                        this.state.driver.phoneNumber.substr(0, 3) + '-' + this.state.driver.phoneNumber.substr(3, 3) + '-' + this.state.driver.phoneNumber.substr(6, 4):  this.state.driver.phoneNumber}
+                                </label>
                             </Col>
                         </Row>
 
@@ -205,8 +212,8 @@ class AdminViewOrderDetails extends Component {
                         <h5>Origin</h5>
                         <hr />
                         <Row className="justify-content-center">
-                            <Col md="2">
-                                <label>Address:</label>
+                            <Col md="3">
+                                <label>Address: </label>
                             </Col>
                             <Col md="6">
                                 <label><a target="_blank" href={`https://www.google.com/maps/dir/?api=1&destination=${this.state.origin_address}%2C+${this.state.origin_city}%2C+${this.state.origin_postalCode}`}>{this.state.origin_address}, {this.state.origin_city}</a></label>
@@ -214,7 +221,7 @@ class AdminViewOrderDetails extends Component {
                         </Row>
 
                         <Row className="justify-content-center ">
-                            {/* <LoadScript
+                            <LoadScript
                                 googleMapsApiKey="AIzaSyB63fYe9MyaTJZbGVDSEYD2-wPXk37Q4jY"
                             >
                                 <GoogleMap
@@ -229,7 +236,7 @@ class AdminViewOrderDetails extends Component {
                                     />
                                     <></>
                                 </GoogleMap>
-                            </LoadScript> */}
+                            </LoadScript>
                         </Row>
                     </Col>
 
@@ -237,8 +244,8 @@ class AdminViewOrderDetails extends Component {
                         <h5>Destination</h5>
                         <hr />
                         <Row className="justify-content-center">
-                            <Col md="2">
-                                <label>Address:</label>
+                            <Col md="3">
+                                <label>Address: </label>
                             </Col>
                             <Col md="6">
                                 <label><a target="_blank" href={`https://www.google.com/maps/dir/?api=1&destination=${this.state.destination_address}%2C+${this.state.destination_city}%2C+${this.state.destination_postalCode}`}>{this.state.destination_address}, {this.state.destination_city}</a></label>
@@ -246,7 +253,7 @@ class AdminViewOrderDetails extends Component {
                         </Row>
 
                         <Row className="justify-content-center">
-                            {/* <LoadScript
+                            <LoadScript
                                 googleMapsApiKey="AIzaSyB63fYe9MyaTJZbGVDSEYD2-wPXk37Q4jY"
                             >
                                 <GoogleMap
@@ -261,7 +268,7 @@ class AdminViewOrderDetails extends Component {
                                     />
                                     <></>
                                 </GoogleMap>
-                            </LoadScript> */}
+                            </LoadScript>
                         </Row>
                     </Col>
                 </Row>
