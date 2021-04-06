@@ -14,7 +14,7 @@ const ObjectID = require('mongodb').ObjectID;
 
 //==============================================Users Table==============================================
 // GET ==> All users
-app.get('/users/:role', async (req, res) => {
+app.get('/users', async (req, res) => {
     const Users = await userModel.find({ role: req.params.role });
     try {
         res.send(Users);
@@ -26,9 +26,19 @@ app.get('/users/:role', async (req, res) => {
 
 // GET ==> User with Driver Role
 app.get('/users/:role', async (req, res) => {
-    const Drivers = await userModel.find({ role: req.params.role });
+    const Driver = await userModel.find({ role: req.params.role });
     try {
-        res.send(Drivers);
+        res.send(Driver);
+    }
+    catch (err) {
+        res.status(500).send(err);
+    }
+});
+
+app.get('/users/info/:email', async (req, res) => {
+    const Driver = await userModel.find({ email: req.params.email });
+    try {
+        res.send(Driver[0]);
     }
     catch (err) {
         res.status(500).send(err);

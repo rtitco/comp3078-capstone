@@ -6,8 +6,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import axios from 'axios';
 import { Link } from "react-router-dom";
-import Container from 'react-bootstrap/Container'
-import './route-styles.css'
+import '../client/views/route-styles.css'
 
 Geocode.setApiKey("AIzaSyB63fYe9MyaTJZbGVDSEYD2-wPXk37Q4jY")
 Geocode.setLanguage("en")
@@ -18,7 +17,7 @@ const containerStyle = {
     height: '400px'
 };
 
-class ViewRouteDetails extends Component {
+class AdminViewOrderDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -42,9 +41,10 @@ class ViewRouteDetails extends Component {
             assigned_truck_driverEmail: props.location.state.data.assigned_truck_driverEmail,
             order_status: props.location.state.data.order_status,
 
+            driver: '',
+
             updateSuccess: ''
         }
-
         let originLat = {};
         let destLat = {};
         var originAddress = `${this.state.origin_address} ${this.state.origin_city} ${this.state.origin_postalCode}`
@@ -81,57 +81,19 @@ class ViewRouteDetails extends Component {
         var status = ""
     }
 
-    changeStatusOnRoute = (event) => {
-        this.status = "On Route"
-        this.onSubmit()
-    }
 
-    changeStatusDelay = (event) => {
-        this.status = "Delay"
-        this.onSubmit()
-    }
-
-    changeStatusEmergency = (event) => {
-        this.status = "Emergency"
-        this.onSubmit()
-    }
-
-    changeStatusArrived = (event) => {
-        this.status = "Arrived"
-        this.onSubmit()
-    }
-
-    onSubmit = () => {
-        const orderData = {
-            id: this.state.delivery_id,
-            orderDate: this.state.order_date,
-            deliveryDate: this.state.delivery_date,
-            origin_address: this.state.origin_address,
-            origin_city: this.state.origin_city,
-            origin_postalCode: this.state.origin_postalCode,
-            dest_address: this.state.destination_address,
-            dest_city: this.state.destination_city,
-            dest_postalCode: this.state.destination_postalCode,
-            cargo_type: this.state.cargo_type,
-            cargo_weight: this.state.cargo_weight,
-            assigned_truckClass: this.state.assigned_truck_class,
-            assigned_truckPlate: this.state.assigned_truck_plate,
-            assigned_truckDriver: this.state.assigned_truck_driverEmail,
-            order_status: this.status
-        }
-
-        axios.post(`http://localhost:8081/order-status/${this.state.id}`, orderData)
-            .then(res => {
-                this.setState({
-                    updateSuccess: res.data.success,
-                })
-            }, (error) => {
-                this.setState({
-                    errorMessage: "Update Failed."
-                })
+    getDriverInfo = async (email) => {
+        let driverInfo = []
+        await axios.get(`http://localhost:8081/users/info/${email}`)
+            .then(driverRes => {
+                driverInfo = driverRes.data
             })
+        this.setState({ driver: driverInfo })
     }
 
+    componentDidMount() {
+        this.getDriverInfo(this.state.assigned_truck_driverEmail)
+    }
 
     render() {
         const onLoad = marker => {
@@ -140,62 +102,118 @@ class ViewRouteDetails extends Component {
 
         return (
             <div>
-                <Link className="btn btn-secondary" to='/client/driver'>Back</Link>
-                <Row>
-                    <div class="routeButtonContainer">
-                        <button type="button" class="btn btn-info routeButton" value="On Route" onClick={this.changeStatusOnRoute}>On Route</button>
-                        <button type="button" class="btn btn-warning routeButton" value="Delay" onClick={this.changeStatusDelay}>Delay</button>
-                        <button type="button" class="btn btn-danger routeButton" value="Emergency" onClick={this.changeStatusEmergency}>Emergency</button>
-                        <button type="button" class="btn btn-success routeButton" value="Arrived" onClick={this.changeStatusArrived}>Arrived</button>
-                        <span className="text-center alert-danger">{this.state.updateSuccess}</span>
-                    </div>
+                <Link className="btn btn-secondary" to='/admin/order-manager'>Back</Link>
+                <Row className="justify-content-center">
+                    <h3 className="pb-3">Order ID: {this.state.delivery_id}</h3>
                 </Row>
 
-                <Row className="mb-4">
-                    <Col md={{ span: 10, offset: 1 }}>
+                <div className="detailsSection">
+
+                </div>
+
+                <Row className="adminDetails">
+                    <Col className="detailsContainer">
                         <Row className="justify-content-center">
-                            <Col className="bg-light pt-4" md="4">
-                                <h3 className="pb-3">Order ID: {this.state.delivery_id}</h3>
-                                <h2 className="h5">Details:</h2>
+                            <Col className="bg-light pt-4">
+                                <h2 className="h5">Route Details:</h2>
                                 <hr />
                             </Col>
                         </Row>
                         <Row className="justify-content-center">
-                            <Col className="bg-light" xs="6" md="2">
+                            <Col className="bg-light">
                                 <label>Delivery Date:</label>
                             </Col>
-                            <Col className="bg-light" xs="6" md="2">
+                            <Col className="bg-light">
                                 <label>{this.state.delivery_date}</label>
                             </Col>
                         </Row>
 
                         <Row className="justify-content-center">
-                            <Col className="bg-light" xs="6" md="2">
+                            <Col className="bg-light">
                                 <label>Cargo:</label>
                             </Col>
-                            <Col className="bg-light" xs="6" md="2">
+                            <Col className="bg-light">
                                 <label>{this.state.cargo_type}</label>
                             </Col>
                         </Row>
 
                         <Row className="justify-content-center">
-                            <Col className="bg-light" xs="6" md="2">
+                            <Col className="bg-light">
                                 <label>Truck License Plate:</label>
                             </Col>
-                            <Col className="bg-light pb-4" xs="6" md="2">
-                                <label>{this.state.assigned_truck_plate ? this.state.assigned_truck_plate.substr(0,4) + ' ' + this.state.assigned_truck_plate.substr(4, 7) : this.state.assigned_truck_plate}</label>
+                            <Col className="bg-light">
+                                <label>{this.state.assigned_truck_plate ? this.state.assigned_truck_plate.substr(0,4)  + ' ' + this.state.assigned_truck_plate.substr(4,7): this.state.assigned_truck_plate }</label>
+                            </Col>
+                        </Row>
+
+                        <Row className="justify-content-center">
+                            <Col className="bg-light">
+                                <label>Origin:</label>
+                            </Col>
+                            <Col className="bg-light">
+                                <label>{this.state.origin_address}, {this.state.origin_city}, {this.state.origin_postalCode}</label>
+                            </Col>
+                        </Row>
+
+                        <Row className="justify-content-center">
+                            <Col className="bg-light pb-4">
+                                <label>Destination:</label>
+                            </Col>
+                            <Col className="bg-light pb-4">
+                                <label>{this.state.destination_address}, {this.state.destination_city}, {this.state.destination_postalCode}</label>
                             </Col>
                         </Row>
                     </Col>
+
+
+
+                    <Col className="detailsContainer">
+                        <Row className="justify-content-center">
+                            <Col className="bg-light pt-4">
+                                <h2 className="h5">Driver Details:</h2>
+                                <hr />
+                            </Col>
+                        </Row>
+                        <Row className="justify-content-center">
+                            <Col className="bg-light">
+                                <label>Company:</label>
+                            </Col>
+                            <Col className="bg-light">
+                                <label>{this.state.driver.company}</label>
+                            </Col>
+                        </Row>
+                        <Row className="justify-content-center">
+                            <Col className="bg-light">
+                                <label>Name:</label>
+                            </Col>
+                            <Col className="bg-light">
+                                <label>{this.state.driver.firstName} {this.state.driver.lastName}</label>
+                            </Col>
+                        </Row>
+
+                        <Row className="justify-content-center">
+                            <Col className="bg-light pb-4">
+                                <label>Phone Number:</label>
+                            </Col>
+                            <Col className="bg-light pb-4">
+                                <label>
+                                    {this.state.driver.phoneNumber ?
+                                        this.state.driver.phoneNumber.substr(0, 3) + '-' + this.state.driver.phoneNumber.substr(3, 3) + '-' + this.state.driver.phoneNumber.substr(6, 4):  this.state.driver.phoneNumber}
+                                </label>
+                            </Col>
+                        </Row>
+
+                    </Col>
                 </Row>
 
-                <Row>
-                    <Col md={{ span: 6, offset: 3 }} className="bg-light py-5">
+                <Row className="adminDetails">
+
+                    <Col className="detailsContainer">
                         <h5>Origin</h5>
                         <hr />
                         <Row className="justify-content-center">
-                            <Col md="2">
-                                <label>Address:</label>
+                            <Col md="3">
+                                <label>Address: </label>
                             </Col>
                             <Col md="6">
                                 <label><a target="_blank" href={`https://www.google.com/maps/dir/?api=1&destination=${this.state.origin_address}%2C+${this.state.origin_city}%2C+${this.state.origin_postalCode}`}>{this.state.origin_address}, {this.state.origin_city}</a></label>
@@ -221,15 +239,13 @@ class ViewRouteDetails extends Component {
                             </LoadScript>
                         </Row>
                     </Col>
-                </Row>
 
-                <Row>
-                    <Col md={{ span: 6, offset: 3 }} className="bg-light mt-4 py-5">
+                    <Col className="detailsContainer">
                         <h5>Destination</h5>
                         <hr />
                         <Row className="justify-content-center">
-                            <Col md="2">
-                                <label>Address:</label>
+                            <Col md="3">
+                                <label>Address: </label>
                             </Col>
                             <Col md="6">
                                 <label><a target="_blank" href={`https://www.google.com/maps/dir/?api=1&destination=${this.state.destination_address}%2C+${this.state.destination_city}%2C+${this.state.destination_postalCode}`}>{this.state.destination_address}, {this.state.destination_city}</a></label>
@@ -261,5 +277,4 @@ class ViewRouteDetails extends Component {
         );
     }
 }
-
-export default ViewRouteDetails;
+export default AdminViewOrderDetails;

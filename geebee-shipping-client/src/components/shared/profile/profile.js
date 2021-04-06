@@ -4,6 +4,8 @@ import axios from 'axios'
 import logo from './gb.png'
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
+import ClientNavBar from '../navbar/login-navbar';
+import AdminNavBar from '../../admin/dashboard/admin-navbar/admin-navbar'
 
 class ProfileForm extends Component {
     constructor(props) {
@@ -181,7 +183,7 @@ class ProfileForm extends Component {
         }
 
         if ((firstNameValid && lastNameValid && phoneValid && emailValid) && ((pwChanged && newPasswordValid) || (pwChanged == false)) && this.state.currentPassword != '') {
-            
+
             let registered = {
                 firstName: this.state.firstName,
                 lastName: this.state.lastName,
@@ -241,6 +243,7 @@ class ProfileForm extends Component {
     }
 
     render() {
+        let myNav;
         //After successful update, redirect to dashboard
         if (this.state.role == '') {
             return <Redirect to='/login' />
@@ -249,8 +252,16 @@ class ProfileForm extends Component {
             return <Redirect to='/dashboard' />
         }
 
+        if (this.state.role == "Admin") {
+            myNav = <AdminNavBar />
+        }
+        else{
+            myNav = <ClientNavBar />
+        }
+
         return (
             <div>
+                {myNav}
                 <img src={logo} className="text-center" alt='logo' />
                 <h1 className='text-center'>Update User Profile</h1>
                 <Row className="justify-content-center">

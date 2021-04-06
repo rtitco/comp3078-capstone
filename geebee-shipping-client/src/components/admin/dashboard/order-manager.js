@@ -122,22 +122,22 @@ export default class OrderManager extends Component {
 
           <Tab eventKey="active-tab" title="Active Orders">
             <br />
-              <Table columns={columns} data={this.state.activeData} formType="Order" tRole="Admin" />
+              <Table columns={columns} data={this.state.activeData} formType="Order" tRole="AdminOrder" />
           </Tab>
 
           <Tab eventKey="completed-tab" title="Completed Orders">
             <br />
-              <Table columns={columns} data={this.state.completedData} formType="Order" tRole="Admin" />
+              <Table columns={columns} data={this.state.completedData} formType="Order" tRole="AdminOrder" />
           </Tab>
 
           <Tab eventKey="rejected-tab" title="Rejected Orders">
             <br />
-              <Table columns={columns} data={this.state.rejectData} formType="Order" tRole="Admin" />
+              <Table columns={columns} data={this.state.rejectData} formType="Order" tRole="AdminOrder" />
           </Tab>
 
           <Tab eventKey="emergency-tab" title="Emergency Status">
             <br />
-              <Table columns={columns} data={this.state.emergencyData} formType="Order" tRole="Admin" />
+              <Table columns={columns} data={this.state.emergencyData} formType="Order" tRole="AdminOrder" />
           </Tab>
         </Tabs>
 

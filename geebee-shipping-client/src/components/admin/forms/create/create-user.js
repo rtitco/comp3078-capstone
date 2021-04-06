@@ -4,6 +4,7 @@ import axios from 'axios'
 import logo from '../../../shared/profile/gb.png'
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import AdminNavBar from '../../dashboard/admin-navbar/admin-navbar'
 
 // Autocomplete imports
 import { Typeahead } from 'react-bootstrap-typeahead'; // ES2015
@@ -117,7 +118,7 @@ class CreateUserForm extends Component {
         const rgx_email = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/
         const rgx_company = /^[A-Za-z]{1,}([ \-]{0,1}([A-Za-z\-]{1,}))*[.]{0,1}$/
         const rgx_password = /^[a-zA-Z\d!?<>@#$%^&*()\-_=+]{8,15}$/
-        
+
         //Check Email
         if (this.validateStringInput(rgx_email, this.state.email) == false) {
             this.setState({ errorEmail: "Invalid Email Address." })
@@ -208,7 +209,7 @@ class CreateUserForm extends Component {
                 </p> */}
                 <h1 className='text-center h2'>Register A New User</h1>
                 <Row className="justify-content-center">
-                    <Col md="6"  className="bg-light p-5">
+                    <Col md="6" className="bg-light p-5">
                         <div>
                             <div className='form-div mt-2'>
                                 <form onSubmit={this.onSubmit}>
