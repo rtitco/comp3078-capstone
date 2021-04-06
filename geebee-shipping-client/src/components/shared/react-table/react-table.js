@@ -115,6 +115,12 @@ function Table({ columns, data, formType, tRole }) {
         state: { data: selectedRow }
       }} />;
     }
+    else if (formType == "Order"){
+      return <Redirect to={{
+        pathname: "./order-manager/order-details",
+        state: { data: selectedRow }
+      }} />;
+    }
   }
 
   //set input state and checks if input is delete 
@@ -170,6 +176,20 @@ function Table({ columns, data, formType, tRole }) {
     </td>
   );
 
+  const editDeleteViewColumn = (
+    <td className="text-center m-0 p-0 w-sml-col">
+      <OverlayTrigger rootClose={true} trigger="click" placement="top" overlay={editPopover}>
+        <Button className="text-success" variant="link"><FaPen /></Button>
+      </OverlayTrigger>
+
+      <OverlayTrigger rootClose={true} trigger="click" placement="top" overlay={deletePopover}>
+        <Button className="text-danger" onClick={()=>setDeleteInput("")} variant="link"><FaTrash /></Button>
+      </OverlayTrigger>
+
+      <Button onClick={setViewCheck}><FaEye /></Button>
+    </td>
+  );
+
   const viewColumn = (
     <td>
       <Button onClick={setViewCheck}><FaEye /></Button>
@@ -182,6 +202,9 @@ function Table({ columns, data, formType, tRole }) {
     }
     if (tRole === "Driver" || tRole === "Retail") {
       return viewColumn;
+    }
+    if (tRole === "AdminOrder"){
+      return editDeleteViewColumn;
     }
   }
 

@@ -1,14 +1,14 @@
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-
 import '../../shared/dashboard-styles.css';
-
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
+import { Component } from 'react';
 
 //Switch to logged in header (keeping for formatting), which will have the logo at the top and the logout / profile access
 import LoginNavBar from '../../shared/navbar/login-navbar';
 import AdminNavBar from './admin-navbar/admin-navbar';
+
 //Company
 import CompanyManager from './company-manager';
 import CreateCompany from '../forms/create/create-company';
@@ -17,10 +17,11 @@ import EditCompany from '../forms/edit/edit-company';
 //user
 import UserManager from './user-manager';
 import CreateUserForm from '../forms/create/create-user';
+
 //orders
 import OrderManager from './order-manager';
 import EditAdminOrder from '../forms/edit/edit-admin-order';
-import { Component } from 'react';
+import AdminViewOrderDetails from '../admin-order-details';
 
 //delete
 import DeleteAnyEntry from '../../shared/react-table/delete-entry';
@@ -66,10 +67,12 @@ class AdminDashboard extends Component {
                                 <Route exact path="/admin/company-manager/edit" component={EditCompany} />
 
                                 <Route exact path="/admin/order-manager" component={OrderManager} />
-                                {/* <Route exact path="/admin/order-manager/add" component={CreateAdminOrder} /> */}
                                 <Route exact path="/admin/order-manager/edit" component={EditAdminOrder} />
+                                <Route exact path="/admin/order-manager/order-details" component={AdminViewOrderDetails} />
+
 
                                 <Route exact path="/admin/row/delete" component={DeleteAnyEntry} />
+                        
                             </Switch>
                         </Col>
                     </Row>
