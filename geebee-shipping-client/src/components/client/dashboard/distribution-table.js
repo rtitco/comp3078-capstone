@@ -14,25 +14,58 @@ export default class DistributionTable extends Component {
       currentUser: sessionUser,
       orders_inProgress: [],
       orders_completed: [],
-      loading: true
+      orders_processed: [],
+      loading: true,
+      waiting: "Awaiting Delivery",
+      companyName: ''
     }
   }
 
   async getOrdersInProgress() {
-    const inprogress = await axios.get('http://localhost:8081/orders/active')
-    console.log("In Progress Orders: ")
-    console.log(inprogress.data)
-    this.setState({ loading: false, orders_inProgress: inprogress.data })
+    const inprogress = await axios.get(`http://localhost:8081/orders/status/${this.state.currentUser.company}/Incomplete`)
+    this.setState({ orders_inProgress: inprogress.data })
   }
 
   async getOrdersCompleted() {
-    const completed = await axios.get('http://localhost:8081/orders/completed')
-    this.setState({ loading: false, orders_completed: completed.data })
+    const completed = await axios.get(`http://localhost:8081/orders/status/${this.state.currentUser.company}/Completed`)
+    this.setState({ orders_completed: completed.data })
   }
 
+  async getOrdersProcessed() {
+    const processed = await axios.get(`http://localhost:8081/orders/status/${this.state.currentUser.company}/${this.state.waiting}`)
+    this.setState({ orders_processed: processed.data })
+  }
+
+  async getCompanies() {
+    let compArray = [];
+    let compDict = {};
+
+    await axios.get(`http://localhost:8081/companies`)
+      .then(compData => {
+        if (compData != null) {
+          // Get all Companies, HOlding MONGO Data
+          compArray = compData.data;
+
+          // Loop through all companies and create dictionary of Address to Name
+          compArray.forEach(company => {
+            compDict[company.address] = company.company_name;
+          });
+
+          // Set it as a state, so that 
+          // 1: We can use it easiler
+          // 2: It forces a rerender
+          this.setState({
+            addressDictionary: compDict
+          });
+        }
+      });
+  }
   componentDidMount() {
+    console.log(this.state.currentUser.company)
     this.getOrdersInProgress()
     this.getOrdersCompleted()
+    this.getOrdersProcessed()
+    this.getCompanies()
   }
 
   render() {
@@ -50,12 +83,14 @@ export default class DistributionTable extends Component {
         accessor: 'delivery_date',
       },
       {
-        Header: 'Origin Address',
-        accessor: data => data.origin_address + ', ' + data.origin_city + ', ' + data.origin_postalCode
+        Header: 'Origin',
+        // CONDITION ? TRUE : FALSE
+        accessor: data => ((this.state.addressDictionary && this.state.addressDictionary[data.origin_address] != null) ? this.state.addressDictionary[data.origin_address] : data.origin_address + ', ' + data.origin_city + ', ' + data.origin_postalCode)
       },
       {
-        Header: 'Destination Address',
-        accessor: data => data.destination_address + ', ' + data.destination_city + ', ' + data.destination_postalCode,
+        Header: 'Destination',
+        accessor: data => ((this.state.addressDictionary && this.state.addressDictionary[data.destination_address] != null) ? this.state.addressDictionary[data.destination_address] : data.destination_address + ', ' + data.destination_city + ', ' + data.destination_postalCode)
+
       },
       {
         Header: 'Cargo Type',
@@ -76,19 +111,17 @@ export default class DistributionTable extends Component {
           <Button className="float-right mr-5 mb-2 btn-top-margin">Create Order</Button>
         </Link>
 
-        <Tabs defaultActiveKey="all-tab" id="uncontrolled-tab-example">
+        <Tabs defaultActiveKey="all-tab" id="uncontrolled-tab-example" className="py-3">
           <Tab eventKey="all-tab" title="In Progress">
-            <div className="mx-5">
-              <h5>In Progress</h5>
-              <Table columns={columns} data={this.state.orders_inProgress} formType="Order" />
-            </div>
+            <Table columns={columns} data={this.state.orders_inProgress} formType="Order" />
+          </Tab>
+
+          <Tab eventKey="processed-tab" title="Awaiting Delivery">
+            <Table columns={columns} data={this.state.orders_processed} formType="Order" />
           </Tab>
 
           <Tab eventKey="completed-tab" title="Completed Orders">
-            <div className="mx-5">
-            <h5>Completed</h5>
-              <Table columns={columns} data={this.state.orders_completed} formType="Order" />
-            </div>
+            <Table columns={columns} data={this.state.orders_completed} formType="Order" />
           </Tab>
         </Tabs>
 

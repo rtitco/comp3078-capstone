@@ -9,7 +9,7 @@ const LoginNavBar = (props) => {
   }
 
   return (
-    <Navbar className="navbar-bb mb-5" variant="light" expand="lg">
+    <Navbar className="navbar-bb mb-5" variant="dark" expand="lg">
       <LinkContainer to="/">
         <Navbar.Brand className="text-white">BusyBee Shipping Solutions</Navbar.Brand>
       </LinkContainer>

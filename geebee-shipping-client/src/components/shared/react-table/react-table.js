@@ -195,7 +195,7 @@ function Table({ columns, data, formType, tRole }) {
         <input type="text" className={"form-control col-sm-5 col-md-3 col-lg-2"}
           value={filterInput}
           onChange={handleFilterChange}
-          placeholder={"Input keyword here..."} />
+          placeholder={"Input keyword"} />
       </div>
 
       <table className="table table-striped table-hover" {...getTableProps()}>

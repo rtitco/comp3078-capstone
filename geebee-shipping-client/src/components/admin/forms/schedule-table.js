@@ -39,7 +39,7 @@ function OrderSchedule({ columns, data }) {
                 <input type="text" className={"form-control col-sm-5 col-md-3 col-lg-2"}
                     value={filterInput}
                     onChange={handleFilterChange}
-                    placeholder={"Input keyword here..."} />
+                    placeholder={"Input keyword"} />
             </div>
 
             <BTable striped bordered hover size="sm" {...getTableProps()}>
