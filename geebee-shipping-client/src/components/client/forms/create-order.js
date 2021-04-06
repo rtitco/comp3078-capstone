@@ -16,9 +16,9 @@ class CreateOrderForm extends Component {
         let sessionUser = JSON.parse(window.sessionStorage.getItem("currentUser"))
         this.state = {
             currentUser: sessionUser,
-            
+
             deliveryDate: '',
-            originCompany: '',
+            originCompany: sessionUser.company,
             destinationCompany: '',
             cargo_type: '',
             cargo_weight: '',
@@ -35,29 +35,33 @@ class CreateOrderForm extends Component {
             singleSelections: [],
             companyNames: [],
         }
-        let myAdd = ''
     }
 
     componentDidMount() {
         this.getCompanyAddresses()
+        this.getEmployeeCompany()
     }
 
     getCompanyAddresses = async () => {
         const companyRes = await axios.get(`http://localhost:8081/companies`)
-        // let myAddresses = []
         let myCompanies = []
         let currentID = 0;
 
         companyRes.data.forEach(element => {
-            // let address = element.address
-            // myAddresses.push({ id: currentID, label: address })
-
             let company = element.company_name
             myCompanies.push({ id: currentID, label: company })
             currentID++;
         });
-        // this.setState({ companyAddresses: myAddresses })
         this.setState({ companyNames: myCompanies })
+    }
+
+    getEmployeeCompany = async () => {
+        await axios.get(`http://localhost:8081/companies/name/${this.state.currentUser.company}`)
+            .then(
+                employer => {
+                    this.setState({ originCompany: employer.data[0].company_name })
+                }
+            )
     }
 
     //==============================Set Autocomplete Selections==========================================
@@ -145,6 +149,7 @@ class CreateOrderForm extends Component {
             })
         }
 
+        //Check Origin Company
         if (this.validateStringInput(rgx_companyName, this.state.originCompany) == false) {
             this.setState({ errorOriginAddress: "Invalid Company Name." })
         } else {
@@ -152,6 +157,7 @@ class CreateOrderForm extends Component {
             this.setState({ errorOriginAddress: '' })
         }
 
+        //Check Destination Company
         if (this.validateStringInput(rgx_companyName, this.state.destinationCompany) == false) {
             this.setState({ errorDestAddress: "Invalid Company Name." })
         } else {
@@ -239,9 +245,11 @@ class CreateOrderForm extends Component {
                                     id="basic-typeahead-single"
                                     onChange={this.setOriginSelections}
                                     options={this.state.companyNames}
-                                    placeholder="Select a Company"
+                                    placeholder={this.state.originCompany}
+                                    defaultInputValue={this.state.originCompany}
                                     selected={this.originSelections}
                                 />
+                                <br />
 
                                 <label>Destination Company: <span className="text-center alert-danger">{this.state.errorDestAddress}</span></label>
                                 <Typeahead
@@ -251,6 +259,7 @@ class CreateOrderForm extends Component {
                                     placeholder="Select a Company"
                                     selected={this.destinationSelections}
                                 />
+                                <br />
 
                                 <Row>
                                     <Col md="6">

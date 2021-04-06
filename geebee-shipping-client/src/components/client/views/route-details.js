@@ -6,7 +6,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import axios from 'axios';
 import { Link } from "react-router-dom";
-
+import Container from 'react-bootstrap/Container'
+import './route-styles.css'
 
 Geocode.setApiKey("AIzaSyB63fYe9MyaTJZbGVDSEYD2-wPXk37Q4jY")
 Geocode.setLanguage("en")
@@ -139,19 +140,19 @@ class ViewRouteDetails extends Component {
 
         return (
             <div>
-                <Link className="mx-3 my-2 btn btn-secondary " to='/client/driver'>Back</Link>
-
-                {/* Buttons on Left, Details on Right */}
+                <Link className="btn btn-secondary" to='/client/driver'>Back</Link>
                 <Row>
-                    <Col md="2" >
-                        <button type="button" class="btn btn-info btn-block" value="On Route" onClick={this.changeStatusOnRoute}>On Route</button>
-                        <button type="button" class="btn btn-warning btn-block" value="Delay" onClick={this.changeStatusDelay}>Delay</button>
-                        <button type="button" class="btn btn-danger btn-block" value="Emergency" onClick={this.changeStatusEmergency}>Emergency</button>
-                        <button type="button" class="btn btn-success btn-block" value="Arrived" onClick={this.changeStatusArrived}>Arrived</button>
+                    <div class="routeButtonContainer">
+                        <button type="button" class="btn btn-info routeButton" value="On Route" onClick={this.changeStatusOnRoute}>On Route</button>
+                        <button type="button" class="btn btn-warning routeButton" value="Delay" onClick={this.changeStatusDelay}>Delay</button>
+                        <button type="button" class="btn btn-danger routeButton" value="Emergency" onClick={this.changeStatusEmergency}>Emergency</button>
+                        <button type="button" class="btn btn-success routeButton" value="Arrived" onClick={this.changeStatusArrived}>Arrived</button>
                         <span className="text-center alert-danger">{this.state.updateSuccess}</span>
-                    </Col>
+                    </div>
+                </Row>
 
-                    <Col md="10">
+                <Row className="mb-4">
+                    <Col md={{ span: 10, offset: 1 }}>
                         <Row className="justify-content-center">
                             <Col className="bg-light pt-4" md="4">
                                 <h3 className="pb-3">Order ID: {this.state.delivery_id}</h3>
@@ -185,73 +186,77 @@ class ViewRouteDetails extends Component {
                                 <label>{this.state.assigned_truck_plate}</label>
                             </Col>
                         </Row>
+                    </Col>
+                </Row>
 
-                        <Row className="my-4">
-                            <Col md="6" className="bg-light py-5">
-                                <h5>Origin</h5>
-                                <hr />
-                                <Row className="justify-content-center">
-                                    <Col md="2">
-                                        <label>Address:</label>
-                                    </Col>
-                                    <Col md="6">
-                                        <label><a target="_blank" href={`https://www.google.com/maps/dir/?api=1&destination=${this.state.origin_address}%2C+${this.state.origin_city}%2C+${this.state.origin_postalCode}`}>{this.state.origin_address}, {this.state.origin_city}</a></label>
-                                    </Col>
-                                </Row>
-
-                                <Row className="justify-content-center ">
-                                    <LoadScript
-                                        googleMapsApiKey="AIzaSyB63fYe9MyaTJZbGVDSEYD2-wPXk37Q4jY"
-                                    >
-                                        <GoogleMap
-                                            mapContainerStyle={containerStyle}
-                                            center={this.state.origin}
-                                            zoom={15}
-                                        >
-                                            <Marker
-                                                onLoad={onLoad}
-                                                position={this.state.origin}
-                                                visible={true}
-                                            />
-                                            <></>
-                                        </GoogleMap>
-                                    </LoadScript>
-                                </Row>
+                <Row>
+                    <Col md={{ span: 6, offset: 3 }} className="bg-light py-5">
+                        <h5>Origin</h5>
+                        <hr />
+                        <Row className="justify-content-center">
+                            <Col md="2">
+                                <label>Address:</label>
                             </Col>
-
-                            <Col md="6" className="bg-light mt-4 py-5">
-                                <h5>Destination</h5>
-                                <hr />
-                                <Row className="justify-content-center">
-                                    <Col md="2">
-                                        <label>Address:</label>
-                                    </Col>
-                                    <Col md="6">
-                                        <label><a target="_blank" href={`https://www.google.com/maps/dir/?api=1&destination=${this.state.destination_address}%2C+${this.state.destination_city}%2C+${this.state.destination_postalCode}`}>{this.state.destination_address}, {this.state.destination_city}</a></label>
-                                    </Col>
-                                </Row>
-                                <Row className="justify-content-center">
-                                    <LoadScript
-                                        googleMapsApiKey="AIzaSyB63fYe9MyaTJZbGVDSEYD2-wPXk37Q4jY"
-                                    >
-                                        <GoogleMap
-                                            mapContainerStyle={containerStyle}
-                                            center={this.state.destination}
-                                            zoom={15}
-                                        >
-                                            <Marker
-                                                onLoad={onLoad}
-                                                position={this.state.destination}
-                                                visible={true}
-                                            />
-                                            <></>
-                                        </GoogleMap>
-                                    </LoadScript>
-                                </Row>
+                            <Col md="6">
+                                <label><a target="_blank" href={`https://www.google.com/maps/dir/?api=1&destination=${this.state.origin_address}%2C+${this.state.origin_city}%2C+${this.state.origin_postalCode}`}>{this.state.origin_address}, {this.state.origin_city}</a></label>
                             </Col>
+                        </Row>
+
+                        <Row className="justify-content-center ">
+                            <LoadScript
+                                googleMapsApiKey="AIzaSyB63fYe9MyaTJZbGVDSEYD2-wPXk37Q4jY"
+                            >
+                                <GoogleMap
+                                    mapContainerStyle={containerStyle}
+                                    center={this.state.origin}
+                                    zoom={15}
+                                >
+                                    <Marker
+                                        onLoad={onLoad}
+                                        position={this.state.origin}
+                                        visible={true}
+                                    />
+                                    <></>
+                                </GoogleMap>
+                            </LoadScript>
                         </Row>
                     </Col>
                 </Row>
+
+                <Row>
+                    <Col md={{ span: 6, offset: 3 }} className="bg-light mt-4 py-5">
+                        <h5>Destination</h5>
+                        <hr />
+                        <Row className="justify-content-center">
+                            <Col md="2">
+                                <label>Address:</label>
+                            </Col>
+                            <Col md="6">
+                                <label><a target="_blank" href={`https://www.google.com/maps/dir/?api=1&destination=${this.state.destination_address}%2C+${this.state.destination_city}%2C+${this.state.destination_postalCode}`}>{this.state.destination_address}, {this.state.destination_city}</a></label>
+                            </Col>
+                        </Row>
+
+                        <Row className="justify-content-center">
+                            <LoadScript
+                                googleMapsApiKey="AIzaSyB63fYe9MyaTJZbGVDSEYD2-wPXk37Q4jY"
+                            >
+                                <GoogleMap
+                                    mapContainerStyle={containerStyle}
+                                    center={this.state.destination}
+                                    zoom={15}
+                                >
+                                    <Marker
+                                        onLoad={onLoad}
+                                        position={this.state.destination}
+                                        visible={true}
+                                    />
+                                    <></>
+                                </GoogleMap>
+                            </LoadScript>
+                        </Row>
+                    </Col>
+                </Row>
+
             </div >
         );
     }

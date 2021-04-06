@@ -126,7 +126,7 @@ class LoginForm extends Component {
                     <Row className="justify-content-md-center">
                         <Col className="login-box rounded p-5" lg="3" md="6" sm="8">
                             <p className="text-center">
-                                <img src={logo} alt='logo' />
+                                <img src={logo} alt='logo' className="img-fluid"/>
                             </p>
                             <Form className="" onSubmit={this.onSubmit}>
                                 <Form.Group controlId="formBasicEmail">

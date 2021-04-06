@@ -55,12 +55,33 @@ export default class OrderManager extends Component {
     })
   }
 
+  async getCompanies() {
+    let compArray = [];
+    let compDict = {};
+
+    await axios.get(`http://localhost:8081/companies`)
+      .then(compData => {
+        if (compData != null) {
+          compArray = compData.data;
+
+          compArray.forEach(company => {
+            compDict[company.address] = company.company_name;
+          });
+
+          this.setState({
+            addressDictionary: compDict
+          });
+        }
+      });
+  }
+
   componentDidMount() {
     this.getOrderData()
     this.getRejectedData()
     this.getEmergencyData()
     this.getProcessingData()
     this.getCompletedData()
+    this.getCompanies()
   }
 
   render() {
@@ -78,16 +99,12 @@ export default class OrderManager extends Component {
         accessor: 'delivery_date',
       },
       {
-        Header: 'Address',
-        accessor: 'destination_address',
+        Header: 'Origin',
+        accessor: data => ((this.state.addressDictionary && this.state.addressDictionary[data.origin_address] != null) ? this.state.addressDictionary[data.origin_address] : data.origin_address + ', ' + data.origin_city + ', ' + data.origin_postalCode)
       },
       {
-        Header: 'City',
-        accessor: 'destination_city',
-      },
-      {
-        Header: 'Postal Code',
-        accessor: 'destination_postalCode',
+        Header: 'Destination',
+        accessor: data => ((this.state.addressDictionary && this.state.addressDictionary[data.destination_address] != null) ? this.state.addressDictionary[data.destination_address] : data.destination_address + ', ' + data.destination_city + ', ' + data.destination_postalCode)
       },
       {
         Header: 'Status',

@@ -61,10 +61,10 @@ app.get('/companies/name/:companyName', async (req, add) => {
 // GET ==> Company based on Address
 app.get('/companies/address/:address', async (req, companyFound) => {
     const Company = await companyModel.find({ address: req.params.address });
-    try{
+    try {
         companyFound.send(Company)
     }
-    catch(err){
+    catch (err) {
         companyFound("Error with Database")
     }
 
@@ -105,7 +105,31 @@ app.get('/orders', async (req, res) => {
     }
 });
 
-//GET ==> All Orders with a Specified Status
+//GET ==> Client ==> All Orders with a Specified Status With Origin = Distribution Centre
+app.get('/orders/status/:company/:status', async (req, res) => {
+    let warehouse = await companyModel.findOne({ company_name: req.params.company })
+    let Orders = []
+
+    if (req.params.status == "Active") {
+        Orders = await orderModel.find({
+            $and: [{ order_status: { $ne: "Completed" } }, { order_status: { $ne: "Processing" } }, { origin_address: warehouse.address }]
+        });
+    }
+    else if (req.params.status == "Incomplete") {
+        Orders = await orderModel.find({ $and: [{ order_status: { $ne: "Completed" } }, { origin_address: warehouse.address }] });
+    }
+    else {
+        Orders = await orderModel.find({ $and: [{ order_status: req.params.status }, { origin_address: warehouse.address }] });
+    }
+    try {
+        res.send(Orders);
+    }
+    catch (err) {
+        res.status(500).send(err);
+    }
+});
+
+//GET ==> Admin ==> All Orders with a specified Status
 app.get('/orders/status/:status', async (req, res) => {
     let Orders = []
 
@@ -115,7 +139,7 @@ app.get('/orders/status/:status', async (req, res) => {
         });
     }
     else if (req.params.status == "Incomplete") {
-        Orders = await orderModel.find({ order_status: { $ne: "Completed" } });
+        Orders = await orderModel.find({ order_status: { $ne: "Completed"} });
     }
     else {
         Orders = await orderModel.find({ order_status: req.params.status });
@@ -124,8 +148,8 @@ app.get('/orders/status/:status', async (req, res) => {
         res.send(Orders);
     }
     catch (err) {
-        res.status(500).send(err);
-    }
+    res.status(500).send(err);
+}
 });
 
 //GET ==> Orders for Particular Date

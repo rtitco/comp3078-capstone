@@ -4,6 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
+import './route-styles.css'
 
 class ViewOrderDetails extends Component {
     constructor(props) {
@@ -78,17 +79,20 @@ class ViewOrderDetails extends Component {
 
         return (
             <div>
-                <Link className="mx-3 my-2 btn btn-secondary " to='/client'>Back</Link>
+                <Link className="btn btn-secondary " to='/client'>Back</Link>
 
                 {/* Buttons on Left, Details on Right */}
-                <Row>
-                    <Col md="2">
-                        <button type="button" class="btn btn-success btn-block" onClick={this.changeStatusReceived}>Order Received</button>
-                        <button type="button" class="btn btn-danger btn-block" onClick={this.changeStatusReject}>Reject Shipment</button>
-                        <span className="text-center alert-danger">{this.state.updateSuccess}</span>
-                    </Col>
 
-                    <Col md="10">
+                <Row>
+                    <div class="routeButtonContainer">
+                    <button type="button" class="btn btn-success routeButton" onClick={this.changeStatusReceived}>Order Received</button>
+                        <button type="button" class="btn btn-danger routeButton" onClick={this.changeStatusReject}>Reject Shipment</button>
+                        <span className="text-center alert-danger">{this.state.updateSuccess}</span>
+                    </div>
+                </Row>
+
+                <Row className="mb-4">
+                    <Col md={{ span: 10, offset: 1 }}>
                         <Row className="justify-content-center">
                             <Col className="bg-light pt-4" md="4">
                                 <h3 className="pb-3">Order ID: {this.state.delivery_id}</h3>
