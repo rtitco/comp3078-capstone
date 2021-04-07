@@ -130,7 +130,7 @@ class LoginForm extends Component {
                             </p>
                             <Form className="" onSubmit={this.onSubmit}>
                                 <Form.Group controlId="formBasicEmail">
-                                    <Form.Label>Email address</Form.Label>
+                                    <Form.Label>Email</Form.Label>
                                     <Form.Control
                                         type="email"
                                         placeholder="Enter email"

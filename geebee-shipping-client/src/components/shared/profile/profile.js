@@ -255,15 +255,17 @@ class ProfileForm extends Component {
         if (this.state.role == "Admin") {
             myNav = <AdminNavBar />
         }
-        else{
+        else {
             myNav = <ClientNavBar />
         }
 
         return (
             <div>
                 {myNav}
-                <img src={logo} className="text-center" alt='logo' />
-                <h1 className='text-center'>Update User Profile</h1>
+                <p  className="text-center">
+                    <img src={logo}  width="400" alt='logo' />
+                </p>
+                <h1 className='text-center h2'>Update User Profile</h1>
                 <Row className="justify-content-center">
                     <Col md="6">
                         <div>

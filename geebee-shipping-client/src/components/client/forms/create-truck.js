@@ -198,8 +198,8 @@ class CreateTruckForm extends Component {
 
         return (
             <div>
-                <p className="text-center mt-5">
-                    <img src={logo} alt='logo' />
+                 <p  className="text-center">
+                    <img src={logo}  width="400" alt='logo' />
                 </p>
                 <h1 className='h3 text-center'>Add Truck to Fleet</h1>
                 <div>

@@ -221,7 +221,7 @@ function Table({ columns, data, formType, tRole }) {
           placeholder={"Input keyword"} />
       </div>
 
-      <table className="table table-striped table-hover" {...getTableProps()}>
+      <table className="table table-striped table-hover table-size" {...getTableProps()}>
         <thead>
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>

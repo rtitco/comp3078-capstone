@@ -5,7 +5,10 @@ body {
 
 .login-bg{
   height: 100%;
-  background-color:#1C2541;
+  background-image: url('../profile/bb-bg.png');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
   width: 100%;
   position: absolute;
 }

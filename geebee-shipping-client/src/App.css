@@ -20,3 +20,11 @@ body{
   background-color: #040813 !important;
   color:white;
 }
+
+.table-container{  
+  overflow-x: scroll;
+}
+
+.table-size{
+ min-width: 1200px;
+}
