@@ -1,11 +1,12 @@
 import { BrowserRouter as Router, Switch, Route, Link, useRouteMatch } from "react-router-dom";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import logo from '../../../shared/profile/gb.png';
+import logo from '../../../shared/profile/navbar.png';
 import { Navbar, Nav } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import React from 'react'
 import '../../../shared/navbar.css';
+
 
 const AdminNavBar = (props) => {
 
@@ -17,7 +18,13 @@ const AdminNavBar = (props) => {
     <Navbar className="navbar-bb" variant="dark" expand="lg">
 
       <LinkContainer to="/">
-        <Navbar.Brand>Geebee Shipping Solutions - {props.fname} {props.lname}</Navbar.Brand>
+      <Navbar.Brand className="text-white">    
+      <img
+        src={logo}
+        height="70"
+        className="d-inline-block align-top"
+        alt="React Bootstrap logo"
+      /></Navbar.Brand>
       </LinkContainer>
 
       <Navbar.Toggle aria-controls="basic-navbar-nav" />

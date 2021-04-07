@@ -223,10 +223,10 @@ class CreateOrderForm extends Component {
 
         return (
             <div>
-                <p className="text-center">
-                    <img src={logo} alt='logo' />
+                 <p  className="text-center">
+                    <img src={logo}  width="400" alt='logo' />
                 </p>
-                <h1 className='text-center'>Create New Delivery Order</h1>
+                <h1 className='h3 text-center'>Create New Delivery Order</h1>
 
                 <div>
                     <Row className="justify-content-center">

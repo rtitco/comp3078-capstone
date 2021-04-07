@@ -85,7 +85,7 @@ export default class UserManager extends Component {
     return (
       <div>
         <Link to="./users/add">
-          <Button className="float-right mr-5 mb-2 btn-top-margin" variant="success">Add User</Button>
+          <Button className="float-right mr-5 mb-2 btn-top-margin" variant="primary">Add User</Button>
         </Link>
 
         <Tabs defaultActiveKey="admin-tab" id="uncontrolled-tab-example" className="mt-3">
