@@ -270,6 +270,7 @@ class CreateOrderForm extends Component {
                                             <option value="Dairy">Dairy</option>
                                             <option value="Frozen Goods">Frozen Goods</option>
                                             <option value="Furniture">Furniture</option>
+                                            <option value="Clothing">Clothing</option>
                                             <option value="Miscellaneous">Miscellaneous</option>
                                         </select>
                                     </Col>

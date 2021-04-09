@@ -260,7 +260,7 @@ class ProfileForm extends Component {
         }
 
         return (
-            <div>
+            <div className="pb-5">
                 {myNav}
                 <p  className="text-center">
                     <img src={logo}  width="400" alt='logo' />

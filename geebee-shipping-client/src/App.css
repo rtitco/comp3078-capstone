@@ -25,6 +25,8 @@ body{
   overflow-x: scroll;
 }
 
-.table-size{
- min-width: 1200px;
+@media (min-width: 400px) { 
+  .table-size{
+    min-width: 375px;
+   }
 }
