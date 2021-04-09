@@ -58,6 +58,12 @@ class EditTruckForm extends Component {
             year: event.target.value
         })
     }
+    //due to React bug
+    setYear = (year)=>{
+        this.setState({
+            year: year.toString()
+        })
+    }
 
     changeTruckClass = (event) => {
         this.setState({
@@ -77,10 +83,11 @@ class EditTruckForm extends Component {
         })
     }
 
+    
+
     onSubmit = (event) => {
         // prevents form from acting in default way, stops refreshing
         event.preventDefault()
-
         let brandValid = false
         let modelValid = false
         let yearValid = false
@@ -88,12 +95,13 @@ class EditTruckForm extends Component {
         let plateValid = false
         let statusValid = false
 
+        const rgx_brand = /^[a-zA-Z]{3,}$/
+        const rgx_model = /^[a-zA-Z\d]{3,}$/
+        const rgx_year = /^[\d]{4}$/
+        const rgx_license = /^[A-Za-z]{3,5}[ ]{0,1}[\d]{3,5}$/
         //Check Brand
-        if (this.validateStringInput(/^[a-zA-Z]{3,}$/,
-            this.state.brand) == false) {
-            this.setState({
-                errorBrand: "Invalid Brand Name."
-            })
+        if (this.validateStringInput(rgx_brand, this.state.brand) == false) {
+            this.setState({ errorBrand: "Invalid Brand Name." })
         } else {
             brandValid = true
             this.setState({
@@ -102,67 +110,46 @@ class EditTruckForm extends Component {
         }
 
         //Check Model
-        if (this.validateStringInput(/^[a-zA-Z\d]{3,}$/,
-            this.state.model) == false) {
-            this.setState({
-                errorModel: "Invalid Model Name."
-            })
+        if (this.validateStringInput(rgx_model, this.state.model) == false) {
+            this.setState({ errorModel: "Invalid Model Name." })
         } else {
             modelValid = true
-            this.setState({
-                errorModel: ''
-            })
+            this.setState({ errorModel: '' })
         }
 
         //Check Year
-        if (this.validateStringInput(/^[\d]{4}$/,
-            this.state.year) == false || this.state.year <= "1990" || this.state.year > "2022") {
-            this.setState({
-                errorYear: "Invalid Year."
-            })
+        if (this.validateStringInput(
+            rgx_year, this.state.year.toString()) == false || this.state.year <= "1990" || this.state.year > "2022") {
+            this.setState({ errorYear: "Invalid Year." })
         } else {
             yearValid = true
-            this.setState({
-                errorYear: ''
-            })
+            this.setState({ errorYear: '' })
         }
 
         //Check Class
         if (this.state.brand.length < 1) {
-            this.setState({
-                errorClass: "Please select a truck Class."
-            })
+            this.setState({ errorClass: "Please select a truck Class." })
         } else {
             classValid = true
-            this.setState({
-                errorClass: ''
-            })
+            this.setState({ errorClass: '' })
         }
 
         //Check License Plate
-        if (this.validateStringInput(/^[A-Za-z]{3,5}[ ]{0,1}[\d]{3,5}$/,
-            this.state.licensePlate) == false) {
-            this.setState({
-                errorLicensePlate: "Invalid License Plate."
-            })
+        if (this.validateStringInput(rgx_license, this.state.licensePlate) == false) {
+            this.setState({ errorLicensePlate: "Invalid License Plate." })
         } else {
             plateValid = true
-            this.setState({
-                errorLicensePlate: ''
-            })
+            this.setState({ errorLicensePlate: '' })
         }
 
         //Check Status
         if (this.state.status.length < 1) {
-            this.setState({
-                errorStatus: "Please select a status."
-            })
+            this.setState({ errorStatus: "Please select a status." })
         } else {
             statusValid = true
-            this.setState({
-                errorStatus: ''
-            })
+            this.setState({ errorStatus: '' })
         }
+
 
         if (brandValid && modelValid && yearValid && classValid && plateValid && statusValid) {
             const truckData = {
@@ -219,13 +206,13 @@ class EditTruckForm extends Component {
         }
 
         return (
-            <div>
+            <div className="mb-5">
                  <p  className="text-center">
                     <img src={logo}  width="400" alt='logo' />
                 </p>
                 <h1 className='h3 text-center'>Edit Truck</h1>
                 <div>
-                    <Row className="justify-content-center">
+                    <Row className="justify-content-center ">
                         <Col md="6">
                             <form onSubmit={this.onSubmit}>
                                 <label>Brand: <span className="text-center alert-danger">{this.state.errorBrand}</span></label>
@@ -244,7 +231,6 @@ class EditTruckForm extends Component {
 
                                 <label>Year: <span className="text-center alert-danger">{this.state.errorYear}</span></label>
                                 <input type='text'
-                                    placeholder='2020'
                                     onChange={this.changeYear}
                                     value={this.state.year}
                                     className='form-control form-group' />
@@ -278,10 +264,12 @@ class EditTruckForm extends Component {
 
                                 <input type='submit' className='btn btn-primary btn-block'
                                     value='Submit' />
-                                <Link className="mt-3 btn btn-warning btn-block" to='/client/fleet'>Go back</Link>
+                                <Link className="mt-2  mb-5 btn btn-warning btn-block" to='/client/fleet'>Go back</Link>
                             </form>
                         </Col>
                     </Row>
+                    <br/>
+                    <br/>
                 </div>
             </div>
         );
