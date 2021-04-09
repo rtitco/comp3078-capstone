@@ -82,21 +82,21 @@ export default class FleetTable extends Component {
           <Tab eventKey="in-tab" title="In Service">
             <div className="mx-5">
               <h5>In Service</h5>
-              <Table columns={columns} data={this.state.data_inService} formType="Fleet" />
+              <Table columns={columns} data={this.state.data_inService} formType="Fleet Manager" tRole="Fleet Manager" />
             </div>
           </Tab>
 
           <Tab eventKey="maintenance-tab" title="Maintenance">
             <div className="mx-5">
               <h5>Maintenance</h5>
-              <Table columns={columns} data={this.state.data_maintenance} formType="Fleet" />
+              <Table columns={columns} data={this.state.data_maintenance}  formType="Fleet Manager" tRole="Fleet Manager" />
             </div>
           </Tab>
 
           <Tab eventKey="out-tab" title="Unavailable">
             <div className="mx-5">
               <h5>Unavailable</h5>
-              <Table columns={columns} data={this.state.data_outOfService} formType="Fleet" />
+              <Table columns={columns} data={this.state.data_outOfService}  formType="Fleet Manager" tRole="Fleet Manager" />
             </div>
           </Tab>
         </Tabs>
