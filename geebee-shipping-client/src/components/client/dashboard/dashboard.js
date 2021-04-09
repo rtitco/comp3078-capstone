@@ -65,7 +65,7 @@ class ClientDashboard extends Component {
         return (
             <div className="dashboard-container">
                 <LoginNavBar fname={this.state.currentUser.firstName} lname={this.state.currentUser.lastName} />
-                <Container fluid>
+                <Container fluid className="footer-clearance">
                     <Switch>
                         <Route exact path="/client">
                             {redirectTo(this.state.currentUser.role)}
